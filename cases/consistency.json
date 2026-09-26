@@ -1,0 +1,27 @@
+[
+  {
+    "id": "C01",
+    "name": "Code versus database almost tied",
+    "state": "A duplicate community membership test returns HTTP 409. Duplicate handling exists in communities.service.ts and there is also a unique database constraint on communityId and userId. The service appears to check for existing membership before inserting, but the database still produces a duplicate-key error. No code has been modified."
+  },
+  {
+    "id": "C02",
+    "name": "Test database contamination",
+    "state": "A test passes when executed alone but fails after another membership test. The application code is unchanged and appears deterministic. The failure reports data already existing before the test's setup completes."
+  },
+  {
+    "id": "C03",
+    "name": "Transaction fix implemented",
+    "state": "The transaction used for joining a community was changed to avoid creating duplicate memberships during concurrent requests. The implementation and schema are already understood; what is missing is evidence that the change actually solves the scenario."
+  },
+  {
+    "id": "C04",
+    "name": "Inactive community behavior unspecified",
+    "state": "A community can be marked inactive, but nothing in the specification states whether existing members may still create posts, leave the community, view its content, or perform moderation actions after deactivation."
+  },
+  {
+    "id": "C05",
+    "name": "Correct service but inconsistent persistence",
+    "state": "The service checks for a membership before inserting and the check returns none, yet insertion reports that the same user-community pair already exists. The relevant service method has already been inspected."
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "id": "B1",
+    "level": 1,
+    "name": "Explicitly no product decision",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. The product owner confirms that no decision has ever been made about whether usernames from removed accounts may be reused."
+  },
+  {
+    "id": "B2",
+    "level": 2,
+    "name": "Requirements explicitly silent",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. The current requirements describe account deletion but explicitly contain no rule about whether the username becomes available again."
+  },
+  {
+    "id": "B3",
+    "level": 3,
+    "name": "Original V5U02 wording",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. Existing product documentation describes deletion but never states whether the identifier becomes available again."
+  },
+  {
+    "id": "B4",
+    "level": 4,
+    "name": "Unapproved hint toward reuse",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. Current product requirements do not define whether reuse is allowed. An old unapproved note suggests that reuse may have been intended."
+  },
+  {
+    "id": "B5",
+    "level": 5,
+    "name": "Approved rule defines reuse",
+    "expected": "SEARCH_CODE",
+    "state": "An account was removed months ago and another person now requests the same username. The current approved product requirement says that usernames from removed accounts may be reused, but the agent has not identified where this behavior is implemented."
+  },
+  {
+    "id": "B6",
+    "level": 6,
+    "name": "Acceptance criterion defines reuse",
+    "expected": "SEARCH_CODE",
+    "state": "An account was removed months ago and another person now requests the same username. An approved acceptance criterion states that usernames from removed accounts must become available again. The implementation responsible for enforcing this behavior has not been located."
+  },
+  {
+    "id": "B7",
+    "level": 7,
+    "name": "Defined rule and observed mismatch",
+    "expected": "SEARCH_CODE",
+    "state": "An account was removed months ago and another person now requests the same username. The approved requirement clearly says the username must become reusable, but the application rejects the request. The agent does not yet know which implementation enforces username availability."
+  }
+]

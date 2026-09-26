@@ -1,0 +1,301 @@
+[
+  {
+    "id": "MP01A",
+    "name": "Invoice retry location unknown",
+    "difficulty": "adversarial",
+    "state": "A duplicate invoice is being created during payment retries. The behavior is known to exist somewhere in the billing implementation, but the agent does not know which file or function contains it.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "MP01B",
+    "name": "Invoice retry exact file known",
+    "difficulty": "adversarial",
+    "state": "A duplicate invoice is being created during payment retries. The behavior is known to exist in src/billing/invoice-retry.service.ts, and the agent needs to inspect how that implementation currently works.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "MP02A",
+    "name": "Avatar transformation location unknown",
+    "difficulty": "adversarial",
+    "state": "Uploaded avatars are being resized incorrectly. The transformation exists somewhere in the repository, but the agent does not know which file implements it.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "MP02B",
+    "name": "Avatar transformation exact file known",
+    "difficulty": "adversarial",
+    "state": "Uploaded avatars are being resized incorrectly. The transformation is implemented in src/media/avatar-transformer.ts, and the agent needs to inspect its current behavior.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "MP03A",
+    "name": "Webhook verification location unknown",
+    "difficulty": "adversarial",
+    "state": "Webhook signatures are sometimes rejected. The verification implementation exists in the repository, but its location is not known.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "MP03B",
+    "name": "Webhook verification exact file known",
+    "difficulty": "adversarial",
+    "state": "Webhook signatures are sometimes rejected. The verification implementation is in src/webhooks/signature-verifier.ts, and its current logic needs to be inspected.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "MP04A",
+    "name": "Cache invalidation location unknown",
+    "difficulty": "adversarial",
+    "state": "Product updates leave stale cache entries. The invalidation behavior is implemented somewhere in the application, but the relevant file is unknown.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "MP04B",
+    "name": "Cache invalidation exact file known",
+    "difficulty": "adversarial",
+    "state": "Product updates leave stale cache entries. The invalidation behavior is implemented in src/cache/product-cache.service.ts, and the current logic needs to be inspected.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "MP05A",
+    "name": "JWT guard not modified",
+    "difficulty": "adversarial",
+    "state": "The exact file src/auth/jwt.guard.ts is known. Authorization fails for suspended users. No code has been changed yet, and the next step is to inspect the current guard logic.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "MP05B",
+    "name": "JWT guard modified",
+    "difficulty": "adversarial",
+    "state": "The exact file src/auth/jwt.guard.ts is known. Authorization fails for suspended users. The guard logic has just been changed to fix the issue, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP06A",
+    "name": "Mapper not modified",
+    "difficulty": "adversarial",
+    "state": "The exact file src/users/user.mapper.ts is known. A property disappears during mapping. No code has been changed yet, and the mapper implementation needs to be inspected.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "MP06B",
+    "name": "Mapper modified",
+    "difficulty": "adversarial",
+    "state": "The exact file src/users/user.mapper.ts is known. A property disappears during mapping. The mapper has just been changed to fix the issue, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP07A",
+    "name": "Pricing function not modified",
+    "difficulty": "adversarial",
+    "state": "The exact pricing function in src/pricing/calculate-total.ts is known. Some totals are rounded incorrectly. No code has been changed yet, and the current implementation needs to be inspected.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "MP07B",
+    "name": "Pricing function modified",
+    "difficulty": "adversarial",
+    "state": "The exact pricing function in src/pricing/calculate-total.ts is known. Some totals are rounded incorrectly. The function has just been changed to fix the issue, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP08A",
+    "name": "Pagination component not modified",
+    "difficulty": "adversarial",
+    "state": "The exact component src/components/Pagination.tsx is known. The final page is displayed incorrectly. No code has been changed yet, and the component implementation needs to be inspected.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "MP08B",
+    "name": "Pagination component modified",
+    "difficulty": "adversarial",
+    "state": "The exact component src/components/Pagination.tsx is known. The final page is displayed incorrectly. The component has just been changed to fix the issue, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP09A",
+    "name": "Migration drift requires database inspection",
+    "difficulty": "adversarial",
+    "state": "Staging rejects a column that exists locally. No migration has been changed. The immediate question is whether the actual staging database schema differs from the expected schema.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "MP09B",
+    "name": "Migration drift patch completed",
+    "difficulty": "adversarial",
+    "state": "Staging rejected a column that exists locally. The migration has just been changed to fix the schema drift, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP10A",
+    "name": "Foreign key discrepancy requires database inspection",
+    "difficulty": "adversarial",
+    "state": "A dependent row still exists even though its parent should have been deleted. No code has been changed. The immediate question is what records and foreign key state actually exist in the database.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "MP10B",
+    "name": "Foreign key cleanup patch completed",
+    "difficulty": "adversarial",
+    "state": "A dependent row still existed even though its parent should have been deleted. The cleanup implementation has just been changed to fix the issue, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP11A",
+    "name": "Unexpected enum requires database inspection",
+    "difficulty": "adversarial",
+    "state": "An unexpected enum value appears in production. No code has been changed. The immediate question is which value is actually persisted in the affected database records.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "MP11B",
+    "name": "Enum validation patch completed",
+    "difficulty": "adversarial",
+    "state": "An unexpected enum value appeared in production. The validation implementation has just been changed to prevent that value, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP12A",
+    "name": "Timestamp anomaly requires database inspection",
+    "difficulty": "adversarial",
+    "state": "A persisted timestamp appears several hours different from the expected value. No code has been changed. The immediate question is what timestamp and timezone-related value are actually stored in the database.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "MP12B",
+    "name": "Timestamp persistence patch completed",
+    "difficulty": "adversarial",
+    "state": "A persisted timestamp appeared several hours different from the expected value. The timestamp persistence code has just been changed to fix the issue, and no tests have been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "MP13A",
+    "name": "Payment retry policy undefined",
+    "difficulty": "adversarial",
+    "state": "A payment can fail after the provider has already charged the customer. The product requirements do not specify whether the system should automatically retry in this situation.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP13B",
+    "name": "Payment retry policy defined location unknown",
+    "difficulty": "adversarial",
+    "state": "A payment can fail after the provider has already charged the customer. The product requirement says the system must never automatically retry in this situation, but the agent does not know where that behavior is implemented.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "MP14A",
+    "name": "Expired invitation policy undefined",
+    "difficulty": "adversarial",
+    "state": "An expired invitation token is submitted. The requirements do not specify whether an expired invitation may be reactivated or must always be rejected.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP14B",
+    "name": "Expired invitation policy defined location unknown",
+    "difficulty": "adversarial",
+    "state": "An expired invitation token is submitted. The requirements say an expired invitation must always be rejected, but the agent does not know where that behavior is implemented.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "MP15A",
+    "name": "Username reuse policy undefined",
+    "difficulty": "adversarial",
+    "state": "A user wants to register a username previously owned by a deleted account. The requirements do not define whether deleted usernames may be reused.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP15B",
+    "name": "Username reuse policy defined location unknown",
+    "difficulty": "adversarial",
+    "state": "A user wants to register a username previously owned by a deleted account. The requirements say deleted usernames may be reused, but the agent does not know where that rule is implemented.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "MP16A",
+    "name": "Account deletion retention undefined",
+    "difficulty": "adversarial",
+    "state": "An account deletion request has been received. The requirements do not specify how long associated audit records must be retained.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP16B",
+    "name": "Account deletion retention defined location unknown",
+    "difficulty": "adversarial",
+    "state": "An account deletion request has been received. The requirements say associated audit records must be retained for 90 days, but the agent does not know where that retention behavior is implemented.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "MP17A",
+    "name": "Soft deletion uniqueness policy undefined",
+    "difficulty": "adversarial",
+    "state": "Creating an account with the email of a soft-deleted user causes a uniqueness conflict. The product requirements do not define whether emails from soft-deleted users may be reused.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP17B",
+    "name": "Soft deletion uniqueness policy defined database conflict",
+    "difficulty": "adversarial",
+    "state": "Creating an account with the email of a soft-deleted user causes a uniqueness conflict. The product requirements say emails from soft-deleted users may be reused, but production still rejects the insert. The actual records and uniqueness constraint state need to be inspected.",
+    "expected": "QUERY_DATABASE"
+  },
+
+  {
+    "id": "MP18A",
+    "name": "Inventory oversell policy undefined",
+    "difficulty": "adversarial",
+    "state": "Two concurrent purchases can reduce stock below zero. The requirements do not specify whether overselling is permitted or whether the second purchase must be rejected.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP18B",
+    "name": "Inventory oversell policy defined database anomaly",
+    "difficulty": "adversarial",
+    "state": "Two concurrent purchases reduced stock below zero. The requirements say stock must never become negative, but production contains a negative stock value. The actual inventory records and database state need to be inspected.",
+    "expected": "QUERY_DATABASE"
+  },
+
+  {
+    "id": "MP19A",
+    "name": "Role inheritance policy undefined",
+    "difficulty": "adversarial",
+    "state": "A user receives permissions from two assigned roles. The requirements do not specify how conflicting inherited permissions should be resolved.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP19B",
+    "name": "Role inheritance policy defined database anomaly",
+    "difficulty": "adversarial",
+    "state": "A user receives permissions from two assigned roles. The requirements define exactly how conflicting inherited permissions are resolved, but the user's persisted role and permission assignments produce a different result. The actual database assignments need to be inspected.",
+    "expected": "QUERY_DATABASE"
+  },
+
+  {
+    "id": "MP20A",
+    "name": "Duplicate webhook policy undefined",
+    "difficulty": "adversarial",
+    "state": "The same webhook event is received twice. The requirements do not specify whether duplicate events should be ignored, rejected, or processed again.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "MP20B",
+    "name": "Duplicate webhook policy defined database anomaly",
+    "difficulty": "adversarial",
+    "state": "The same webhook event is received twice. The requirements say duplicate events must be ignored, but production contains two persisted processing records for the same event identifier. The actual database records need to be inspected.",
+    "expected": "QUERY_DATABASE"
+  }
+]

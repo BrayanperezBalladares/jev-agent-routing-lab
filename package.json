@@ -1,0 +1,36 @@
+{
+  "name": "jev-agent-lab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "benchmark": "tsx src/benchmark.ts",
+    "typecheck": "tsc --noEmit",
+    "smoke": "tsx src/smoke.ts",
+    "consistency": "tsx src/consistency.ts",
+    "rules": "tsx src/rules-benchmark.ts",
+    "llm": "tsx src/llm-benchmark.ts",
+    "nvidia-smoke": "tsx src/nvidia-smoke.ts",
+    "nvidia": "tsx src/nvidia-benchmark.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.19.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^18.0.3",
+    "openai": "^7.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

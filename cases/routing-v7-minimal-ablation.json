@@ -1,0 +1,44 @@
+[
+  {
+    "id": "A1",
+    "level": 1,
+    "name": "Documentation never states",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. The documentation never states whether the username becomes available again."
+  },
+  {
+    "id": "A2",
+    "level": 2,
+    "name": "Current requirements never state",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. The current requirements never state whether the username becomes available again."
+  },
+  {
+    "id": "A3",
+    "level": 3,
+    "name": "Current requirements do not define",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. The current requirements do not define whether the username becomes available again."
+  },
+  {
+    "id": "A4",
+    "level": 4,
+    "name": "No product decision has been made",
+    "expected": "ASK_USER",
+    "state": "An account was removed months ago and another person now requests the same username. No product decision has been made about whether the username becomes available again."
+  },
+  {
+    "id": "A5",
+    "level": 5,
+    "name": "Approved requirement defines behavior",
+    "expected": "SEARCH_CODE",
+    "state": "An account was removed months ago and another person now requests the same username. The current approved requirement says that the username becomes available again."
+  },
+  {
+    "id": "A6",
+    "level": 6,
+    "name": "Approved requirement plus unknown implementation",
+    "expected": "SEARCH_CODE",
+    "state": "An account was removed months ago and another person now requests the same username. The current approved requirement says that the username becomes available again, but the implementation responsible for this behavior has not been located."
+  }
+]

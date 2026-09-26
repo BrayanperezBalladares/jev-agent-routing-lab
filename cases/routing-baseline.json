@@ -1,0 +1,151 @@
+[
+  {
+    "id": "E01",
+    "name": "Unknown duplicate join implementation",
+    "difficulty": "easy",
+    "state": "A NestJS integration test for joining a community fails when the same user joins twice. We do not know where duplicate membership handling is implemented.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "E02",
+    "name": "Known service implementation",
+    "difficulty": "easy",
+    "state": "The failing community join behavior has already been traced to communities.service.ts. No code has been changed yet and we need to understand the current duplicate handling.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "E03",
+    "name": "Code changed without tests",
+    "difficulty": "easy",
+    "state": "The coding agent modified communities.service.ts to make duplicate joins idempotent. No tests have been executed after the change.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "E04",
+    "name": "Database constraint investigation",
+    "difficulty": "easy",
+    "state": "The application reports a duplicate-key violation on the unique communityId and userId constraint. The service logic has already been reviewed and now we need to inspect the stored memberships and database constraint.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "E05",
+    "name": "Missing owner leave requirement",
+    "difficulty": "easy",
+    "state": "The task requires users to leave communities, but the specification does not say what should happen when the OWNER attempts to leave while other members remain.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "I01",
+    "name": "Unknown authorization guard",
+    "difficulty": "intermediate",
+    "state": "A community endpoint unexpectedly returns HTTP 403. Authentication succeeds but we do not know where authorization for this endpoint is implemented.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "I02",
+    "name": "Known authorization file",
+    "difficulty": "intermediate",
+    "state": "The authorization behavior has been narrowed down to community-role.guard.ts. We need to understand why an OWNER is being rejected.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "I03",
+    "name": "DTO validation changed",
+    "difficulty": "intermediate",
+    "state": "The agent changed CreateCommunityDto validation rules and updated the corresponding service logic. The implementation has not yet been verified.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "I04",
+    "name": "Unexpected database state",
+    "difficulty": "intermediate",
+    "state": "The service query appears correct, but an integration test finds an existing membership that should not be present. We need to verify what rows actually exist in the test database.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "I05",
+    "name": "Undefined moderation rule",
+    "difficulty": "intermediate",
+    "state": "The task says moderators can remove community members, but it does not define whether a moderator can remove an OWNER or another moderator.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "A01",
+    "name": "Service versus database",
+    "difficulty": "ambiguous",
+    "state": "A duplicate community membership test returns HTTP 409. Duplicate handling exists in communities.service.ts and there is also a unique database constraint on communityId and userId. The service appears to check for existing membership before inserting, but the database still produces a duplicate-key error. No code has been modified.",
+    "expected": "READ_FILE",
+    "acceptable": [
+      "QUERY_DATABASE"
+    ]
+  },
+  {
+    "id": "A02",
+    "name": "Foreign key investigation",
+    "difficulty": "ambiguous",
+    "state": "The service implementation has already been inspected and looks consistent with the requirements. An integration test still fails with a foreign-key violation after a recent migration.",
+    "expected": "QUERY_DATABASE",
+    "acceptable": [
+      "READ_FILE"
+    ]
+  },
+  {
+    "id": "A03",
+    "name": "Known files but uncertain branch",
+    "difficulty": "ambiguous",
+    "state": "The relevant join logic is known to be inside communities.service.ts and communities.controller.ts. The unexpected behavior happens only for existing members, and no code changes have been made.",
+    "expected": "READ_FILE",
+    "acceptable": [
+      "SEARCH_CODE"
+    ]
+  },
+  {
+    "id": "A04",
+    "name": "Implementation complete but unverified",
+    "difficulty": "ambiguous",
+    "state": "The agent believes the implementation is correct and has finished modifying the service and repository layer. Some unrelated tests were previously flaky, but the new implementation has not been tested at all.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "A05",
+    "name": "Product behavior unclear",
+    "difficulty": "ambiguous",
+    "state": "The backend can technically support transferring ownership before an OWNER leaves, but the requirements do not state whether ownership should transfer automatically, block the leave operation, or delete the community.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V01",
+    "name": "Known stack trace location",
+    "difficulty": "adversarial",
+    "state": "The user only said 'fix the join error', but the integration test stack trace clearly points to communities.service.ts line 142 where duplicate membership handling occurs. No modifications have been made.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V02",
+    "name": "Search already completed",
+    "difficulty": "adversarial",
+    "state": "Repository search has already identified membership.repository.ts as the only file implementing the failing membership lookup. The next step is to understand the implementation.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V03",
+    "name": "High confidence code still needs tests",
+    "difficulty": "adversarial",
+    "state": "The coding agent is highly confident that its changes correctly fix duplicate memberships. The service and controller were modified successfully, but no tests have been run since the changes.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V04",
+    "name": "Database mentioned but compile error",
+    "difficulty": "adversarial",
+    "state": "The project uses a database unique constraint for memberships, but the current failure is a TypeScript compile error inside the already identified communities.service.ts file. No runtime database request occurs.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V05",
+    "name": "Database known but business rule missing",
+    "difficulty": "adversarial",
+    "state": "The membership database schema and constraints are fully understood. The remaining problem is that the product specification never defines whether the final OWNER may leave the community.",
+    "expected": "ASK_USER"
+  }
+]

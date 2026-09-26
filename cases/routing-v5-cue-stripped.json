@@ -1,0 +1,286 @@
+[
+  {
+    "id": "V5S01",
+    "name": "SSO failure with no located owner",
+    "difficulty": "adversarial",
+    "state": "Users returning from an external identity provider occasionally lose their session. Logs show the callback succeeds, but the team has not yet identified which part of the application performs the later session transition.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S02",
+    "name": "Order recalculation source not located",
+    "difficulty": "adversarial",
+    "state": "An order total changes several seconds after checkout even though no new item was added. Several pricing-related modules exist, but nothing collected so far identifies which implementation performs the later recalculation.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S03",
+    "name": "Background status mutation",
+    "difficulty": "adversarial",
+    "state": "A shipment moves from READY to CANCELLED several minutes after creation. The API request itself completes normally and no responsible handler has been identified yet.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S04",
+    "name": "Hidden cache refresh path",
+    "difficulty": "adversarial",
+    "state": "A product description reverts to an older value after a short delay. The normal update flow looks correct, and the agent has not yet located what performs the later refresh.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S05",
+    "name": "Unknown email trigger",
+    "difficulty": "adversarial",
+    "state": "Customers receive a cancellation email even when support restores the order immediately. Multiple notification mechanisms exist and the responsible execution path has not been located.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S06",
+    "name": "Permission source uncertain",
+    "difficulty": "adversarial",
+    "state": "A moderator unexpectedly gains access to an administration screen. Role assignments appear normal, but it is not yet known which authorization implementation grants this capability.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S07",
+    "name": "Duplicate processing origin",
+    "difficulty": "adversarial",
+    "state": "One incoming event causes the same business operation twice. The event identifier is available, but the execution point responsible for the duplicate processing has not been found.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "V5S08",
+    "name": "Unexpected normalization path",
+    "difficulty": "adversarial",
+    "state": "A customer's display name is altered before it reaches the response payload. Several mapping and normalization layers exist and the responsible transformation has not been identified.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "V5R01",
+    "name": "Stack trace identifies session guard",
+    "difficulty": "adversarial",
+    "state": "A stack trace consistently ends at src/auth/session.guard.ts:118 when suspended users are accepted. No change has been made yet, and the relevant branch at that location has not been examined.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R02",
+    "name": "Serializer line identified",
+    "difficulty": "adversarial",
+    "state": "The missing field is produced by src/orders/order.serializer.ts:74 according to the trace. The behavior still needs to be understood before changing anything.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R03",
+    "name": "Exact retry handler identified",
+    "difficulty": "adversarial",
+    "state": "Repeated payment attempts enter src/payments/retry-handler.ts through handleProviderFailure(). The current branch behavior has not been inspected and nothing has been edited.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R04",
+    "name": "Exact React state updater",
+    "difficulty": "adversarial",
+    "state": "The incorrect page number originates from updatePaginationState() in src/components/Pagination.tsx. The next step is to understand why that function produces the observed value.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R05",
+    "name": "Known mapper despite persistence noise",
+    "difficulty": "adversarial",
+    "state": "A production record contains the expected value, but the API response loses it inside src/users/user.mapper.ts according to the debugger. No modification has been made.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R06",
+    "name": "Known cache invalidator",
+    "difficulty": "adversarial",
+    "state": "Telemetry shows stale entries are produced immediately after invalidateProduct() in src/cache/product-cache.service.ts. The implementation of that method has not yet been examined.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R07",
+    "name": "Known middleware branch",
+    "difficulty": "adversarial",
+    "state": "The request changes behavior at line 91 of src/http/tenant.middleware.ts. The relevant branch is known, nothing has been altered, and the cause is not yet understood.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "V5R08",
+    "name": "Known pricing calculation",
+    "difficulty": "adversarial",
+    "state": "The debugger shows the incorrect total first appears inside calculateDiscountedTotal() in src/pricing/calculate-total.ts. The implementation has not yet been reviewed.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "V5T01",
+    "name": "Authorization patch awaiting evidence",
+    "difficulty": "adversarial",
+    "state": "The suspended-user branch in src/auth/session.guard.ts has just been corrected. Nothing has been executed since the edit to establish whether the change behaves as intended or affects existing authorization behavior.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T02",
+    "name": "Pagination patch awaiting evidence",
+    "difficulty": "adversarial",
+    "state": "The pagination calculation was just updated to handle the final page correctly. The edited implementation has not been exercised since the change.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T03",
+    "name": "Transaction patch with database distraction",
+    "difficulty": "adversarial",
+    "state": "Production previously contained partial writes after a failure. The transaction boundary has now been changed to address that behavior, but the new implementation has not been exercised since the edit.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T04",
+    "name": "Serializer patch with known file",
+    "difficulty": "adversarial",
+    "state": "The missing-property logic in src/orders/order.serializer.ts has just been corrected. The implementation location is already understood; what remains is establishing whether the change works without breaking existing serialization behavior.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T05",
+    "name": "Migration patch after schema discrepancy",
+    "difficulty": "adversarial",
+    "state": "A deployment previously failed because an environment lacked an expected column. The migration was just revised to handle the discrepancy, and the revised behavior has not yet been exercised.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T06",
+    "name": "Retry logic patch",
+    "difficulty": "adversarial",
+    "state": "The branch that could process the same payment twice has just been changed. The cause and implementation location are already understood, but there is no evidence yet that the new behavior works correctly.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T07",
+    "name": "Validation patch",
+    "difficulty": "adversarial",
+    "state": "The validator that allowed an unsupported status value has just been updated. The edit is complete, but its effect on valid and invalid inputs has not been established yet.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "V5T08",
+    "name": "Cache patch after production anomaly",
+    "difficulty": "adversarial",
+    "state": "The stale-product behavior was traced to one invalidation branch and that branch has just been changed. Production previously showed stale values, but the immediate need is to establish whether the new implementation behaves correctly.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "V5D01",
+    "name": "Duplicate row despite single execution",
+    "difficulty": "adversarial",
+    "state": "Tracing shows the create operation executed once, yet two durable order entries appear to exist for the same external identifier. The service path has already been inspected and looks consistent with a single write.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D02",
+    "name": "Unexpected stored status",
+    "difficulty": "adversarial",
+    "state": "The application branch assigns ACTIVE and the relevant implementation has already been inspected, but one customer later appears as ARCHIVED. The next uncertainty is the value that actually exists in persistent state for that customer.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D03",
+    "name": "Missing relation",
+    "difficulty": "adversarial",
+    "state": "The service loads an order and its customer through a relation that appears correct in the implementation. Production nevertheless behaves as if the customer reference is absent, so the actual relationship associated with the affected order needs to be established.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D04",
+    "name": "Uniqueness conflict after soft delete",
+    "difficulty": "adversarial",
+    "state": "The application is explicitly allowed to reuse an email after account removal, and the responsible service already follows that rule. Creation still fails with a uniqueness conflict for one removed account.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D05",
+    "name": "Sequence mismatch",
+    "difficulty": "adversarial",
+    "state": "A newly created record collides with an identifier that was used long ago. The creation logic itself generates no explicit identifier, so the current persisted sequence state needs to be established.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D06",
+    "name": "Environment structure mismatch",
+    "difficulty": "adversarial",
+    "state": "The same build succeeds in staging and fails in production because one field appears to be absent there. The migration definitions have already been inspected and contain the field.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D07",
+    "name": "Negative inventory persisted",
+    "difficulty": "adversarial",
+    "state": "The business rule forbids stock below zero and the current service contains the expected guard, yet one product is displayed with a negative quantity. The immediate uncertainty is the durable state for that product and its recent adjustments.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "V5D08",
+    "name": "Cleanup leaves child state",
+    "difficulty": "adversarial",
+    "state": "The cleanup implementation appears to remove a parent and its dependents in one operation, but production behaves as though a dependent entry survived. The implementation has already been reviewed.",
+    "expected": "QUERY_DATABASE"
+  },
+
+  {
+    "id": "V5U01",
+    "name": "Refund behavior undecided",
+    "difficulty": "adversarial",
+    "state": "A provider reports success after the customer has already cancelled the purchase. The existing product notes never decide whether the system should refund automatically or require manual approval.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U02",
+    "name": "Username reuse undecided",
+    "difficulty": "adversarial",
+    "state": "An account was removed months ago and another person now requests the same username. Existing product documentation describes deletion but never states whether the identifier becomes available again.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U03",
+    "name": "Conflicting role semantics undecided",
+    "difficulty": "adversarial",
+    "state": "One assigned role permits an operation and another assigned role denies it. The authorization implementation can support either precedence rule, but no product decision states which behavior is intended.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U04",
+    "name": "Duplicate event semantics undecided",
+    "difficulty": "adversarial",
+    "state": "The same external event can legitimately arrive more than once. The current design material does not say whether a repeated event should be ignored, rejected, or processed again.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U05",
+    "name": "Expired invitation behavior undecided",
+    "difficulty": "adversarial",
+    "state": "A person opens an invitation after its expiration time. Nothing agreed by the product team establishes whether this should permanently fail or allow a new activation path.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U06",
+    "name": "Overselling behavior undecided",
+    "difficulty": "adversarial",
+    "state": "Two buyers request the last unit almost simultaneously. The system could reject the second purchase, permit temporary negative stock, or create a backorder, and no agreed behavior selects among them.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U07",
+    "name": "Retention duration undecided",
+    "difficulty": "adversarial",
+    "state": "A deleted account has associated audit history. Technical support exists for immediate removal or delayed cleanup, but no product decision specifies how long that history should remain.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "V5U08",
+    "name": "Private resource visibility undecided",
+    "difficulty": "adversarial",
+    "state": "A resource marked private is requested by someone who follows its owner but has no explicit membership. The application can support either outcome and no agreed behavior defines whether following is sufficient.",
+    "expected": "ASK_USER"
+  }
+]

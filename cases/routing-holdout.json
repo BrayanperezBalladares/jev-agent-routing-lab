@@ -1,0 +1,365 @@
+[
+  {
+    "id": "S01",
+    "name": "Payment retry owner unknown",
+    "difficulty": "intermediate",
+    "state": "Customers occasionally receive two payment attempts after a timeout. The API route, payment provider and queue worker are known, but nobody has established which component decides whether a failed charge should be retried.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S02",
+    "name": "Avatar transformation path unknown",
+    "difficulty": "ambiguous",
+    "state": "Uploaded profile photos sometimes lose their orientation. Uploading succeeds and object storage contains the original image. The project contains several image utilities and background jobs, and it is not yet clear which path performs the transformation.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S03",
+    "name": "Email notification source unknown",
+    "difficulty": "intermediate",
+    "state": "A password reset completes correctly but two emails are sent. The mail provider shows two legitimate requests from the application. There are controllers, event subscribers and queue consumers that can send mail, but the source of the second request has not been traced.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S04",
+    "name": "Cache invalidation ownership unknown",
+    "difficulty": "adversarial",
+    "state": "Product edits persist correctly in the database, yet some clients continue seeing the previous value for several minutes. Redis is involved, but the team has not mapped which application component is responsible for clearing the relevant cache entry.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S05",
+    "name": "Unknown inventory reservation path",
+    "difficulty": "intermediate",
+    "state": "Stock is sometimes reserved twice when two checkout requests arrive almost simultaneously. Several services interact with inventory and orders, and the call path responsible for creating reservations has not been isolated.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S06",
+    "name": "Unknown webhook verification implementation",
+    "difficulty": "adversarial",
+    "state": "Valid provider webhooks occasionally receive a 401 response. The signing secret is correct and the incoming signature matches the provider documentation, but the team has not located the code that performs webhook signature verification.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S07",
+    "name": "Background cleanup trigger unknown",
+    "difficulty": "ambiguous",
+    "state": "Expired temporary files remain in storage indefinitely. A cleanup service exists, but it is unclear whether it is invoked through cron, a queue scheduler, application startup or another mechanism.",
+    "expected": "SEARCH_CODE",
+    "acceptable": [
+      "READ_FILE"
+    ]
+  },
+  {
+    "id": "S08",
+    "name": "Rate limiter ownership unknown",
+    "difficulty": "adversarial",
+    "state": "One API endpoint starts returning 429 responses far earlier than expected. Infrastructure limits are normal. The application uses middleware, route decorators and a shared throttling module, but the rule governing this endpoint has not been traced.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S09",
+    "name": "Order status mutation source unknown",
+    "difficulty": "intermediate",
+    "state": "Some orders move from PAID back to PENDING several seconds after checkout. Audit timestamps show that the application performs the update, but the responsible worker, listener or service method has not been identified.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "S10",
+    "name": "Unknown feature flag consumer",
+    "difficulty": "ambiguous",
+    "state": "A feature flag is enabled for a tenant but the new checkout remains hidden. The flag service returns true when queried manually. Several frontend and backend modules consume flags and the relevant consumer has not yet been found.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "R01",
+    "name": "Exact serializer frame",
+    "difficulty": "intermediate",
+    "state": "The stack trace ends inside src/orders/order-response.mapper.ts at buildOrderResponse(), immediately before the malformed response is returned. The underlying order record has already been confirmed to contain the expected values.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R02",
+    "name": "Known JWT guard",
+    "difficulty": "adversarial",
+    "state": "Tracing shows that requests are rejected inside src/auth/access-token.guard.ts before the controller executes. The token is valid when decoded independently and no database lookup occurs on this path.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R03",
+    "name": "Known pricing function",
+    "difficulty": "intermediate",
+    "state": "A debugger has narrowed an incorrect discount calculation to calculateFinalPrice() in pricing.service.ts. The inputs entering that function are correct, but its branching behavior has not been reviewed.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R04",
+    "name": "Compile failure exact module",
+    "difficulty": "adversarial",
+    "state": "The application cannot build because TypeScript reports an incompatible return type in inventory.repository.ts at findAvailableStock(). Nothing reaches the database or runtime.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R05",
+    "name": "Known event handler",
+    "difficulty": "ambiguous",
+    "state": "Instrumentation confirms that OrderPaidHandler.handle() is invoked twice for one event. The queue delivers only one message, so the next investigation is inside the handler and its immediate execution path.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R06",
+    "name": "Exact React component identified",
+    "difficulty": "intermediate",
+    "state": "React DevTools shows that CartSummary.tsx receives the correct subtotal but displays an incorrect total. The API payload and store state are both correct.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R07",
+    "name": "Known middleware branch",
+    "difficulty": "adversarial",
+    "state": "Request tracing stops at tenant-context.middleware.ts where a specific branch returns before next() is called. The tenant exists and its database record has already been verified.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R08",
+    "name": "Known SQL builder code",
+    "difficulty": "ambiguous",
+    "state": "The generated SQL is missing the tenant predicate. Logging shows that buildProductQuery() in product-query.builder.ts produces the incorrect query string before it is sent to the database.",
+    "expected": "READ_FILE",
+    "acceptable": [
+      "QUERY_DATABASE"
+    ]
+  },
+  {
+    "id": "R09",
+    "name": "Exact file upload validator",
+    "difficulty": "intermediate",
+    "state": "Valid PDF uploads are rejected inside document-file.validator.ts. Logging immediately before the validator shows the correct MIME type and file size.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "R10",
+    "name": "Mapper loses property",
+    "difficulty": "adversarial",
+    "state": "The database entity contains customerReference and the service receives it correctly. The value disappears while executing mapInvoiceDto() in invoice.mapper.ts.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "T01",
+    "name": "Pagination fix awaiting validation",
+    "difficulty": "intermediate",
+    "state": "The pagination calculation was rewritten to fix duplicated rows between pages. The changes compile and code review is complete, but nobody has exercised page boundaries since the edit.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T02",
+    "name": "Race condition patch complete",
+    "difficulty": "adversarial",
+    "state": "A locking change intended to prevent two workers from processing the same job has been implemented. The relevant code and database constraint are understood; what remains is proving that concurrent execution now behaves correctly.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T03",
+    "name": "Validation behavior updated",
+    "difficulty": "intermediate",
+    "state": "Username validation now accepts accented characters after changes to the DTO and validation helper. Static analysis passes, but valid and invalid request examples have not been exercised after the update.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T04",
+    "name": "Cache fix completed",
+    "difficulty": "ambiguous",
+    "state": "The product update flow was changed so it also invalidates Redis. The responsible code has already been inspected and the implementation is considered complete. There is no runtime evidence yet that stale values no longer appear.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T05",
+    "name": "Migration compatibility patch",
+    "difficulty": "adversarial",
+    "state": "The application was updated to work with the newly renamed database column and TypeScript now builds cleanly. The integration path that reads and writes the affected entity has not been exercised since the change.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T06",
+    "name": "Frontend state fix",
+    "difficulty": "intermediate",
+    "state": "The cart reducer was changed so removing the final item resets totals and discounts. The implementation is finished and there are existing reducer tests, but they have not been run after the change.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T07",
+    "name": "Retry policy revised",
+    "difficulty": "ambiguous",
+    "state": "The queue retry policy was adjusted to stop retrying permanent validation failures while preserving retries for transient failures. The edit is complete; its behavior has not yet been demonstrated.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T08",
+    "name": "Authorization fix implemented",
+    "difficulty": "adversarial",
+    "state": "The authorization condition that incorrectly rejected project owners has been corrected. The guard compiles and the affected branch has been reviewed. The original failing request has not been executed afterward.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T09",
+    "name": "Transaction boundary changed",
+    "difficulty": "intermediate",
+    "state": "Order creation and inventory reservation were moved into one transaction. All intended edits are present and no further code investigation is planned. The rollback scenario has not been exercised.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "T10",
+    "name": "Serialization patch complete",
+    "difficulty": "adversarial",
+    "state": "The response mapper was corrected so null optional fields are omitted rather than serialized incorrectly. The patch is finished, but endpoint behavior has not been checked since it was made.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "D01",
+    "name": "Record exists unexpectedly",
+    "difficulty": "intermediate",
+    "state": "The repository method returns no active subscription, yet inserting a new subscription fails because the user-plan pair already exists. The repository query has already been inspected and matches its intended filter.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D02",
+    "name": "Migration drift",
+    "difficulty": "adversarial",
+    "state": "Production reports a constraint called users_email_key_old, while neither the current entity nor the latest migrations define that constraint. Application code behaves normally in a fresh local database.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D03",
+    "name": "Test order leakage",
+    "difficulty": "intermediate",
+    "state": "An order integration test succeeds alone but observes another test's order when the whole suite runs. The order service is deterministic and no source files changed between the two executions.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D04",
+    "name": "Soft deletion uniqueness conflict",
+    "difficulty": "ambiguous",
+    "state": "Creating a replacement API key fails on a uniqueness violation even though the previous key is no longer returned by normal queries. The application uses soft deletion for API keys.",
+    "expected": "QUERY_DATABASE",
+    "acceptable": [
+      "READ_FILE"
+    ]
+  },
+  {
+    "id": "D05",
+    "name": "Foreign key record discrepancy",
+    "difficulty": "adversarial",
+    "state": "The service passes an existing customerId according to the debugger, but the insert fails with a foreign-key error. The service method and DTO have already been checked.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D06",
+    "name": "Unexpected enum value stored",
+    "difficulty": "intermediate",
+    "state": "The application only writes PENDING, PAID and CANCELLED, yet a query failure reports an older ARCHIVED value in the status column. No current code path can produce that value.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D07",
+    "name": "Sequence behind table",
+    "difficulty": "adversarial",
+    "state": "New invoices intermittently fail because the generated primary key already belongs to an existing row. Insert logic contains no custom ID assignment and has already been reviewed.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D08",
+    "name": "Schema differs by environment",
+    "difficulty": "ambiguous",
+    "state": "The same build works in staging but production rejects one insert because a column is NOT NULL there. The current migration history says the column should be nullable in both environments.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D09",
+    "name": "Persisted timestamp anomaly",
+    "difficulty": "intermediate",
+    "state": "The application logs the correct expiration timestamp immediately before saving, but reading the row back shows a different timezone offset. Serialization and service calculations have already been verified.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "D10",
+    "name": "Cleanup leaves dependent rows",
+    "difficulty": "adversarial",
+    "state": "A test setup deletes all parent records successfully, but inserting the next fixture fails because dependent rows from a previous run still reference an old identifier. Cleanup code has already executed without errors.",
+    "expected": "QUERY_DATABASE"
+  },
+
+  {
+    "id": "U01",
+    "name": "Failed payment retry policy",
+    "difficulty": "intermediate",
+    "state": "The system can either retry a failed payment automatically, require the customer to retry manually, or cancel the order. The product requirements specify the failure state but never choose among those behaviors.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U02",
+    "name": "Username reuse policy",
+    "difficulty": "ambiguous",
+    "state": "A deleted account's username could be released immediately, reserved forever, or held for a limited period. All three approaches are technically supported and the requirement does not establish which one applies.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U03",
+    "name": "Refund authorization policy",
+    "difficulty": "adversarial",
+    "state": "Managers and administrators both have access to order management, but there is no stated rule describing whether managers may issue full refunds above a monetary threshold.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U04",
+    "name": "Duplicate webhook semantics",
+    "difficulty": "intermediate",
+    "state": "The provider may deliver the same webhook more than once. The implementation can ignore repeats, return the original result, or report a conflict, but the contract does not specify the externally visible behavior.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U05",
+    "name": "Expired invitation behavior",
+    "difficulty": "ambiguous",
+    "state": "An expired team invitation could be automatically replaced with a new invitation, rejected, or reactivated. Existing requirements only define the expiration period.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U06",
+    "name": "Inventory oversell policy",
+    "difficulty": "adversarial",
+    "state": "When the final unit is requested simultaneously by two customers, the backend can reject one checkout, create a backorder, or permit temporary negative stock. No business rule chooses among these outcomes.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U07",
+    "name": "Account deletion retention",
+    "difficulty": "intermediate",
+    "state": "Account deletion is implemented technically, but the requested feature does not state whether associated invoices, audit records and uploaded files must be retained, anonymized or removed.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U08",
+    "name": "Role inheritance semantics",
+    "difficulty": "ambiguous",
+    "state": "A user can belong to multiple organizations with different roles. The specification lists the roles but never defines whether permissions should combine across memberships or remain isolated to the selected organization.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U09",
+    "name": "Scheduled job missed execution",
+    "difficulty": "adversarial",
+    "state": "A scheduled report is supposed to run daily, but the requirements do not say whether a missed execution during downtime should run immediately after recovery or simply wait for the next scheduled time.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "U10",
+    "name": "Private file access semantics",
+    "difficulty": "intermediate",
+    "state": "Private attachments can be exposed through short-lived signed URLs or streamed through the authenticated API. Both are already supported by the infrastructure, but the desired access behavior is not defined.",
+    "expected": "ASK_USER"
+  }
+]

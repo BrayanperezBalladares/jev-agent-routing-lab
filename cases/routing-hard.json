@@ -1,0 +1,219 @@
+[
+  {
+    "id": "H01",
+    "name": "Unknown membership implementation with database distraction",
+    "difficulty": "adversarial",
+    "state": "A membership request returns an unexpected conflict response. The database contains a unique constraint and several migrations mention memberships, but nobody on the team currently knows which part of the NestJS application decides whether an existing member may join again.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "H02",
+    "name": "Authorization location unknown",
+    "difficulty": "ambiguous",
+    "state": "Authentication succeeds and the JWT contains the expected role, yet one community endpoint rejects the request. Several guards, decorators and interceptors exist in the project and we have not established which one governs this endpoint.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "H03",
+    "name": "Flaky community test without implementation location",
+    "difficulty": "adversarial",
+    "state": "An integration test involving community membership fails intermittently. Logs mention a repository call and a service operation, but there is no stack trace identifying the business rule responsible and the relevant implementation has not been located.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "H04",
+    "name": "Refactor moved behavior",
+    "difficulty": "ambiguous",
+    "state": "After a recent module refactor, the API still exposes the join endpoint but the team is unsure where the duplicate-member behavior ended up. The old service no longer contains the previous method and no replacement file has been identified.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "H05",
+    "name": "Unknown event publisher",
+    "difficulty": "adversarial",
+    "state": "Joining a community succeeds but the expected membership-created event is never emitted. We know the event exists and consumers are working, but we do not know which component is responsible for publishing it.",
+    "expected": "SEARCH_CODE"
+  },
+  {
+    "id": "H06",
+    "name": "Missing ownership authorization implementation",
+    "difficulty": "ambiguous",
+    "state": "OWNER and ADMIN requests behave differently on the same route. Requirements clearly describe the expected permissions, but the implementation responsible for enforcing those permissions has not yet been identified.",
+    "expected": "SEARCH_CODE"
+  },
+
+  {
+    "id": "H07",
+    "name": "Exact service location despite SQL noise",
+    "difficulty": "adversarial",
+    "state": "Logs contain several SQL statements and a duplicate index warning, but the exception stack points directly to communities.service.ts in the canJoinCommunity method. No implementation changes have been made yet.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "H08",
+    "name": "Repository already identified",
+    "difficulty": "ambiguous",
+    "state": "A previous repository-wide investigation established that membership.repository.ts contains the only lookup used by the failing operation. An old migration also modified the same table, but the current repository implementation has not yet been examined.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "H09",
+    "name": "Known role guard",
+    "difficulty": "adversarial",
+    "state": "Tracing has already isolated the unexpected 403 response to community-role.guard.ts. The JWT and database role assignments have been verified as correct, but the guard's decision logic has not yet been inspected.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "H10",
+    "name": "Known DTO compile failure",
+    "difficulty": "adversarial",
+    "state": "The project does not compile because TypeScript reports an error at CreateCommunityDto in create-community.dto.ts. Database connectivity and integration tests are unrelated because execution never reaches runtime.",
+    "expected": "READ_FILE"
+  },
+  {
+    "id": "H11",
+    "name": "Controller line identified",
+    "difficulty": "ambiguous",
+    "state": "A debugger shows that the unexpected 409 response originates from line 88 of communities.controller.ts. Someone suspects a unique database constraint might also matter, but the controller branch itself has not been examined.",
+    "expected": "READ_FILE",
+    "acceptable": [
+      "QUERY_DATABASE"
+    ]
+  },
+  {
+    "id": "H12",
+    "name": "Specific mapper suspected",
+    "difficulty": "adversarial",
+    "state": "The returned community object is missing the member count. Tracing already identifies community.mapper.ts as the component producing the response object, while database queries show the correct count is available.",
+    "expected": "READ_FILE"
+  },
+
+  {
+    "id": "H13",
+    "name": "Idempotency patch not exercised",
+    "difficulty": "adversarial",
+    "state": "A developer has just changed the duplicate-join behavior so an existing membership should return successfully instead of creating another record. The patch looks reasonable in review, but nothing has exercised the new behavior yet.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "H14",
+    "name": "Guard fix ready for verification",
+    "difficulty": "ambiguous",
+    "state": "The OWNER authorization condition inside the known guard has been corrected and the project builds successfully. The original failing scenario and regression suite have not been exercised after the modification.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "H15",
+    "name": "DTO change needs evidence",
+    "difficulty": "adversarial",
+    "state": "Validation rules for community names were changed together with their error mapping. Static inspection reveals no obvious issue and the implementation is complete, but there is no evidence yet that existing valid and invalid requests still behave correctly.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "H16",
+    "name": "Repository refactor completed",
+    "difficulty": "ambiguous",
+    "state": "Membership lookup logic was refactored from the service into a repository. All intended edits are complete and TypeScript reports no editor errors, but the behavior of the refactored path has not been validated.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "H17",
+    "name": "Transaction fix implemented",
+    "difficulty": "adversarial",
+    "state": "The transaction used for joining a community was changed to avoid creating duplicate memberships during concurrent requests. The implementation and schema are already understood; what is missing is evidence that the change actually solves the scenario.",
+    "expected": "RUN_TESTS"
+  },
+  {
+    "id": "H18",
+    "name": "Controller response change complete",
+    "difficulty": "ambiguous",
+    "state": "The controller and service were updated so repeated join requests return the required status and body. No more code investigation is currently planned, but the updated endpoint has not been exercised since those edits.",
+    "expected": "RUN_TESTS"
+  },
+
+  {
+    "id": "H19",
+    "name": "Unexpected row after code review",
+    "difficulty": "adversarial",
+    "state": "The membership lookup implementation has been reviewed carefully and matches the intended query. Nevertheless, an integration scenario observes an existing membership for a user who should have none, so the actual persisted records need to be understood.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "H20",
+    "name": "Foreign key after migration",
+    "difficulty": "ambiguous",
+    "state": "Application logic has not changed, but tests began failing with a foreign-key violation immediately after a schema migration. The service passes valid identifiers according to the debugger.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "H21",
+    "name": "Correct service but inconsistent persistence",
+    "difficulty": "adversarial",
+    "state": "The service checks for a membership before inserting and the check returns none, yet insertion reports that the same user-community pair already exists. The relevant service method has already been inspected.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "H22",
+    "name": "Possible stale soft deleted row",
+    "difficulty": "ambiguous",
+    "state": "A user cannot rejoin after previously leaving a community. The service correctly ignores inactive memberships, but the unique constraint still rejects the new insert. A soft-deleted historical row may still occupy the constrained values.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "H23",
+    "name": "Test database contamination",
+    "difficulty": "adversarial",
+    "state": "A test passes when executed alone but fails after another membership test. The application code is unchanged and appears deterministic. The failure reports data already existing before the test's setup completes.",
+    "expected": "QUERY_DATABASE"
+  },
+  {
+    "id": "H24",
+    "name": "Migration constraint mismatch",
+    "difficulty": "ambiguous",
+    "state": "The entity metadata defines one membership per user and community, but the database reports a constraint name that does not exist in the current migration files. Service behavior has already been verified.",
+    "expected": "QUERY_DATABASE"
+  },
+
+  {
+    "id": "H25",
+    "name": "Final owner departure semantics",
+    "difficulty": "adversarial",
+    "state": "Implementation options are technically straightforward, but the product specification never states whether the final OWNER should be prevented from leaving, transfer ownership automatically, or cause the community to be deleted.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "H26",
+    "name": "Moderator authority undefined",
+    "difficulty": "ambiguous",
+    "state": "The system already has the technical ability to remove members. The unresolved issue is whether a MODERATOR is permitted to remove another moderator or the OWNER; existing requirements do not establish that policy.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "H27",
+    "name": "Duplicate join expected behavior unspecified",
+    "difficulty": "adversarial",
+    "state": "A second join request currently returns HTTP 409. The code location and database constraint are both known, but the task only says to handle duplicate joins and never states whether the expected behavior is an error, success, or an idempotent response.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "H28",
+    "name": "Community deletion policy missing",
+    "difficulty": "ambiguous",
+    "state": "Deleting a community with posts and active members can be implemented through cascading deletion, soft deletion, or by blocking the operation. The technical paths are known, but no requirement chooses among them.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "H29",
+    "name": "Private community membership policy",
+    "difficulty": "adversarial",
+    "state": "The backend supports public and private communities, and the join endpoint already exists. Requirements do not say whether joining a private community should be rejected, create a pending request, or require an invitation.",
+    "expected": "ASK_USER"
+  },
+  {
+    "id": "H30",
+    "name": "Inactive community behavior unspecified",
+    "difficulty": "ambiguous",
+    "state": "A community can be marked inactive, but nothing in the specification states whether existing members may still create posts, leave the community, view its content, or perform moderation actions after deactivation.",
+    "expected": "ASK_USER"
+  }
+]
