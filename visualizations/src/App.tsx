@@ -2,7 +2,12 @@ import React, { Suspense } from 'react'
 import './App.css'
 import { Hero } from './components/Hero'
 import { ResearchOverview } from './components/ResearchOverview'
-import { AgentScenarioSandbox, HistoricRunReplay } from './components/story'
+import {
+  AgentScenarioSandbox,
+  HistoricRunReplay,
+  MarginDeconstructor,
+  ExplicitnessLadder,
+} from './components/story'
 import { ConfidenceStabilitySection } from './components/ConfidenceStabilitySection'
 import { ResearchConclusion } from './components/ResearchConclusion'
 import { MethodologyNotes } from './components/MethodologyNotes'
@@ -39,6 +44,8 @@ export const App: React.FC = () => {
           <a href="#hero" className="nav-anchor">Hero</a>
           <a href="#agent-scenario-sandbox" className="nav-anchor">Scenario Sandbox</a>
           <a href="#historic-run-replay" className="nav-anchor">Boundary Replay</a>
+          <a href="#margin-deconstructor" className="nav-anchor">Margin Deconstructor</a>
+          <a href="#explicitness-ladder" className="nav-anchor">Explicitness Ladder</a>
           <a href="#research-overview" className="nav-anchor">Overview</a>
           <a href="#holdout-comparison" className="nav-anchor">Holdout</a>
           <a href="#benchmark-progression" className="nav-anchor">Progression</a>
@@ -58,7 +65,7 @@ export const App: React.FC = () => {
         {/* Phase 1 Story: Step 1 — Interactive Agent Scenario Sandbox */}
         <AgentScenarioSandbox />
 
-        {/* Short Narrative Transition Banner 1 */}
+        {/* Narrative Transition Banner 1 */}
         <div className="story-transition-banner" role="note" aria-label="Research transition note">
           <div className="transition-lead">
             A correct one-shot decision still leaves another question: is that decision stable?
@@ -72,17 +79,46 @@ export const App: React.FC = () => {
         {/* Phase 1 Story: Step 2 — Historic Run Replay (V5U02) */}
         <HistoricRunReplay />
 
+        {/* Phase 2 Transition Banner: Deconstructing the Boundary */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            So what does a result like this tell us about the decision?
+          </div>
+          <p className="transition-caption">
+            To diagnose why routing alternates between SEARCH_CODE and ASK_USER, we must deconstruct the difference
+            between provider-returned confidence, candidate margin separation, and observed repeated-choice stability.
+          </p>
+        </div>
+
+        {/* Phase 2 Story: Step 3 — Margin Deconstructor */}
+        <MarginDeconstructor />
+
+        {/* Phase 2 Transition Banner: Representation and Formulation */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            What happens when the unresolved implementation state is expressed more explicitly?
+          </div>
+          <p className="transition-caption">
+            Investigate how explicitly specifying the location and nature of unresolved operational information
+            coincided with changes in routing behavior across the controlled V8 ablation suite.
+          </p>
+        </div>
+
+        {/* Phase 2 Story: Step 4 — Explicitness Ladder (C1–C6) */}
+        <ExplicitnessLadder />
+
         {/* Primary Insight Transition to Deep Dashboard */}
         <div className="story-transition-banner" role="note" aria-label="Research progression note">
           <div className="transition-lead">
             Primary Insight: One-shot accuracy can hide routing instability near semantic decision boundaries.
           </div>
           <p className="transition-caption">
-            With the boundary concept established, examine how Jev performs across stationary holdouts, diagnostic stress suites, and implementation-explicitness ablations in the research dashboard below.
+            With the experiential foundations established, examine how Jev performs across stationary holdouts,
+            diagnostic stress suites, and full research datasets in the deep analytical sections below.
           </p>
         </div>
 
-        {/* 2. Research Overview & Scope (Repositioned after experiential story) */}
+        {/* Research Overview & Scope (Repositioned after experiential story) */}
         <ResearchOverview />
 
         {/* 3. V3 Holdout Router Comparison */}
