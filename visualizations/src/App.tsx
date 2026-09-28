@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import './App.css'
 import { Hero } from './components/Hero'
 import { ResearchOverview } from './components/ResearchOverview'
+import { AgentScenarioSandbox, HistoricRunReplay } from './components/story'
 import { ConfidenceStabilitySection } from './components/ConfidenceStabilitySection'
 import { ResearchConclusion } from './components/ResearchConclusion'
 import { MethodologyNotes } from './components/MethodologyNotes'
@@ -36,6 +37,8 @@ export const App: React.FC = () => {
         </div>
         <div className="nav-links">
           <a href="#hero" className="nav-anchor">Hero</a>
+          <a href="#agent-scenario-sandbox" className="nav-anchor">Scenario Sandbox</a>
+          <a href="#historic-run-replay" className="nav-anchor">Boundary Replay</a>
           <a href="#research-overview" className="nav-anchor">Overview</a>
           <a href="#holdout-comparison" className="nav-anchor">Holdout</a>
           <a href="#benchmark-progression" className="nav-anchor">Progression</a>
@@ -47,12 +50,39 @@ export const App: React.FC = () => {
         </div>
       </nav>
 
-      {/* Main Research Content (Order 1 through 9) */}
+      {/* Main Research Content (Interactive Narrative Flow) */}
       <main id="main-content" style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-        {/* 1. Hero */}
+        {/* 1. Hero: Minimal Narrative Hook */}
         <Hero />
 
-        {/* 2. Research Overview & Scope */}
+        {/* Phase 1 Story: Step 1 — Interactive Agent Scenario Sandbox */}
+        <AgentScenarioSandbox />
+
+        {/* Short Narrative Transition Banner 1 */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            A correct one-shot decision still leaves another question: is that decision stable?
+          </div>
+          <p className="transition-caption">
+            In production agent workflows, single-pass evaluations can mask underlying sensitivity.
+            When ambiguous operational states are presented repeatedly, how consistently does a semantic evaluator choose the same action?
+          </p>
+        </div>
+
+        {/* Phase 1 Story: Step 2 — Historic Run Replay (V5U02) */}
+        <HistoricRunReplay />
+
+        {/* Primary Insight Transition to Deep Dashboard */}
+        <div className="story-transition-banner" role="note" aria-label="Research progression note">
+          <div className="transition-lead">
+            Primary Insight: One-shot accuracy can hide routing instability near semantic decision boundaries.
+          </div>
+          <p className="transition-caption">
+            With the boundary concept established, examine how Jev performs across stationary holdouts, diagnostic stress suites, and implementation-explicitness ablations in the research dashboard below.
+          </p>
+        </div>
+
+        {/* 2. Research Overview & Scope (Repositioned after experiential story) */}
         <ResearchOverview />
 
         {/* 3. V3 Holdout Router Comparison */}
