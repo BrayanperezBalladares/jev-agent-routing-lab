@@ -1,5 +1,11 @@
 # Jev Agent Routing Lab
 
+## Interactive Dashboard
+
+Explore the live research dashboard:
+
+https://brayanperezballadares.github.io/jev-agent-routing-lab/
+
 Experimental evaluation of **Jev (`typesafe-ai/jev`) as a semantic decision router for software-engineering agents**.
 
 The project studies whether a specialized evaluator can reliably answer a deceptively simple question:
