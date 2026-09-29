@@ -1,0 +1,52 @@
+{
+  "brand": {
+    "badge": "JEV LAB",
+    "title": "Agent Routing Research",
+    "monograph": "Research Monograph"
+  },
+  "nav": {
+    "ariaLabel": "Dashboard Section Navigation",
+    "hero": "Introduction",
+    "sandbox": "Scenario Sandbox",
+    "replay": "Historic Replay",
+    "margin": "Margin Deconstructor",
+    "ladder": "Explicitness Ladder",
+    "overview": "Overview",
+    "holdout": "Holdout",
+    "progression": "Progression",
+    "boundary": "Boundary",
+    "ablation": "V8 Ablation",
+    "confidence": "Confidence & Margin",
+    "conclusions": "Conclusions",
+    "methodology": "Methodology"
+  },
+  "controls": {
+    "theme": {
+      "ariaLabel": "Theme selection",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "ariaLabel": "Language selection",
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "common": {
+    "loading": "Loading Research Visualization...",
+    "canonicalLabel": "Canonical Source of Record (English)",
+    "readingTranslationLabel": "Reading Translation",
+    "note": "Note",
+    "warning": "Warning",
+    "keyTakeaways": "Key Takeaways"
+  },
+  "transitions": {
+    "step1to2Lead": "A correct one-shot decision still leaves another question: is that decision stable?",
+    "step1to2Caption": "In production agent workflows, single-pass evaluations can mask underlying sensitivity. When ambiguous operational states are presented repeatedly, how consistently does a semantic evaluator choose the same action?",
+    "step2to3Lead": "So what does a result like this tell us about the decision?",
+    "step2to3Caption": "To diagnose why routing alternates between SEARCH_CODE and ASK_USER, we must deconstruct the difference between provider-returned confidence, candidate margin separation, and observed repeated-choice stability.",
+    "step3to4Lead": "What happens when the unresolved implementation state is expressed more explicitly?",
+    "step3to4Caption": "To study how agent-state representation influences boundary sensitivity, the V8 ablation tests six graduated formulations of the same scenario, from unstated operational doubts (C1) to an explicit question addressed to the user (C6)."
+  }
+}

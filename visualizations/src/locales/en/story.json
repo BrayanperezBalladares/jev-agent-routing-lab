@@ -1,0 +1,165 @@
+{
+  "sandbox": {
+    "badge": "Interactive Problem Space",
+    "badge2": "Canonical 5-Action Formulation",
+    "title": "What Should the Agent Do Next?",
+    "subtitle": "Autonomous engineering agents must map unstructured operational states to a discrete action slot. Read the verified benchmark scenario below and predict which tool action should be invoked.",
+    "contrastLabel": "Holdout Scenario Contrast:",
+    "contextKicker": "AGENT CONTEXT // WORKSPACE SNAPSHOT",
+    "datasetLabel": "routing-holdout.json • Case",
+    "benchmarkCase": "Benchmark Case:",
+    "selectActionLegend": "Select the canonical action for the agent:",
+    "outcomeTitle": "Benchmark Comparison Outcome",
+    "matchSuccess": "Prediction Matches Benchmark Target",
+    "matchAlternative": "Alternative Choice (Benchmark Target: {{expected}})",
+    "yourSelection": "Your Selection",
+    "benchmarkTarget": "Benchmark Target",
+    "whyTargetFits": "Why this target fits the routing definition:",
+    "resetSelection": "Reset selection",
+    "switchToContrast": "Switch to Contrast Case (U01)",
+    "switchToPrimary": "Switch to Primary Case (S01)",
+    "readingTranslationLabel": "Reading Translation",
+    "cases": {
+      "S01": {
+        "name": "Payment retry owner unknown",
+        "contrastLabelDesktop": "S01 — Codebase uncertainty",
+        "contrastLabelMobile": "S01 — Search",
+        "difficulty": "intermediate",
+        "state": "Customers occasionally receive two payment attempts after a timeout. The API route, payment provider and queue worker are known, but nobody has established which component decides whether a failed charge should be retried.",
+        "pedagogicalRationale": "The API route, payment provider, and queue worker are already known in the system, but the specific code component responsible for deciding retry behavior has not been identified. Because this is an implementation detail that exists within the codebase, SEARCH_CODE is the target action to locate the responsible handler before taking any modifying action."
+      },
+      "U01": {
+        "name": "Failed payment retry policy",
+        "contrastLabelDesktop": "U01 — Requirement ambiguity",
+        "contrastLabelMobile": "U01 — Ask",
+        "difficulty": "intermediate",
+        "state": "The system can either retry a failed payment automatically, require the customer to retry manually, or cancel the order. The product requirements specify the failure state but never choose among those behaviors.",
+        "pedagogicalRationale": "Multiple competing business recovery paths exist (automatic retry vs. manual retry vs. order cancellation), but the product requirements never specified which policy should be applied. Because code cannot invent business requirements, ASK_USER is the target action to obtain guidance from the human developer."
+      }
+    },
+    "actions": {
+      "SEARCH_CODE": {
+        "description": "Search repository symbols, files, or references to locate implementations or cues."
+      },
+      "READ_FILE": {
+        "description": "Inspect a known file path to examine its exact contents or configuration."
+      },
+      "RUN_TESTS": {
+        "description": "Execute test suites to observe runtime, regression, or failure behavior."
+      },
+      "QUERY_DATABASE": {
+        "description": "Execute database queries to inspect schema, state, or record consistency."
+      },
+      "ASK_USER": {
+        "description": "Prompt the developer for clarification or guidance on underspecified requirements."
+      }
+    }
+  },
+  "replay": {
+    "badge": "Boundary Exploration",
+    "badge2": "State V5U02 Diagnostic Probe",
+    "title": "When One-Shot Accuracy Hides Decision Instability",
+    "subtitle": "In single-shot evaluations, an agent prompt yields a single routing choice. What happens when the exact same prompt text is evaluated repeatedly across 20 identical runs?",
+    "contextKicker": "HISTORICAL PROBE // STATE V5U02 (Requirement ambiguity)",
+    "datasetLabel": "Dataset: routing-v5-cue-stripped.json • Target: ASK_USER",
+    "promptText": "An account was removed months ago and another person now requests the same username. Existing product documentation describes deletion but never states whether the identifier becomes available again.",
+    "questionLead": "In a single-shot benchmark, this state looked decisive.",
+    "questionSub": "What happened when the exact same prompt text was evaluated 20 times?",
+    "triggerButton": "Replay observed evaluations",
+    "triggerHint": "Historical replay • 20 recorded runs • No live model inference",
+    "focalTag": "EMPIRICAL OUTCOME",
+    "focalTitle": "SAME INPUT • TWO OBSERVED ROUTING CHOICES",
+    "focalSubtitle": "Evaluated across 20 identical runs under the same conditions, routing drifted between two competing actions.",
+    "distSearch": "SEARCH_CODE • 14 of 20 (70%)",
+    "distAsk": "ASK_USER • 6 of 20 (30%)",
+    "searchCaption": "14 evaluations routed to autonomous codebase inspection",
+    "askCaption": "6 evaluations routed to developer clarification",
+    "recordedRuns": "Recorded Runs",
+    "identicalEvals": "Identical evaluations",
+    "observedSplit": "Observed Split",
+    "splitSub": "14 SEARCH / 6 ASK",
+    "avgConfidence": "Average Confidence",
+    "confSub": "Provider-returned signal",
+    "topMargin": "Top-1 / Top-2 Margin",
+    "marginSub": "Low separation",
+    "providerConfTerm": "Provider Confidence:",
+    "providerConfDef": "A provider-returned confidence signal. It is not treated as a calibrated probability that the selected action is correct, and its exact internal semantics are not assumed.",
+    "marginTerm": "Top-1 / Top-2 Margin:",
+    "marginDef": "Top-1 / top-2 margin is the numerical gap between the two highest action probabilities.",
+    "thresholdTerm": "Operational Threshold Caveat:",
+    "thresholdDef": "Small average margins appeared in several mixed-choice states observed in these experiments. The study did not establish a numeric operational threshold.",
+    "resetReplay": "Reset replay",
+    "footerMeta": "Historical record • V5 consistency suite"
+  },
+  "margin": {
+    "badge": "Conceptual Framework",
+    "badge2": "Diagnostic Boundary Analysis",
+    "title": "Deconstructing the Decision Boundary",
+    "subtitle": "Understanding boundary behavior requires distinguishing between provider-returned confidence, candidate margin separation, and observed repeated-choice stability.",
+    "recordedStates": "Recorded Boundary States:",
+    "kicker": "DIAGNOSTIC STATE // {{id}}",
+    "suite": "Suite:",
+    "identicalEvals": "{{count}} Identical Evaluations",
+    "mixedChoices": "Mixed Observed Choices",
+    "singleChoice": "Single Observed Choice",
+    "pillar1Tag": "SIGNAL 1",
+    "pillar1Title": "Provider Confidence",
+    "pillar1Caption": "Provider-returned signal • Non-calibrated",
+    "pillar2Tag": "SIGNAL 2",
+    "pillar2Title": "Top-1 / Top-2 Margin",
+    "pillar2Caption": "Candidate separation • Top-1 vs Top-2 gap",
+    "pillar3Tag": "BEHAVIOR",
+    "pillar3Title": "Repeated-Choice Stability",
+    "pillar3Caption": "SEARCH_CODE vs ASK_USER ({{runs}} runs)",
+    "findingLabel": "Observed Diagnostic Finding",
+    "referenceGuide": {
+      "confidenceTerm": "Provider Confidence",
+      "confidenceDesc": "A provider-returned confidence signal. It is not treated as a calibrated probability that the selected action is correct, and its exact internal semantics are not assumed.",
+      "marginTerm": "Top-1 / Top-2 Margin",
+      "marginDesc": "Top-1 / top-2 margin is the numerical gap between the two highest action probabilities.",
+      "stabilityTerm": "Repeated-Choice Stability",
+      "stabilityDesc": "Repeated evaluations show whether identical input text produced the same or mixed observed routing choices in this experiment."
+    },
+    "guardrailTitle": "Methodological Interpretation & Non-Threshold Policy",
+    "guardrailBody": "Several mixed-choice states in these diagnostic suites had small average margins (such as V5U02 at 0.0705 or V8-C1 at 0.034). In these recorded runs, V8-C2 showed a single observed SEARCH_CODE choice across 10 evaluations with an average margin of 0.284. However, the study did not establish a universal margin threshold, and a single low-margin observation is not sufficient evidence of instability. Repeated identical evaluations characterize empirical stochastic behavior rather than independent samples. Choice stability in a diagnostic probe does not imply universal correctness or production readiness."
+  },
+  "ladder": {
+    "badge": "Ablation Study",
+    "badge2": "State Formulation Analysis",
+    "title": "How State Formulation Shapes Routing Stability",
+    "subtitle": "Explore six discrete tested variants (C1–C6) to observe how explicitly stating unresolved implementation location coincided with changes in routing behavior.",
+    "testedVariants": "Tested Explicitness Variants",
+    "contrastSub": "C1 → C2 Primary Discovery Contrast • C3–C6 Additional Tested Variants",
+    "discreteHint": "Discrete benchmark variants • Non-continuous",
+    "primaryContrast": "Primary Contrast:",
+    "additionalVariants": "Additional Tested Variants:",
+    "stateRepKicker": "STATE REPRESENTATION // {{id}}",
+    "promptCueBadge": "Tested Prompt Cue",
+    "exactCueText": "Exact Tested Cue Text:",
+    "whatChanged": "What changed in this state?",
+    "observedOutcomeKicker": "OBSERVED OUTCOME // {{runs}} RUNS",
+    "mixedChoicesBadge": "Mixed Observed Choices (20%)",
+    "singleChoiceBadge": "Single Observed Choice (0% Mixed)",
+    "ratioLabel": "SEARCH_CODE to ASK_USER ratio: {{search}}% to {{ask}}%",
+    "avgConfidence": "Average Confidence",
+    "avgMargin": "Average Margin",
+    "mixedRate": "Mixed-Choice Rate",
+    "observedBehavior": "Observed Behavior:",
+    "contextBadgeC1": "Observed Variant Context",
+    "contextBadgeC2": "Observed Local Transition",
+    "contextBadgeOther": "Additional Tested Variant",
+    "contextTextC1": "Mixed observed choices were recorded in this tested variant.",
+    "contextTextC2": "Observed local transition: recorded choices changed from 8/2 in C1 to 10/0 in C2 while average margin changed from 0.034 to 0.284.",
+    "contextTextOther": "This variant retained a single observed SEARCH_CODE choice across the 10 recorded runs.",
+    "disclaimerTitle": "Methodological Scope & Non-Generalization Guardrails",
+    "disclaimerBody": "In these recorded runs, V8-C2 showed a single observed SEARCH_CODE choice across 10 evaluations with an average margin of 0.284. Across these tested states, making unresolved implementation information more explicit coincided with increasingly stable SEARCH_CODE routing in the recorded runs. However, this was a local controlled diagnostic study. It does not establish a universal causal law about semantic routers, does not prove that prompt wording universally eliminates instability, and does not establish that margin 0.284 is an operational guarantee of correctness.",
+    "cFocus": {
+      "C1": "Approved requirement only without stating where implementation uncertainty lies. The model faces an ambiguous operational boundary between inspecting code and asking the user.",
+      "C2": "Adds that the implementation is not discussed. This clarifies that the behavior exists conceptually, but its code whereabouts remain unknown.",
+      "C3": "Explicitly states that it is unclear where the behavior is implemented. Directly points the agent toward autonomous codebase inspection.",
+      "C4": "States that the implementation responsible for the behavior is unknown.",
+      "C5": "States that the implementation responsible for the behavior has not been located.",
+      "C6": "Explicitly states that the implementation has not been located in the repository."
+    }
+  }
+}

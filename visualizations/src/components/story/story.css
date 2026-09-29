@@ -1,18 +1,5 @@
 /* Story & Experiential Section Styles (Phase 1) */
 
-/* Accessibility visually-hidden utility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 /* Neutral & Amber technical badge variants */
 .badge-neutral {
   background-color: var(--bg-surface-elevated) !important;
@@ -21,9 +8,9 @@
 }
 
 .badge-amber {
-  background-color: rgba(251, 191, 36, 0.08) !important;
+  background-color: var(--color-warning-muted) !important;
   color: var(--color-warning) !important;
-  border-color: rgba(251, 191, 36, 0.3) !important;
+  border-color: var(--color-warning) !important;
 }
 
 .story-section {
@@ -411,15 +398,15 @@
 }
 
 .match-success {
-  background-color: rgba(52, 211, 153, 0.12);
-  color: #34d399;
-  border: 1px solid rgba(52, 211, 153, 0.3);
+  background-color: var(--color-success-muted);
+  color: var(--color-success);
+  border: 1px solid var(--color-success);
 }
 
 .match-alternative {
-  background-color: rgba(167, 139, 250, 0.12);
-  color: #a78bfa;
-  border: 1px solid rgba(167, 139, 250, 0.3);
+  background-color: var(--primary-muted);
+  color: var(--primary);
+  border: 1px solid var(--primary);
 }
 
 .reveal-comparison-grid {
@@ -596,9 +583,9 @@
   font-weight: 600;
   padding: 12px 24px;
   border-radius: var(--radius-sm);
-  border: 1px solid var(--accent-primary);
-  background-color: rgba(56, 189, 248, 0.12);
-  color: var(--accent-primary);
+  border: 1px solid var(--primary);
+  background-color: var(--primary-muted);
+  color: var(--primary);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -607,12 +594,12 @@
 }
 
 .replay-trigger-btn:hover {
-  background-color: rgba(56, 189, 248, 0.22);
-  border-color: var(--accent-primary);
+  background-color: var(--surface-tertiary);
+  border-color: var(--primary);
 }
 
 .replay-trigger-btn:focus-visible {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -656,9 +643,9 @@
   font-weight: 700;
   padding: 3px 8px;
   border-radius: var(--radius-full);
-  background-color: rgba(248, 113, 113, 0.15);
-  border: 1px solid rgba(248, 113, 113, 0.4);
-  color: var(--color-ask-user);
+  background-color: var(--ask-user-muted);
+  border: 1px solid var(--ask-user);
+  color: var(--ask-user);
   letter-spacing: 0.05em;
 }
 
@@ -743,14 +730,14 @@
 }
 
 .outcome-region.region-search {
-  background-color: rgba(56, 189, 248, 0.04);
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  background-color: var(--search-code-muted);
+  border: 1px solid var(--search-code);
   box-shadow: none;
 }
 
 .outcome-region.region-ask {
-  background-color: rgba(248, 113, 113, 0.04);
-  border: 1px solid rgba(248, 113, 113, 0.3);
+  background-color: var(--ask-user-muted);
+  border: 1px solid var(--ask-user);
   box-shadow: none;
 }
 
@@ -804,15 +791,15 @@
 }
 
 .region-search .outcome-percentage {
-  background-color: rgba(56, 189, 248, 0.15);
-  color: var(--color-search-code);
-  border: 1px solid rgba(56, 189, 248, 0.35);
+  background-color: var(--search-code-muted);
+  color: var(--search-code);
+  border: 1px solid var(--search-code);
 }
 
 .region-ask .outcome-percentage {
-  background-color: rgba(248, 113, 113, 0.15);
-  color: var(--color-ask-user);
-  border: 1px solid rgba(248, 113, 113, 0.35);
+  background-color: var(--ask-user-muted);
+  color: var(--ask-user);
+  border: 1px solid var(--ask-user);
 }
 
 .outcome-markers-bank {
@@ -828,7 +815,7 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.775rem;
   font-weight: 600;
@@ -839,15 +826,15 @@
 }
 
 .marker-search {
-  background-color: rgba(56, 189, 248, 0.1);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: var(--color-search-code);
+  background-color: var(--search-code-muted);
+  border: 1px solid var(--search-code);
+  color: var(--search-code);
 }
 
 .marker-ask {
-  background-color: rgba(248, 113, 113, 0.1);
-  border: 1px solid rgba(248, 113, 113, 0.3);
-  color: var(--color-ask-user);
+  background-color: var(--ask-user-muted);
+  border: 1px solid var(--ask-user);
+  color: var(--ask-user);
 }
 
 .marker-icon {
@@ -943,9 +930,9 @@
 
 /* Primary Insight Box */
 .primary-insight-banner {
-  background-color: rgba(56, 189, 248, 0.05);
-  border: 1px solid rgba(56, 189, 248, 0.25);
-  border-left: 3px solid var(--accent-primary);
+  background-color: var(--primary-muted);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
   border-radius: var(--radius-sm);
   padding: 16px 20px;
   display: flex;
@@ -1205,11 +1192,11 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #cbd5e1;
-  border: 2px solid var(--bg-surface-elevated);
+  background-color: var(--text-primary);
+  border: 2px solid var(--surface);
   transform: translate(-50%, -50%);
   z-index: 2;
-  box-shadow: 0 0 0 1px var(--border-light);
+  box-shadow: 0 0 0 1px var(--border);
 }
 
 .triad-axis-scale {
@@ -1655,9 +1642,9 @@
 
 /* Persistent Interpretation Region */
 .persistent-interpretation-region {
-  background-color: rgba(56, 189, 248, 0.03);
-  border: 1px solid var(--border-light);
-  border-left: 3px solid var(--accent-primary);
+  background-color: var(--primary-muted);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
   border-radius: var(--radius-sm);
   padding: 14px 18px;
   display: flex;
@@ -1709,4 +1696,30 @@
 
 .disclaimer-body {
   margin: 0;
+}
+
+/* Spanish Reading Translation (source of record remains canonical English) */
+.context-reading-translation {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.reading-translation-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--methodology);
+  font-family: var(--font-mono);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.reading-translation-body,
+.reading-translation-text {
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }

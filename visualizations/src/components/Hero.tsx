@@ -1,28 +1,28 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const Hero: React.FC = () => {
+  const { t } = useTranslation(['overview'])
+
   return (
     <header className="hero-section" id="hero" aria-label="Jev Agent Routing Lab Introduction">
       <div className="hero-content-wrapper">
         <div className="hero-badge-row">
-          <span className="badge badge-accent">Research Lab</span>
-          <span className="badge badge-purple">Autonomous Agent Systems</span>
-          <span className="badge">Typesafe Semantic Routing</span>
+          <span className="badge badge-accent">{t('hero.badge1')}</span>
+          <span className="badge">{t('hero.badge2')}</span>
+          <span className="badge">{t('hero.badge3')}</span>
         </div>
 
         <h1 className="hero-title">
-          How Does a Coding Agent Decide What to Do Next?
+          {t('hero.title')}
         </h1>
 
         <p className="hero-subtitle">
-          Jev Agent Routing Lab studies semantic routing, stability, and decision boundaries
-          across five discrete software-engineering actions.
+          {t('hero.subtitle')}
         </p>
 
         <p className="hero-description">
-          When an autonomous agent receives an ambiguous bug report or complex task, choosing the wrong tool
-          wastes tokens, triggers unnecessary execution loops, or interrupts developers prematurely.
-          Experience the routing dilemma firsthand below before exploring the empirical research.
+          {t('hero.description')}
         </p>
       </div>
     </header>

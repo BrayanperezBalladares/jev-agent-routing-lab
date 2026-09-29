@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import './story.css'
 import {
   V8_IMPLEMENTATION_EXPLICITNESS,
@@ -6,6 +7,8 @@ import {
 } from '../../data/research-results'
 
 export const ExplicitnessLadder: React.FC = () => {
+  const { t, i18n } = useTranslation(['story', 'common'])
+  const isSpanish = i18n.language.startsWith('es')
   const [selectedVariantId, setSelectedVariantId] = useState<string>('C1')
   const [srAnnouncement, setSrAnnouncement] = useState<string>('')
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -17,7 +20,9 @@ export const ExplicitnessLadder: React.FC = () => {
   const handleSelectVariant = (variant: V8VariantResult) => {
     setSelectedVariantId(variant.id)
     setSrAnnouncement(
-      `Selected variant ${variant.id}: ${variant.label}. Outcome: ${variant.searchCodeCount} SEARCH_CODE, ${variant.askUserCount} ASK_USER across ${variant.runs} runs. Average margin: ${variant.averageMargin.toFixed(3)}.`
+      isSpanish
+        ? `Variante seleccionada ${variant.id}: ${variant.label}. Resultado: ${variant.searchCodeCount} SEARCH_CODE, ${variant.askUserCount} ASK_USER en ${variant.runs} ejecuciones. Margen promedio: ${variant.averageMargin.toFixed(3)}.`
+        : `Selected variant ${variant.id}: ${variant.label}. Outcome: ${variant.searchCodeCount} SEARCH_CODE, ${variant.askUserCount} ASK_USER across ${variant.runs} runs. Average margin: ${variant.averageMargin.toFixed(3)}.`
     )
   }
 
@@ -51,30 +56,27 @@ export const ExplicitnessLadder: React.FC = () => {
     >
       <div className="story-header">
         <div className="story-badge-row">
-          <span className="badge badge-accent">Ablation Study</span>
-          <span className="badge">State Formulation Analysis</span>
+          <span className="badge badge-accent">{t('ladder.badge')}</span>
+          <span className="badge">{t('ladder.badge2')}</span>
         </div>
-        <h2 className="story-title">How State Formulation Shapes Routing Stability</h2>
-        <p className="story-subtitle">
-          Explore six discrete tested variants (C1–C6) to observe how explicitly stating
-          unresolved implementation location coincided with changes in routing behavior.
-        </p>
+        <h2 className="story-title">{t('ladder.title')}</h2>
+        <p className="story-subtitle">{t('ladder.subtitle')}</p>
       </div>
 
       <div className="ladder-workbench">
-        {/* Discrete Variant Tabs (Compact C1-C6 - No Continuous Slider) */}
+        {/* Discrete Variant Tabs (Compact C1-C6) */}
         <div className="ladder-tabs-bar">
           <div className="ladder-tabs-header">
             <div className="tabs-header-title-group">
               <span className="ladder-tabs-label">
-                Tested Explicitness Variants
+                {t('ladder.testedVariants')}
               </span>
               <span className="ladder-tabs-sub">
-                C1 &rarr; C2 Primary Discovery Contrast &bull; C3&ndash;C6 Additional Tested Variants
+                {t('ladder.contrastSub')}
               </span>
             </div>
             <span className="ladder-discrete-hint">
-              Discrete benchmark variants &bull; Non-continuous
+              {t('ladder.discreteHint')}
             </span>
           </div>
 
@@ -85,7 +87,7 @@ export const ExplicitnessLadder: React.FC = () => {
           >
             {/* Primary Discovery Contrast Group (C1 & C2) */}
             <div className="tab-contrast-group" role="presentation">
-              <span className="tab-group-label" aria-hidden="true">Primary Contrast:</span>
+              <span className="tab-group-label" aria-hidden="true">{t('ladder.primaryContrast')}</span>
               <div className="tab-group-buttons" role="presentation">
                 {variants.slice(0, 2).map((variant, idx) => {
                   const isSelected = variant.id === selectedVariantId
@@ -117,7 +119,7 @@ export const ExplicitnessLadder: React.FC = () => {
 
             {/* Additional Tested Variants Group (C3–C6) */}
             <div className="tab-additional-group" role="presentation">
-              <span className="tab-group-label" aria-hidden="true">Additional Tested Variants:</span>
+              <span className="tab-group-label" aria-hidden="true">{t('ladder.additionalVariants')}</span>
               <div className="tab-group-buttons" role="presentation">
                 {variants.slice(2).map((variant, sliceIdx) => {
                   const idx = sliceIdx + 2
@@ -157,10 +159,10 @@ export const ExplicitnessLadder: React.FC = () => {
           <div className="ladder-pane pane-representation">
             <div className="pane-header-row">
               <span className="context-kicker-label">
-                STATE REPRESENTATION // {selectedVariant.id}
+                {t('ladder.stateRepKicker', { id: selectedVariant.id })}
               </span>
               <span className="badge badge-neutral">
-                Tested Prompt Cue
+                {t('ladder.promptCueBadge')}
               </span>
             </div>
 
@@ -171,48 +173,16 @@ export const ExplicitnessLadder: React.FC = () => {
               </div>
 
               <div className="representation-quote-box">
-                <span className="quote-label">Exact Tested Cue Text:</span>
+                <span className="quote-label">{t('ladder.exactCueText')}</span>
                 <blockquote className="representation-quote-body">
                   &ldquo;{selectedVariant.stateCue}&rdquo;
                 </blockquote>
               </div>
 
               <div className="representation-focus-box">
-                <strong className="focus-title">What changed in this state?</strong>
+                <strong className="focus-title">{t('ladder.whatChanged')}</strong>
                 <p className="focus-description">
-                  {selectedVariant.id === 'C1' && (
-                    <>
-                      Approved requirement only without stating where implementation uncertainty lies.
-                      The model faces an ambiguous operational boundary between inspecting code and asking the user.
-                    </>
-                  )}
-                  {selectedVariant.id === 'C2' && (
-                    <>
-                      Adds that the implementation is not discussed.
-                      This clarifies that the behavior exists conceptually, but its code whereabouts remain unknown.
-                    </>
-                  )}
-                  {selectedVariant.id === 'C3' && (
-                    <>
-                      Explicitly states that it is unclear where the behavior is implemented.
-                      Directly points the agent toward autonomous codebase inspection.
-                    </>
-                  )}
-                  {selectedVariant.id === 'C4' && (
-                    <>
-                      States that the implementation responsible for the behavior is unknown.
-                    </>
-                  )}
-                  {selectedVariant.id === 'C5' && (
-                    <>
-                      States that the implementation responsible for the behavior has not been located.
-                    </>
-                  )}
-                  {selectedVariant.id === 'C6' && (
-                    <>
-                      Explicitly states that the implementation has not been located in the repository.
-                    </>
-                  )}
+                  {t(`ladder.cFocus.${selectedVariant.id}`)}
                 </p>
               </div>
             </div>
@@ -222,10 +192,10 @@ export const ExplicitnessLadder: React.FC = () => {
           <div className="ladder-pane pane-outcome">
             <div className="pane-header-row">
               <span className="context-kicker-label">
-                OBSERVED OUTCOME // {selectedVariant.runs} RUNS
+                {t('ladder.observedOutcomeKicker', { runs: selectedVariant.runs })}
               </span>
               <span className={`badge ${selectedVariant.instabilityRatePct > 0 ? 'badge-amber' : 'badge-neutral'}`}>
-                {selectedVariant.instabilityRatePct > 0 ? 'Mixed Observed Choices (20%)' : 'Single Observed Choice (0% Mixed)'}
+                {selectedVariant.instabilityRatePct > 0 ? t('ladder.mixedChoicesBadge') : t('ladder.singleChoiceBadge')}
               </span>
             </div>
 
@@ -243,7 +213,7 @@ export const ExplicitnessLadder: React.FC = () => {
                 <div
                   className="distribution-track"
                   role="img"
-                  aria-label={`SEARCH_CODE to ASK_USER ratio: ${selectedVariant.searchCodeRatePct}% to ${selectedVariant.askUserRatePct}%`}
+                  aria-label={t('ladder.ratioLabel', { search: selectedVariant.searchCodeRatePct, ask: selectedVariant.askUserRatePct })}
                 >
                   <div
                     className="distribution-segment-search"
@@ -259,7 +229,7 @@ export const ExplicitnessLadder: React.FC = () => {
               {/* Metrics Grid */}
               <div className="ladder-metrics-grid">
                 <div className="metric-stat-box">
-                  <span className="metric-stat-label">Average Confidence</span>
+                  <span className="metric-stat-label">{t('ladder.avgConfidence')}</span>
                   <span className="metric-stat-value">
                     {selectedVariant.averageConfidence.toFixed(3)}
                   </span>
@@ -267,7 +237,7 @@ export const ExplicitnessLadder: React.FC = () => {
                 </div>
 
                 <div className="metric-stat-box">
-                  <span className="metric-stat-label">Average Margin</span>
+                  <span className="metric-stat-label">{t('ladder.avgMargin')}</span>
                   <span className="metric-stat-value">
                     {selectedVariant.averageMargin.toFixed(3)}
                   </span>
@@ -275,7 +245,7 @@ export const ExplicitnessLadder: React.FC = () => {
                 </div>
 
                 <div className="metric-stat-box">
-                  <span className="metric-stat-label">Mixed-Choice Rate</span>
+                  <span className="metric-stat-label">{t('ladder.mixedRate')}</span>
                   <span className="metric-stat-value">
                     {selectedVariant.instabilityRatePct}%
                   </span>
@@ -287,7 +257,7 @@ export const ExplicitnessLadder: React.FC = () => {
 
               {/* Canonical State Interpretation */}
               <div className="ladder-interpretation-card">
-                <strong className="interpretation-card-title">Observed Behavior:</strong>
+                <strong className="interpretation-card-title">{t('ladder.observedBehavior')}</strong>
                 <p className="interpretation-card-body">
                   &ldquo;{selectedVariant.interpretation}&rdquo;
                 </p>
@@ -296,7 +266,7 @@ export const ExplicitnessLadder: React.FC = () => {
           </div>
         </div>
 
-        {/* Persistent Interpretation Region (Layout-Stable across all C1–C6 variants) */}
+        {/* Persistent Interpretation Region */}
         <div
           className="persistent-interpretation-region"
           role="region"
@@ -305,44 +275,29 @@ export const ExplicitnessLadder: React.FC = () => {
           <div className="interpretation-region-header">
             <span className="badge badge-accent">
               {selectedVariantId === 'C1'
-                ? 'Observed Variant Context'
+                ? t('ladder.contextBadgeC1')
                 : selectedVariantId === 'C2'
-                ? 'Observed Local Transition'
-                : 'Additional Tested Variant'}
+                ? t('ladder.contextBadgeC2')
+                : t('ladder.contextBadgeOther')}
             </span>
             <span className="interpretation-region-meta">
               {selectedVariant.id} // {selectedVariant.label}
             </span>
           </div>
           <p className="interpretation-region-text">
-            {selectedVariantId === 'C1' && (
-              <>Mixed observed choices were recorded in this tested variant.</>
-            )}
-            {selectedVariantId === 'C2' && (
-              <>
-                Observed local transition: recorded choices changed from 8/2 in C1 to 10/0 in C2 while average margin changed from 0.034 to 0.284.
-              </>
-            )}
-            {['C3', 'C4', 'C5', 'C6'].includes(selectedVariantId) && (
-              <>
-                This variant retained a single observed SEARCH_CODE choice across the 10 recorded runs.
-              </>
-            )}
+            {selectedVariantId === 'C1' && t('ladder.contextTextC1')}
+            {selectedVariantId === 'C2' && t('ladder.contextTextC2')}
+            {['C3', 'C4', 'C5', 'C6'].includes(selectedVariantId) && t('ladder.contextTextOther')}
           </p>
         </div>
 
         {/* Methodological Scope & Boundary Policy Disclaimer */}
         <div className="ladder-disclaimer-card">
           <div className="disclaimer-header">
-            <strong>Methodological Scope &amp; Non-Generalization Guardrails</strong>
+            <strong>{t('ladder.disclaimerTitle')}</strong>
           </div>
           <p className="disclaimer-body">
-            In these recorded runs, V8-C2 showed a single observed SEARCH_CODE choice across 10 evaluations with an average margin of 0.284.
-            Across these tested states, making unresolved implementation information more explicit coincided with
-            increasingly stable SEARCH_CODE routing in the recorded runs. However, <strong>this was a local controlled
-            diagnostic study</strong>. It does not establish a universal causal law about semantic routers, does not prove
-            that prompt wording universally eliminates instability, and does not establish that margin 0.284 is an
-            operational guarantee of correctness.
+            {t('ladder.disclaimerBody')}
           </p>
         </div>
 

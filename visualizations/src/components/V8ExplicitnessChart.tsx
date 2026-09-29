@@ -1,8 +1,12 @@
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { V8_IMPLEMENTATION_EXPLICITNESS, type V8VariantResult } from '../data/research-results'
+import { useChartTheme } from '../hooks/useChartTheme'
 
 export const V8ExplicitnessChart: React.FC = () => {
+  const { t } = useTranslation(['charts', 'common'])
+  const chartTheme = useChartTheme()
   const [selectedVariantId, setSelectedVariantId] = useState<string>('C1')
 
   const selectedVariant = useMemo(() => {
@@ -32,28 +36,26 @@ export const V8ExplicitnessChart: React.FC = () => {
       legend: {
         top: 15,
         right: 20,
-        textStyle: {
-          color: '#8b9bb4',
-          fontSize: 12,
-        },
+        textStyle: chartTheme.legendTextStyle,
         itemWidth: 14,
         itemHeight: 10,
-        data: ['Instability Rate (%)', 'Average Margin (P1 - P2)', 'Average Confidence'],
+        data: [
+          t('explicitness.legendInstability', { ns: 'charts' }),
+          t('explicitness.legendMargin', { ns: 'charts' }),
+          t('explicitness.legendConfidence', { ns: 'charts' }),
+        ],
       },
       tooltip: {
         trigger: 'axis',
-        backgroundColor: '#131720',
-        borderColor: '#333e54',
-        borderWidth: 1,
-        padding: [12, 16],
-        textStyle: {
-          color: '#f0f3f8',
-          fontSize: 13,
-        },
+        backgroundColor: chartTheme.tooltipConfig.backgroundColor,
+        borderColor: chartTheme.tooltipConfig.borderColor,
+        borderWidth: chartTheme.tooltipConfig.borderWidth,
+        padding: chartTheme.tooltipConfig.padding,
+        textStyle: chartTheme.tooltipConfig.textStyle,
         axisPointer: {
           type: 'shadow',
           shadowStyle: {
-            color: 'rgba(56, 189, 248, 0.05)',
+            color: 'rgba(0, 0, 0, 0.05)',
           },
         },
         formatter: (params: unknown) => {
@@ -63,31 +65,31 @@ export const V8ExplicitnessChart: React.FC = () => {
           const item: V8VariantResult = V8_IMPLEMENTATION_EXPLICITNESS[idx]
 
           return `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-width: 300px; line-height: 1.5;">
-              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222938; padding-bottom: 8px; margin-bottom: 8px;">
+            <div style="font-family: ${chartTheme.fontSans}; min-width: 300px; line-height: 1.5; color: ${chartTheme.textPrimary};">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid ${chartTheme.tooltipBorder}; padding-bottom: 8px; margin-bottom: 8px;">
                 <div>
-                  <strong style="color: #f0f3f8; font-size: 14px;">Variant ${item.id}: ${item.label}</strong>
+                  <strong style="color: ${chartTheme.textPrimary}; font-size: 14px;">Variant ${item.id}: ${item.label}</strong>
                 </div>
-                <span style="font-size: 11px; background: ${item.instabilityRatePct > 0 ? 'rgba(248,113,113,0.15)' : 'rgba(52,211,153,0.15)'}; color: ${item.instabilityRatePct > 0 ? '#f87171' : '#34d399'}; padding: 2px 6px; border-radius: 4px; font-weight: 600;">
+                <span style="font-size: 11px; color: ${item.instabilityRatePct > 0 ? chartTheme.askUser : chartTheme.success}; padding: 2px 6px; border-radius: 2px; font-weight: 600; font-family: ${chartTheme.fontMono};">
                   ${item.instabilityRatePct > 0 ? `${item.instabilityRatePct}% Instability` : '0% Instability'}
                 </span>
               </div>
               <div style="display: grid; grid-template-columns: 1fr auto; gap: 4px; font-size: 12px; margin-bottom: 6px;">
-                <span style="color: #8b9bb4;">Action Rates:</span>
+                <span style="color: ${chartTheme.textSecondary};">Action Rates:</span>
                 <span style="font-variant-numeric: tabular-nums;">
-                  <strong style="color: #38bdf8;">SEARCH: ${item.searchCodeRatePct}%</strong> (${item.searchCodeCount}) |
-                  <strong style="color: #f87171;">ASK: ${item.askUserRatePct}%</strong> (${item.askUserCount})
+                  <strong style="color: ${chartTheme.searchCode};">SEARCH: ${item.searchCodeRatePct}%</strong> (${item.searchCodeCount}) |
+                  <strong style="color: ${chartTheme.askUser};">ASK: ${item.askUserRatePct}%</strong> (${item.askUserCount})
                 </span>
-                <span style="color: #8b9bb4;">Average Margin:</span>
-                <strong style="color: #fbbf24; font-variant-numeric: tabular-nums;">${item.averageMargin.toFixed(3)}</strong>
-                <span style="color: #8b9bb4;">Average Confidence:</span>
-                <strong style="color: #a78bfa; font-variant-numeric: tabular-nums;">${item.averageConfidence.toFixed(3)}</strong>
+                <span style="color: ${chartTheme.textSecondary};">${t('explicitness.legendMargin', { ns: 'charts' })}:</span>
+                <strong style="color: ${chartTheme.accent}; font-variant-numeric: tabular-nums;">${item.averageMargin.toFixed(3)}</strong>
+                <span style="color: ${chartTheme.textSecondary};">${t('explicitness.legendConfidence', { ns: 'charts' })}:</span>
+                <strong style="color: ${chartTheme.primary}; font-variant-numeric: tabular-nums;">${item.averageConfidence.toFixed(3)}</strong>
               </div>
-              <div style="font-size: 11px; color: #38bdf8; background: rgba(56,189,248,0.06); padding: 6px; border-radius: 4px; margin-top: 6px; border: 1px solid #222938;">
-                <strong style="color: #cbd5e1;">State Cue:</strong> &ldquo;${item.stateCue}&rdquo;
+              <div style="font-size: 11px; color: ${chartTheme.textPrimary}; background: var(--surface-secondary); padding: 6px; border-radius: 2px; margin-top: 6px; border: 1px solid ${chartTheme.tooltipBorder};">
+                <strong style="color: ${chartTheme.textSecondary};">State Cue:</strong> &ldquo;${item.stateCue}&rdquo;
               </div>
-              <div style="font-size: 11px; color: #8b9bb4; border-top: 1px solid #222938; padding-top: 6px; margin-top: 6px;">
-                <strong style="color: #cbd5e1;">Interpretation:</strong> ${item.interpretation}
+              <div style="font-size: 11px; color: ${chartTheme.textMutedColor}; border-top: 1px solid ${chartTheme.tooltipBorder}; padding-top: 6px; margin-top: 6px;">
+                <strong style="color: ${chartTheme.textPrimary};">Interpretation:</strong> ${item.interpretation}
               </div>
             </div>
           `
@@ -96,152 +98,123 @@ export const V8ExplicitnessChart: React.FC = () => {
       xAxis: {
         type: 'category',
         data: xLabels,
-        axisLine: { lineStyle: { color: '#222938' } },
+        axisLine: chartTheme.axisLineStyle,
         axisLabel: {
-          color: '#cbd5e1',
-          fontSize: 12,
-          fontWeight: 600,
-          interval: 0,
+          ...chartTheme.axisLabelStyle,
+          margin: 12,
         },
         axisTick: { show: false },
       },
       yAxis: [
         {
           type: 'value',
+          name: t('explicitness.legendInstability', { ns: 'charts' }),
+          nameTextStyle: {
+            color: chartTheme.textColor,
+            fontSize: 11,
+          },
           min: 0,
-          max: 1.1,
-          interval: 0.2,
-          name: 'Margin & Confidence',
-          nameTextStyle: { color: '#fbbf24', fontSize: 11 },
+          max: 100,
+          interval: 20,
           axisLine: { show: false },
           axisLabel: {
-            color: '#fbbf24',
+            ...chartTheme.axisLabelStyle,
             fontSize: 11,
-            formatter: '{value}',
+            formatter: '{value}%',
           },
-          splitLine: {
-            lineStyle: {
-              color: '#1a2234',
-              type: 'dashed',
-            },
-          },
+          splitLine: chartTheme.splitLineStyle,
         },
         {
           type: 'value',
+          name: t('explicitness.yAxisMargin', { ns: 'charts' }),
+          nameTextStyle: {
+            color: chartTheme.textColor,
+            fontSize: 11,
+          },
           min: 0,
-          max: 30,
-          interval: 10,
-          name: 'Instability Rate (%)',
-          nameTextStyle: { color: '#f87171', fontSize: 11 },
+          max: 1.0,
+          interval: 0.2,
+          position: 'right',
           axisLine: { show: false },
           axisLabel: {
-            color: '#f87171',
+            ...chartTheme.axisLabelStyle,
             fontSize: 11,
-            formatter: '{value}%',
+            formatter: (val: number) => val.toFixed(1),
           },
           splitLine: { show: false },
         },
       ],
       series: [
         {
-          name: 'Instability Rate (%)',
+          name: t('explicitness.legendInstability', { ns: 'charts' }),
           type: 'bar',
-          yAxisIndex: 1,
-          barWidth: 26,
+          barWidth: 28,
           data: instabilityData,
           itemStyle: {
-            color: '#f87171',
-            borderRadius: [4, 4, 0, 0],
-          },
-          label: {
-            show: true,
-            position: 'top',
-            color: '#f87171',
-            fontSize: 10,
-            formatter: (params: unknown) => {
-              const p = params as { value?: number | string | null }
-              if (!p.value || Number(p.value) === 0) return ''
-              return `${p.value}%`
-            },
+            color: chartTheme.askUser,
+            borderRadius: [2, 2, 0, 0],
           },
         },
         {
-          name: 'Average Margin (P1 - P2)',
+          name: t('explicitness.legendMargin', { ns: 'charts' }),
           type: 'line',
-          yAxisIndex: 0,
+          yAxisIndex: 1,
+          data: marginData,
           symbol: 'diamond',
           symbolSize: 9,
-          data: marginData,
-          lineStyle: {
-            color: '#fbbf24',
-            width: 2.5,
-          },
-          itemStyle: {
-            color: '#fbbf24',
-            borderColor: '#131720',
-            borderWidth: 1.5,
-          },
+          itemStyle: { color: chartTheme.accent },
+          lineStyle: { color: chartTheme.accent, width: 2 },
         },
         {
-          name: 'Average Confidence',
+          name: t('explicitness.legendConfidence', { ns: 'charts' }),
           type: 'line',
-          yAxisIndex: 0,
+          yAxisIndex: 1,
+          data: confidenceData,
           symbol: 'circle',
           symbolSize: 8,
-          data: confidenceData,
-          lineStyle: {
-            color: '#a78bfa',
-            width: 2,
-            type: 'dashed',
-          },
-          itemStyle: {
-            color: '#a78bfa',
-            borderColor: '#131720',
-            borderWidth: 1.5,
-          },
+          itemStyle: { color: chartTheme.primary },
+          lineStyle: { color: chartTheme.primary, width: 2, type: 'dashed' },
         },
       ],
     }
-  }, [])
+  }, [chartTheme, t])
 
   return (
-    <section className="section-container" id="v8-explicitness" aria-label="V8 Implementation-Explicitness Ablation">
+    <section className="section-container" id="v8-explicitness" aria-label={t('explicitness.title', { ns: 'charts' })}>
       <div className="section-header">
         <div className="section-badge-row">
-          <span className="badge badge-accent">V8 Ablation Suite</span>
-          <span className="badge badge-purple">State Cue Analysis</span>
+          <span className="badge badge-accent">{t('explicitness.badge', { ns: 'charts' })}</span>
+          <span className="badge">C1–C6 Progression</span>
         </div>
-        <h2 className="section-title">V8 Implementation-Explicitness Analysis</h2>
-        <p className="section-subtitle">
-          Observed progression across six prompt variants (C1 &rarr; C6) testing how explicitly qualifying unresolved operational information collapses ambiguity and resolves routing instability.
-        </p>
+        <h2 className="section-title">{t('explicitness.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('explicitness.description', { ns: 'charts' })}</p>
       </div>
 
       <div className="chart-card">
         <div className="chart-header-row">
           <div>
-            <h3 className="card-title">Progression from Boundary Ambiguity to Stable SEARCH_CODE Routing</h3>
+            <h3 className="card-title">Impact of State Explicitness on Decision Margin &amp; Stability</h3>
             <p className="card-caption">
-              Progression C1 &rarr; C6: Bars depict stochastic instability; lines depict probability separation margin and model confidence.
+              Making unresolved implementation location explicit (C2–C6) coincided with 0% instability and near-maximal margin separation in the evaluated runs.
             </p>
           </div>
           <div className="legend-tag-group">
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#f87171' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.askUser }}></span>
               Instability Rate (%)
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#fbbf24' }}></span>
-              Avg Margin (P1 - P2)
+              <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
+              Margin (P1 - P2)
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#a78bfa' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
               Avg Confidence
             </span>
           </div>
         </div>
 
-        <div className="chart-wrapper" style={{ height: 400 }}>
+        <div className="chart-wrapper" style={{ height: 380 }}>
           <ReactEChartsCore
             echarts={echarts}
             option={chartOption}
@@ -250,42 +223,9 @@ export const V8ExplicitnessChart: React.FC = () => {
           />
         </div>
 
-        {/* Progression Stage Cards (C1 vs C2 vs C3+) */}
-        <div className="explicitness-stages-grid">
-          <div className={`stage-card ${selectedVariant.id === 'C1' ? 'active' : ''}`} onClick={() => setSelectedVariantId('C1')}>
-            <div className="stage-header">
-              <span className="stage-pill warn">C1: Requirement Only</span>
-              <span className="stage-instability">20% Instability</span>
-            </div>
-            <p className="stage-summary">
-              Approved requirement provided, but operational uncertainty is left implicit. Results in low margin (0.034) and mixed choices.
-            </p>
-          </div>
-
-          <div className={`stage-card ${selectedVariant.id === 'C2' ? 'active' : ''}`} onClick={() => setSelectedVariantId('C2')}>
-            <div className="stage-header">
-              <span className="stage-pill mid">C2: Implementation Not Discussed</span>
-              <span className="stage-instability green">0% Instability</span>
-            </div>
-            <p className="stage-summary">
-              Explicitly notes implementation is not discussed. Achieves 100% empirical SEARCH_CODE consistency with moderate margin (0.284).
-            </p>
-          </div>
-
-          <div className={`stage-card ${['C3', 'C4', 'C5', 'C6'].includes(selectedVariant.id) ? 'active' : ''}`} onClick={() => setSelectedVariantId('C3')}>
-            <div className="stage-header">
-              <span className="stage-pill strong">C3&ndash;C6: Location Explicit</span>
-              <span className="stage-instability green">0% Instability</span>
-            </div>
-            <p className="stage-summary">
-              Explicitly frames missing information as unknown repository location. Coincided with margin rising to ~1.00 and observed stable SEARCH_CODE routing in the tested runs.
-            </p>
-          </div>
-        </div>
-
-        {/* Interactive Variant Detail Inspector */}
-        <div className="variant-inspect-section">
-          <div className="inspect-tabs" role="tablist" aria-label="Select variant C1 through C6">
+        {/* Interactive Variant Tabs */}
+        <div className="router-inspect-section">
+          <div className="inspect-tabs" role="tablist" aria-label="Select variant for detailed inspection">
             {V8_IMPLEMENTATION_EXPLICITNESS.map((v) => (
               <button
                 key={v.id}
@@ -295,7 +235,9 @@ export const V8ExplicitnessChart: React.FC = () => {
                 onClick={() => setSelectedVariantId(v.id)}
               >
                 <span className="tab-name">{v.id}</span>
-                <span className="tab-margin">Margin: {v.averageMargin.toFixed(2)}</span>
+                <span className="tab-score">
+                  {v.instabilityRatePct > 0 ? `${v.instabilityRatePct}% mixed` : 'stable'}
+                </span>
               </button>
             ))}
           </div>
@@ -303,64 +245,59 @@ export const V8ExplicitnessChart: React.FC = () => {
           <div className="router-detail-card" aria-live="polite">
             <div className="router-detail-header">
               <div>
-                <div className="boundary-card-id-row">
-                  <h4 className="router-name">Variant {selectedVariant.id}: {selectedVariant.label}</h4>
-                  <span className={`badge ${selectedVariant.instabilityRatePct > 0 ? 'badge-warning' : 'badge-success'}`}>
-                    {selectedVariant.instabilityRatePct}% Instability
-                  </span>
-                </div>
-                <p className="router-type-badge">{selectedVariant.runs} Repeated Empirical Runs</p>
+                <h4 className="router-name">Variant {selectedVariant.id} — {selectedVariant.label}</h4>
+                <span className="router-type-badge">
+                  {selectedVariant.instabilityRatePct > 0 ? 'Boundary Instability' : 'Stable Routing'}
+                </span>
               </div>
-              <div className="variant-margin-badge">
-                <span className="score-val" style={{ color: '#fbbf24' }}>{selectedVariant.averageMargin.toFixed(3)}</span>
-                <span className="score-lbl">Top-1/Top-2 Margin</span>
+              <div className="router-score-badge">
+                <span className="score-val">{selectedVariant.averageMargin.toFixed(3)}</span>
+                <span className="score-lbl">Average Margin</span>
               </div>
-            </div>
-
-            {/* State Cue Callout */}
-            <div className="state-cue-box">
-              <span className="cue-tag">Prompt State Cue:</span>
-              <blockquote className="cue-text">&ldquo;{selectedVariant.stateCue}&rdquo;</blockquote>
             </div>
 
             <div className="router-metrics-grid">
               <div className="router-metric-item">
-                <span className="item-label">SEARCH_CODE Rate</span>
-                <span className="item-value" style={{ color: '#38bdf8' }}>{selectedVariant.searchCodeRatePct}%</span>
-                <span className="item-sub">{selectedVariant.searchCodeCount} of {selectedVariant.runs} runs</span>
+                <span className="item-label">Prompt Cue Text</span>
+                <span className="item-sub" style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
+                  &ldquo;{selectedVariant.stateCue}&rdquo;
+                </span>
               </div>
               <div className="router-metric-item">
-                <span className="item-label">ASK_USER Rate</span>
-                <span className="item-value" style={{ color: '#f87171' }}>{selectedVariant.askUserRatePct}%</span>
-                <span className="item-sub">{selectedVariant.askUserCount} of {selectedVariant.runs} runs</span>
+                <span className="item-label">Choice Distribution</span>
+                <span className="item-value">
+                  {selectedVariant.searchCodeCount} SEARCH / {selectedVariant.askUserCount} ASK
+                </span>
+                <span className="item-sub">Across {selectedVariant.runs} repeated runs</span>
+              </div>
+              <div className="router-metric-item">
+                <span className="item-label">Instability Rate</span>
+                <span className="item-value">
+                  {selectedVariant.instabilityRatePct}%
+                </span>
+                <span className="item-sub">
+                  {selectedVariant.instabilityRatePct > 0 ? 'Stochastic alternation observed' : 'Consistent single action'}
+                </span>
               </div>
               <div className="router-metric-item">
                 <span className="item-label">Average Confidence</span>
-                <span className="item-value" style={{ color: '#a78bfa' }}>{selectedVariant.averageConfidence.toFixed(3)}</span>
-                <span className="item-sub">Provider-returned confidence signal</span>
-              </div>
-              <div className="router-metric-item">
-                <span className="item-label">Empirical Instability</span>
-                <span className="item-value" style={{ color: selectedVariant.instabilityRatePct > 0 ? '#f87171' : '#34d399' }}>
-                  {selectedVariant.instabilityRatePct}%
-                </span>
-                <span className="item-sub">Observed decision divergence</span>
+                <span className="item-value">{selectedVariant.averageConfidence.toFixed(3)}</span>
+                <span className="item-sub">Provider-returned confidence</span>
               </div>
             </div>
 
             <div className="router-notes-box">
-              <strong className="notes-heading">Observed Transition Dynamics:</strong> {selectedVariant.interpretation}
+              <strong className="notes-heading">Behavioral Interpretation:</strong> {selectedVariant.interpretation}
             </div>
           </div>
         </div>
 
-        {/* Methodological Boundary Note */}
+        {/* Methodological Caveat */}
         <div className="chart-methodology-note" role="note">
-          <strong className="notice-tag">Scope Limitation:</strong>
+          <strong className="notice-tag">Ablation Interpretation:</strong>
           <span>
-            These findings describe an observed empirical progression within the controlled V8 diagnostic family and do NOT establish universal causality
-            or production margin thresholds. Semantic routers operate on multi-dimensional prompt representations; state explicitness is an observed
-            disambiguation mechanism in this benchmark, not an invariant guarantee across arbitrary architectures.
+            The V8 ablation demonstrates that prompt wording and state explicitness strongly affected decision stability in these experiments.
+            When the prompt explicitly acknowledged missing implementation details, the router converged to SEARCH_CODE with near-maximal margin separation in the evaluated runs.
           </span>
         </div>
       </div>

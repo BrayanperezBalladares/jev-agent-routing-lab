@@ -1,8 +1,11 @@
 import React, { useState, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import './story.css'
 import { BOUNDARY_EVOLUTION, type BoundaryResult } from '../../data/research-results'
 
 export const MarginDeconstructor: React.FC = () => {
+  const { t, i18n } = useTranslation(['story', 'common'])
+  const isSpanish = i18n.language.startsWith('es')
   const [selectedId, setSelectedId] = useState<string>('V5U02')
   const [srAnnouncement, setSrAnnouncement] = useState<string>('')
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -15,7 +18,9 @@ export const MarginDeconstructor: React.FC = () => {
   const handleSelectState = (state: BoundaryResult) => {
     setSelectedId(state.id)
     setSrAnnouncement(
-      `Selected diagnostic state ${state.id}: ${state.label}. Confidence: ${state.averageConfidence.toFixed(3)}, margin: ${state.averageMargin.toFixed(3)}, observed choices: ${state.searchCodeCount} SEARCH_CODE and ${state.askUserCount} ASK_USER across ${state.runs} runs.`
+      isSpanish
+        ? `Estado diagnóstico seleccionado ${state.id}: ${state.label}. Confianza: ${state.averageConfidence.toFixed(3)}, margen: ${state.averageMargin.toFixed(3)}, elecciones observadas: ${state.searchCodeCount} SEARCH_CODE y ${state.askUserCount} ASK_USER en ${state.runs} ejecuciones.`
+        : `Selected diagnostic state ${state.id}: ${state.label}. Confidence: ${state.averageConfidence.toFixed(3)}, margin: ${state.averageMargin.toFixed(3)}, observed choices: ${state.searchCodeCount} SEARCH_CODE and ${state.askUserCount} ASK_USER across ${state.runs} runs.`
     )
   }
 
@@ -61,21 +66,18 @@ export const MarginDeconstructor: React.FC = () => {
     >
       <div className="story-header">
         <div className="story-badge-row">
-          <span className="badge badge-purple">Conceptual Framework</span>
-          <span className="badge">Diagnostic Boundary Analysis</span>
+          <span className="badge badge-accent">{t('margin.badge')}</span>
+          <span className="badge">{t('margin.badge2')}</span>
         </div>
-        <h2 className="story-title">Deconstructing the Decision Boundary</h2>
-        <p className="story-subtitle">
-          Understanding boundary behavior requires distinguishing between provider-returned
-          confidence, candidate margin separation, and observed repeated-choice stability.
-        </p>
+        <h2 className="story-title">{t('margin.title')}</h2>
+        <p className="story-subtitle">{t('margin.subtitle')}</p>
       </div>
 
       <div className="margin-workbench">
         {/* State Selector Bar */}
         <div className="state-selector-bar">
           <span className="state-selector-label">
-            Recorded Boundary States:
+            {t('margin.recordedStates')}
           </span>
           <div
             className="state-tabs-list"
@@ -116,18 +118,18 @@ export const MarginDeconstructor: React.FC = () => {
           <div className="state-meta-banner">
             <div className="meta-banner-left">
               <span className="context-kicker-label">
-                DIAGNOSTIC STATE // {selectedState.id}
+                {t('margin.kicker', { id: selectedState.id })}
               </span>
               <span className="meta-banner-desc">
-                {selectedState.label} &bull; Suite: <code>{selectedState.experiment}</code>
+                {selectedState.label} &bull; {t('margin.suite')} <code>{selectedState.experiment}</code>
               </span>
             </div>
             <div className="meta-banner-right">
               <span className="badge">
-                {selectedState.runs} Identical Evaluations
+                {t('margin.identicalEvals', { count: selectedState.runs })}
               </span>
               <span className={`badge ${isMixedChoice ? 'badge-amber' : 'badge-neutral'}`}>
-                {isMixedChoice ? 'Mixed Observed Choices' : 'Single Observed Choice'}
+                {isMixedChoice ? t('margin.mixedChoices') : t('margin.singleChoice')}
               </span>
             </div>
           </div>
@@ -137,15 +139,15 @@ export const MarginDeconstructor: React.FC = () => {
             {/* Pillar 1: Provider Confidence */}
             <div className="triad-card pillar-confidence">
               <div className="triad-card-header">
-                <span className="triad-pillar-tag">SIGNAL 1</span>
-                <h3 className="triad-pillar-title">Provider Confidence</h3>
+                <span className="triad-pillar-tag">{t('margin.pillar1Tag')}</span>
+                <h3 className="triad-pillar-title">{t('margin.pillar1Title')}</h3>
               </div>
               <div className="triad-metric-display">
                 <div className="triad-metric-value">
                   {formatMetric(selectedState.averageConfidence)}
                 </div>
                 <div className="triad-metric-caption">
-                  Provider-returned signal &bull; Non-calibrated
+                  {t('margin.pillar1Caption')}
                 </div>
               </div>
               <div className="triad-axis-container">
@@ -172,15 +174,15 @@ export const MarginDeconstructor: React.FC = () => {
             {/* Pillar 2: Top-1 / Top-2 Margin */}
             <div className="triad-card pillar-margin">
               <div className="triad-card-header">
-                <span className="triad-pillar-tag">SIGNAL 2</span>
-                <h3 className="triad-pillar-title">Top-1 / Top-2 Margin</h3>
+                <span className="triad-pillar-tag">{t('margin.pillar2Tag')}</span>
+                <h3 className="triad-pillar-title">{t('margin.pillar2Title')}</h3>
               </div>
               <div className="triad-metric-display">
                 <div className="triad-metric-value">
                   {formatMetric(selectedState.averageMargin)}
                 </div>
                 <div className="triad-metric-caption">
-                  Candidate separation &bull; Top-1 vs Top-2 gap
+                  {t('margin.pillar2Caption')}
                 </div>
               </div>
               <div className="triad-axis-container">
@@ -207,15 +209,15 @@ export const MarginDeconstructor: React.FC = () => {
             {/* Pillar 3: Repeated-Choice Stability */}
             <div className="triad-card pillar-stability">
               <div className="triad-card-header">
-                <span className="triad-pillar-tag">BEHAVIOR</span>
-                <h3 className="triad-pillar-title">Repeated-Choice Stability</h3>
+                <span className="triad-pillar-tag">{t('margin.pillar3Tag')}</span>
+                <h3 className="triad-pillar-title">{t('margin.pillar3Title')}</h3>
               </div>
               <div className="triad-metric-display">
                 <div className="triad-metric-value">
                   {selectedState.searchCodeCount} / {selectedState.askUserCount}
                 </div>
                 <div className="triad-metric-caption">
-                  SEARCH_CODE vs ASK_USER ({selectedState.runs} runs)
+                  {t('margin.pillar3Caption', { runs: selectedState.runs })}
                 </div>
               </div>
               <div className="triad-distribution-wrapper">
@@ -245,36 +247,32 @@ export const MarginDeconstructor: React.FC = () => {
             </div>
           </div>
 
-          {/* Consolidated Conceptual Reference Guide (Secondary Static Definitions) */}
+          {/* Consolidated Conceptual Reference Guide */}
           <div className="triad-conceptual-reference">
             <div className="reference-item">
-              <span className="reference-term">Provider Confidence</span>
+              <span className="reference-term">{t('margin.referenceGuide.confidenceTerm')}</span>
               <p className="reference-desc">
-                A provider-returned confidence signal. It is not treated as a calibrated
-                probability that the selected action is correct, and its exact internal
-                semantics are not assumed.
+                {t('margin.referenceGuide.confidenceDesc')}
               </p>
             </div>
             <div className="reference-item">
-              <span className="reference-term">Top-1 / Top-2 Margin</span>
+              <span className="reference-term">{t('margin.referenceGuide.marginTerm')}</span>
               <p className="reference-desc">
-                Top-1 / top-2 margin is the numerical gap between the two highest
-                action probabilities.
+                {t('margin.referenceGuide.marginDesc')}
               </p>
             </div>
             <div className="reference-item">
-              <span className="reference-term">Repeated-Choice Stability</span>
+              <span className="reference-term">{t('margin.referenceGuide.stabilityTerm')}</span>
               <p className="reference-desc">
-                Repeated evaluations show whether identical input text produced the
-                same or mixed observed routing choices in this experiment.
+                {t('margin.referenceGuide.stabilityDesc')}
               </p>
             </div>
           </div>
 
-          {/* Canonical State Interpretation Callout */}
+          {/* Canonical State Finding Callout */}
           <div className="state-interpretation-callout">
             <div className="interpretation-header">
-              <span className="interpretation-label">Observed Diagnostic Finding</span>
+              <span className="interpretation-label">{t('margin.findingLabel')}</span>
             </div>
             <p className="interpretation-text">
               &ldquo;{selectedState.interpretation}&rdquo;
@@ -284,15 +282,10 @@ export const MarginDeconstructor: React.FC = () => {
           {/* Methodological Context & Guardrails */}
           <div className="methodology-guardrail-note">
             <div className="guardrail-title">
-              Methodological Interpretation &amp; Non-Threshold Policy
+              {t('margin.guardrailTitle')}
             </div>
             <p className="guardrail-body">
-              Several mixed-choice states in these diagnostic suites had small average margins
-              (such as V5U02 at 0.0705 or V8-C1 at 0.034). In these recorded runs, V8-C2 showed a single observed SEARCH_CODE choice across 10 evaluations with an average margin of 0.284.
-              However, <strong>the study did not establish a universal margin threshold</strong>, and a single
-              low-margin observation is not sufficient evidence of instability. Repeated identical evaluations
-              characterize empirical stochastic behavior rather than independent samples. Choice stability in a
-              diagnostic probe does not imply universal correctness or production readiness.
+              {t('margin.guardrailBody')}
             </p>
           </div>
         </div>

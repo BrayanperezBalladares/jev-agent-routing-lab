@@ -1,0 +1,42 @@
+{
+  "title": "Research Methodology & Limitations",
+  "badge": "Experimental Boundaries",
+  "description": "Critical constraints, environmental conditions, and methodological parameters governing the interpretation of these experimental findings.",
+  "items": {
+    "syntheticScenarios": {
+      "title": "Synthetic SE Scenarios",
+      "category": "Scope & Domain",
+      "content": "Scenarios represent bounded, isolated software-engineering situations constructed to evaluate single-step routing choices. They deliberately omit full multi-turn conversational history, developer feedback loops, and live file tree modifications."
+    },
+    "fixedActionSpace": {
+      "title": "Fixed Action Space",
+      "category": "Action Framing",
+      "content": "Routing targets are constrained to five discrete canonical actions: SEARCH_CODE, READ_FILE, RUN_TESTS, QUERY_DATABASE, and ASK_USER. This protocol measures discrimination among defined action slots, not open-ended agent reasoning or dynamic tool creation."
+    },
+    "diagnosticSuites": {
+      "title": "Diagnostic Suites (V4–V8)",
+      "category": "Dataset Nature",
+      "content": "Suites V4 through V8 were iteratively curated to stress-test semantic boundaries, minimal pairs, and cue-stripping. As formalized in research guidelines, these suites are adaptive diagnostic probes, NOT untouched holdouts."
+    },
+    "repeatedRuns": {
+      "title": "Repeated Identical Runs",
+      "category": "Sampling Dynamics",
+      "content": "Evaluating identical input text repeatedly across 10 to 20 runs characterizes empirical stochastic behavior under real inference conditions. These runs quantify decision drift, but do not represent independent statistical observations."
+    },
+    "providerVariability": {
+      "title": "Provider Infrastructure Variability",
+      "category": "Execution Environment",
+      "content": "Jev, GPT-5-mini, and Nemotron Ultra operated through distinct infrastructure stacks, cloud gateways, and geographic endpoints. Operational latencies, network timeouts, and gateway retries reflect these diverse runtime conditions."
+    },
+    "confidenceCalibration": {
+      "title": "Confidence Calibration Limits",
+      "category": "Metric Boundaries",
+      "content": "Confidence is a provider-returned signal and is not treated as a calibrated probability that the selected action is correct."
+    },
+    "latencyCostComparability": {
+      "title": "Latency & Cost Comparability",
+      "category": "Comparative Validity",
+      "content": "Cost and latency figures across models cannot be interpreted as a universal benchmark leaderboard. As noted in research findings, pricing basis (observed gateway market cost vs. theoretical list price vs. free experimental tier) and retry policies varied."
+    }
+  }
+}

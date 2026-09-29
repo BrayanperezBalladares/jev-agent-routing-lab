@@ -1,0 +1,168 @@
+{
+  "sandbox": {
+    "badge": "Espacio de Problema Interactivo",
+    "badge2": "Formulación Canónica de 5 Acciones",
+    "title": "¿Qué debería hacer el agente a continuación?",
+    "subtitle": "Los agentes de ingeniería autónomos deben asignar estados operativos no estructurados a una acción discreta. Lea el escenario verificado a continuación y prediga qué herramienta debe invocarse.",
+    "contrastLabel": "Contraste de Escenarios Holdout:",
+    "contextKicker": "CONTEXTO DEL AGENTE // INSTANTÁNEA DEL ESPACIO DE TRABAJO",
+    "datasetLabel": "routing-holdout.json • Caso",
+    "benchmarkCase": "Caso de Benchmark:",
+    "selectActionLegend": "Seleccione la acción canónica para el agente:",
+    "outcomeTitle": "Resultado de Comparación con el Benchmark",
+    "matchSuccess": "La predicción coincide con el objetivo del benchmark",
+    "matchAlternative": "Elección alternativa (Objetivo del benchmark: {{expected}})",
+    "yourSelection": "Su Selección",
+    "benchmarkTarget": "Objetivo del Benchmark",
+    "whyTargetFits": "Por qué este objetivo se ajusta a la definición de enrutamiento:",
+    "resetSelection": "Restablecer selección",
+    "switchToContrast": "Cambiar a Caso de Contraste (U01)",
+    "switchToPrimary": "Cambiar a Caso Principal (S01)",
+    "readingTranslationLabel": "Traducción para lectura",
+    "cases": {
+      "S01": {
+        "name": "Responsable de reintento de pago desconocido",
+        "contrastLabelDesktop": "S01 — Incertidumbre en código",
+        "contrastLabelMobile": "S01 — Búsqueda",
+        "difficulty": "intermedio",
+        "state": "Customers occasionally receive two payment attempts after a timeout. The API route, payment provider and queue worker are known, but nobody has established which component decides whether a failed charge should be retried.",
+        "readingTranslation": "Los clientes ocasionalmente reciben dos intentos de cobro tras un tiempo de espera. La ruta de la API, el proveedor de pagos y el worker de la cola son conocidos, pero nadie ha establecido qué componente decide si un cobro fallido debe reintentarse.",
+        "pedagogicalRationale": "La ruta de la API, el proveedor de pagos y el worker de la cola ya son conocidos en el sistema, pero el componente de código específico responsable de decidir la política de reintento no ha sido identificado. Dado que se trata de un detalle de implementación existente en la base de código, SEARCH_CODE es la acción objetivo para localizar el manejador antes de tomar acciones de modificación."
+      },
+      "U01": {
+        "name": "Política de reintento de pago fallido",
+        "contrastLabelDesktop": "U01 — Ambigüedad en requisitos",
+        "contrastLabelMobile": "U01 — Preguntar",
+        "difficulty": "intermedio",
+        "state": "The system can either retry a failed payment automatically, require the customer to retry manually, or cancel the order. The product requirements specify the failure state but never choose among those behaviors.",
+        "readingTranslation": "El sistema puede reintentar un pago fallido automáticamente, requerir que el cliente reintente manualmente o cancelar el pedido. Los requisitos de producto especifican el estado de fallo pero nunca eligen entre esos comportamientos.",
+        "pedagogicalRationale": "Existen múltiples vías de recuperación de negocio contrapuestas (reintento automático vs. reintento manual vs. cancelación de la orden), pero los requisitos de producto nunca especificaron cuál aplicar. Dado que el código no puede inventar reglas de negocio, ASK_USER es la acción objetivo para solicitar directivas al desarrollador humano."
+      }
+    },
+    "actions": {
+      "SEARCH_CODE": {
+        "description": "Buscar símbolos, archivos o referencias en el repositorio para localizar implementaciones o pistas."
+      },
+      "READ_FILE": {
+        "description": "Inspeccionar una ruta de archivo conocida para examinar su contenido exacto o configuración."
+      },
+      "RUN_TESTS": {
+        "description": "Ejecutar suites de pruebas para observar el comportamiento en tiempo de ejecución, regresión o fallo."
+      },
+      "QUERY_DATABASE": {
+        "description": "Ejecutar consultas a la base de datos para inspeccionar el esquema, estado o consistencia de registros."
+      },
+      "ASK_USER": {
+        "description": "Solicitar al desarrollador aclaración o directivas ante requisitos no especificados o ambiguos."
+      }
+    }
+  },
+  "replay": {
+    "badge": "Exploración de Frontera",
+    "badge2": "Sonda Diagnóstica Estado V5U02",
+    "title": "Cuando la Precisión Puntual Oculta Inestabilidad de Decisión",
+    "subtitle": "En evaluaciones de un solo intento, un prompt de agente produce una única elección de ruta. ¿Qué ocurre cuando exactamente el mismo texto de prompt se evalúa repetidamente en 20 ejecuciones idénticas?",
+    "contextKicker": "SONDA HISTÓRICA // ESTADO V5U02 (Ambigüedad de requisitos)",
+    "datasetLabel": "Dataset: routing-v5-cue-stripped.json • Objetivo: ASK_USER",
+    "promptText": "An account was removed months ago and another person now requests the same username. Existing product documentation describes deletion but never states whether the identifier becomes available again.",
+    "readingTranslation": "Una cuenta fue eliminada hace meses y otra persona ahora solicita el mismo nombre de usuario. La documentación de producto existente describe la eliminación pero nunca establece si el identificador vuelve a estar disponible.",
+    "questionLead": "En un benchmark de un solo intento, este estado parecía decisivo.",
+    "questionSub": "¿Qué ocurrió cuando exactamente el mismo texto de prompt fue evaluado 20 veces?",
+    "triggerButton": "Reproducir evaluaciones observadas",
+    "triggerHint": "Repetición histórica • 20 ejecuciones registradas • Sin inferencia de modelo en vivo",
+    "focalTag": "RESULTADO EMPÍRICO",
+    "focalTitle": "MISMO INPUT • DOS ELECCIONES DE RUTA OBSERVADAS",
+    "focalSubtitle": "Evaluado en 20 ejecuciones idénticas bajo las mismas condiciones, el enrutamiento osciló entre dos acciones contrapuestas.",
+    "distSearch": "SEARCH_CODE • 14 de 20 (70%)",
+    "distAsk": "ASK_USER • 6 de 20 (30%)",
+    "searchCaption": "14 evaluaciones enrutadas a inspección autónoma del código",
+    "askCaption": "6 evaluaciones enrutadas a aclaración del desarrollador",
+    "recordedRuns": "Ejecuciones Registradas",
+    "identicalEvals": "Evaluaciones idénticas",
+    "observedSplit": "Distribución Observada",
+    "splitSub": "14 SEARCH / 6 ASK",
+    "avgConfidence": "Confianza Promedio",
+    "confSub": "Señal devuelta por proveedor",
+    "topMargin": "Margen Top-1 / Top-2",
+    "marginSub": "Baja separación",
+    "providerConfTerm": "Confianza del Proveedor:",
+    "providerConfDef": "Señal de confianza devuelta por el proveedor. No se interpreta como probabilidad calibrada de que la acción sea correcta y no se asume su semántica interna exacta.",
+    "marginTerm": "Margen Top-1 / Top-2:",
+    "marginDef": "El margen top-1 / top-2 es la brecha numérica entre las dos probabilidades de acción más altas.",
+    "thresholdTerm": "Advertencia sobre Umbrales Operativos:",
+    "thresholdDef": "Márgenes promedio reducidos aparecieron en varios estados de elección mixta observados en estos experimentos. El estudio no estableció un umbral operativo numérico.",
+    "resetReplay": "Restablecer repetición",
+    "footerMeta": "Registro histórico • Suite de consistencia V5"
+  },
+  "margin": {
+    "badge": "Marco Conceptual",
+    "badge2": "Análisis de Frontera Diagnóstica",
+    "title": "Deconstrucción de la Frontera de Decisión",
+    "subtitle": "Comprender el comportamiento de frontera exige distinguir entre la confianza del proveedor, la separación de margen entre candidatos y la estabilidad observada en elecciones reiteradas.",
+    "recordedStates": "Estados de Frontera Registrados:",
+    "kicker": "ESTADO DIAGNÓSTICO // {{id}}",
+    "suite": "Suite:",
+    "identicalEvals": "{{count}} Evaluaciones Idénticas",
+    "mixedChoices": "Elecciones Mixtas Observadas",
+    "singleChoice": "Elección Única Observada",
+    "pillar1Tag": "SEÑAL 1",
+    "pillar1Title": "Confianza del Proveedor",
+    "pillar1Caption": "Señal devuelta por proveedor • No calibrada",
+    "pillar2Tag": "SEÑAL 2",
+    "pillar2Title": "Margen Top-1 / Top-2",
+    "pillar2Caption": "Separación de candidatos • Brecha Top-1 vs Top-2",
+    "pillar3Tag": "COMPORTAMIENTO",
+    "pillar3Title": "Estabilidad en Elecciones Reiteradas",
+    "pillar3Caption": "SEARCH_CODE vs ASK_USER ({{runs}} ejecuciones)",
+    "findingLabel": "Hallazgo Diagnóstico Observado",
+    "referenceGuide": {
+      "confidenceTerm": "Confianza del Proveedor",
+      "confidenceDesc": "Señal de confianza devuelta por el proveedor. No se interpreta como probabilidad calibrada de que la acción seleccionada sea correcta.",
+      "marginTerm": "Margen Top-1 / Top-2",
+      "marginDesc": "El margen top-1 / top-2 es la diferencia numérica entre las dos probabilidades de acción más altas.",
+      "stabilityTerm": "Estabilidad en Elecciones Reiteradas",
+      "stabilityDesc": "Las evaluaciones repetidas muestran si un texto de entrada idéntico produjo elecciones de ruta iguales o mixtas en este experimento."
+    },
+    "guardrailTitle": "Interpretación Metodológica y Política de No Umbral",
+    "guardrailBody": "Varios estados de elección mixta en estas suites diagnósticas mostraron márgenes promedio reducidos (como V5U02 en 0.0705 o V8-C1 en 0.034). En estas ejecuciones registradas, V8-C2 mostró una única elección observada de SEARCH_CODE en 10 evaluaciones con un margen promedio de 0.284. Sin embargo, el estudio no estableció un umbral de margen universal, y una sola observación de bajo margen no es evidencia suficiente de inestabilidad. Las evaluaciones repetidas caracterizan comportamiento estocástico empírico en lugar de muestras independientes. La estabilidad en una sonda diagnóstica no implica corrección universal ni preparación para producción."
+  },
+  "ladder": {
+    "badge": "Estudio de Ablación",
+    "badge2": "Análisis de Formulación del Estado",
+    "title": "Cómo la Formulación del Estado Modela la Estabilidad de Enrutamiento",
+    "subtitle": "Explore seis variantes discretas evaluadas (C1–C6) para observar cómo explicitar la ubicación de la incertidumbre en la implementación coincidió con cambios en la estabilidad del enrutamiento.",
+    "testedVariants": "Variantes de Explicitud Evaluadas",
+    "contrastSub": "C1 → C2 Contraste de Descubrimiento Principal • C3–C6 Variantes Evaluadas Adicionales",
+    "discreteHint": "Variantes discretas de benchmark • No continuas",
+    "primaryContrast": "Contraste Principal:",
+    "additionalVariants": "Variantes Adicionales Evaluadas:",
+    "stateRepKicker": "REPRESENTACIÓN DEL ESTADO // {{id}}",
+    "promptCueBadge": "Pista del Prompt Evaluada",
+    "exactCueText": "Texto Exacto de la Pista Evaluada:",
+    "whatChanged": "¿Qué cambió en este estado?",
+    "observedOutcomeKicker": "RESULTADO OBSERVADO // {{runs}} EJECUCIONES",
+    "mixedChoicesBadge": "Elecciones Mixtas Observadas (20%)",
+    "singleChoiceBadge": "Elección Única Observada (0% Mixto)",
+    "ratioLabel": "Proporción SEARCH_CODE a ASK_USER: {{search}}% a {{ask}}%",
+    "avgConfidence": "Confianza Promedio",
+    "avgMargin": "Margen Promedio",
+    "mixedRate": "Tasa de Elección Mixta",
+    "observedBehavior": "Comportamiento Observado:",
+    "contextBadgeC1": "Contexto de Variante Observada",
+    "contextBadgeC2": "Transición Local Observada",
+    "contextBadgeOther": "Variante Adicional Evaluada",
+    "contextTextC1": "Se registraron elecciones mixtas en esta variante evaluada.",
+    "contextTextC2": "Transición local observada: las elecciones registradas pasaron de 8/2 en C1 a 10/0 en C2, mientras el margen promedio aumentó de 0.034 a 0.284.",
+    "contextTextOther": "Esta variante conservó una única elección observada de SEARCH_CODE a lo largo de las 10 ejecuciones registradas.",
+    "disclaimerTitle": "Alcance Metodológico y Límites de No Generalización",
+    "disclaimerBody": "En estas ejecuciones registradas, V8-C2 mostró una única elección observada de SEARCH_CODE en 10 evaluaciones con un margen promedio de 0.284. A través de estos estados evaluados, hacer más explícita la información de implementación no resuelta coincidió con un enrutamiento crecientemente estable hacia SEARCH_CODE en las ejecuciones registradas. Sin embargo, este fue un estudio diagnóstico controlado local. No establece una ley causal universal sobre enrutadores semánticos, no prueba que la redacción de prompts elimine universalmente la inestabilidad y no establece que un margen de 0.284 constituya una garantía operativa de corrección.",
+    "cFocus": {
+      "C1": "Únicamente requisito aprobado sin explicitar dónde radica la incertidumbre de implementación. El modelo enfrenta una frontera operativa ambigua entre inspeccionar código y preguntar al usuario.",
+      "C2": "Añade que la implementación no está discutida. Esto aclara que el comportamiento existe conceptualmente, pero su ubicación en código sigue siendo desconocida.",
+      "C3": "Declara explícitamente que no está claro dónde está implementado el comportamiento. Orienta directamente al agente hacia la inspección autónoma del código.",
+      "C4": "Declara que la implementación responsable del comportamiento es desconocida.",
+      "C5": "Declara que la implementación responsable del comportamiento no ha sido localizada.",
+      "C6": "Declara explícitamente que la implementación no ha sido localizada en el repositorio."
+    }
+  }
+}

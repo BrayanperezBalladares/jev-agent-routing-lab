@@ -1,68 +1,57 @@
 import React from 'react'
-
-interface ResearchArea {
-  id: string
-  title: string
-  description: string
-  badge: string
-}
-
-const RESEARCH_AREAS: ResearchArea[] = [
-  {
-    id: 'accuracy',
-    title: 'Semantic Routing Accuracy',
-    description:
-      'Measuring multi-candidate action selection across nuanced software-engineering scenarios against ground-truth intent.',
-    badge: 'Evaluation',
-  },
-  {
-    id: 'stability',
-    title: 'Repeated Decision Stability',
-    description:
-      'Quantifying stochastic routing drift across 10–20 identical prompt evaluations to expose hidden non-determinism.',
-    badge: 'Reliability',
-  },
-  {
-    id: 'uncertainty',
-    title: 'Routing Uncertainty',
-    description:
-      'Analyzing top-1/top-2 candidate probability margins and raw confidence distributions across boundary transitions.',
-    badge: 'Metrics',
-  },
-  {
-    id: 'boundary',
-    title: 'ASK_USER ↔ SEARCH_CODE Boundaries',
-    description:
-      'Characterizing the observed semantic transition where agents alternate between requesting user clarification and autonomous codebase inspection.',
-    badge: 'Decision Frontier',
-  },
-  {
-    id: 'state-rep',
-    title: 'Agent-State Representation',
-    description:
-      'Evaluating how explicitly structuring unresolved operational information coincided with reduced choice instability and stable routing in the tested runs.',
-    badge: 'Ablation',
-  },
-]
+import { useTranslation } from 'react-i18next'
 
 export const ResearchOverview: React.FC = () => {
+  const { t } = useTranslation(['overview'])
+
+  const researchAreas = [
+    {
+      id: 'accuracy',
+      title: t('researchAreas.accuracy.title'),
+      description: t('researchAreas.accuracy.description'),
+      badge: t('researchAreas.accuracy.badge'),
+    },
+    {
+      id: 'stability',
+      title: t('researchAreas.stability.title'),
+      description: t('researchAreas.stability.description'),
+      badge: t('researchAreas.stability.badge'),
+    },
+    {
+      id: 'uncertainty',
+      title: t('researchAreas.uncertainty.title'),
+      description: t('researchAreas.uncertainty.description'),
+      badge: t('researchAreas.uncertainty.badge'),
+    },
+    {
+      id: 'boundary',
+      title: t('researchAreas.boundary.title'),
+      description: t('researchAreas.boundary.description'),
+      badge: t('researchAreas.boundary.badge'),
+    },
+    {
+      id: 'state-rep',
+      title: t('researchAreas.stateRep.title'),
+      description: t('researchAreas.stateRep.description'),
+      badge: t('researchAreas.stateRep.badge'),
+    },
+  ]
+
   return (
     <section className="section-container" id="research-overview" aria-label="Research Scope and Focus Areas">
       <div className="section-header">
         <div className="section-badge-row">
-          <span className="badge badge-accent">Scope & Objectives</span>
-          <span className="badge">5 Core Pillars</span>
+          <span className="badge badge-accent">{t('researchAreas.badge')}</span>
+          <span className="badge">{t('researchAreas.badge2')}</span>
         </div>
-        <h2 className="section-title">Research Overview & Methodology</h2>
-        <p className="section-subtitle">
-          Investigating semantic decision stability, probability separation, and state formulation for autonomous engineering agents beyond superficial one-shot benchmarks.
-        </p>
+        <h2 className="section-title">{t('researchAreas.title')}</h2>
+        <p className="section-subtitle">{t('researchAreas.subtitle')}</p>
       </div>
 
       {/* Research Areas Grid */}
       <div className="hero-research-areas">
         <div className="hero-areas-grid">
-          {RESEARCH_AREAS.map((area) => (
+          {researchAreas.map((area) => (
             <article key={area.id} className="hero-area-card">
               <div className="hero-area-top">
                 <h3 className="hero-area-title">{area.title}</h3>
@@ -79,30 +68,30 @@ export const ResearchOverview: React.FC = () => {
         <div className="distinction-grid">
           <article className="distinction-card frozen">
             <div className="distinction-header">
-              <span className="badge badge-success">V1–V3</span>
-              <h3 className="distinction-title">Benchmark Progression</h3>
+              <span className="badge badge-accent">{t('distinction.v1v3Badge')}</span>
+              <h3 className="distinction-title">{t('distinction.v1v3Title')}</h3>
             </div>
             <p className="distinction-text">
-              Standard frozen evaluation suite progressing from initial baseline validation (V1, 20 cases) to hard semantic distinctions (V2, 30 cases) and balanced holdout (V3, 50 cases). Designed to measure macro semantic accuracy under stationary conditions.
+              {t('distinction.v1v3Text')}
             </p>
             <div className="distinction-footer">
               <span className="distinction-meta">
-                Frozen test distribution &bull; Balanced action distribution &bull; Stationary holdout
+                {t('distinction.v1v3Footer')}
               </span>
             </div>
           </article>
 
           <article className="distinction-card diagnostic">
             <div className="distinction-header">
-              <span className="badge badge-warning">V4–V8</span>
-              <h3 className="distinction-title">Adaptive Diagnostic Experiments</h3>
+              <span className="badge badge-warning">{t('distinction.v4v8Badge')}</span>
+              <h3 className="distinction-title">{t('distinction.v4v8Title')}</h3>
             </div>
             <p className="distinction-text">
-              Targeted adversarial minimal pairs (V4), cue-stripped prompts (V5), and repeated boundary exploration suites (V6–V8) probing routing edge cases, margin collapse, and state representation.
+              {t('distinction.v4v8Text')}
             </p>
             <div className="distinction-notice">
-              <strong className="notice-highlight">Methodological Note:</strong>{' '}
-              V4–V8 are adaptive diagnostic experiments, NOT untouched holdouts.
+              <strong className="notice-highlight">{t('distinction.v4v8NoticeLabel')}</strong>{' '}
+              {t('distinction.v4v8NoticeText')}
             </div>
           </article>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './story.css'
 import {
   CANONICAL_CASES,
@@ -7,6 +8,8 @@ import {
 } from './story-data'
 
 export const AgentScenarioSandbox: React.FC = () => {
+  const { t, i18n } = useTranslation(['story', 'common'])
+  const isSpanish = i18n.language.startsWith('es')
   const [activeCaseIndex, setActiveCaseIndex] = useState<number>(0)
   const [selectedAction, setSelectedAction] = useState<CanonicalAction | null>(null)
   const [srAnnouncement, setSrAnnouncement] = useState<string>('')
@@ -18,8 +21,12 @@ export const AgentScenarioSandbox: React.FC = () => {
     setSelectedAction(actionId)
     const matched = actionId === activeCase.expected
     const message = matched
-      ? `You selected ${actionId}. This matches the benchmark target action.`
-      : `You selected ${actionId}. The benchmark target action is ${activeCase.expected}.`
+      ? isSpanish
+        ? `Ha seleccionado ${actionId}. Coincide con la acción objetivo del benchmark.`
+        : `You selected ${actionId}. This matches the benchmark target action.`
+      : isSpanish
+        ? `Ha seleccionado ${actionId}. La acción objetivo del benchmark es ${activeCase.expected}.`
+        : `You selected ${actionId}. The benchmark target action is ${activeCase.expected}.`
     setSrAnnouncement(message)
   }
 
@@ -27,13 +34,19 @@ export const AgentScenarioSandbox: React.FC = () => {
     setActiveCaseIndex(index)
     setSelectedAction(null)
     setSrAnnouncement(
-      `Switched to benchmark case ${CANONICAL_CASES[index].id}: ${CANONICAL_CASES[index].name}.`
+      isSpanish
+        ? `Cambiado a caso de benchmark ${CANONICAL_CASES[index].id}: ${CANONICAL_CASES[index].name}.`
+        : `Switched to benchmark case ${CANONICAL_CASES[index].id}: ${CANONICAL_CASES[index].name}.`
     )
   }
 
   const handleReset = () => {
     setSelectedAction(null)
-    setSrAnnouncement('Selection reset. Choose an action for the agent.')
+    setSrAnnouncement(
+      isSpanish
+        ? 'Selección restablecida. Elija una acción para el agente.'
+        : 'Selection reset. Choose an action for the agent.'
+    )
   }
 
   return (
@@ -44,21 +57,18 @@ export const AgentScenarioSandbox: React.FC = () => {
     >
       <div className="story-header">
         <div className="story-badge-row">
-          <span className="badge badge-accent">Interactive Problem Space</span>
-          <span className="badge">Canonical 5-Action Formulation</span>
+          <span className="badge badge-accent">{t('sandbox.badge')}</span>
+          <span className="badge">{t('sandbox.badge2')}</span>
         </div>
-        <h2 className="story-title">What Should the Agent Do Next?</h2>
-        <p className="story-subtitle">
-          Autonomous engineering agents must map unstructured operational states to a discrete action slot.
-          Read the verified benchmark scenario below and predict which tool action should be invoked.
-        </p>
+        <h2 className="story-title">{t('sandbox.title')}</h2>
+        <p className="story-subtitle">{t('sandbox.subtitle')}</p>
       </div>
 
       <div className="sandbox-workbench">
         {/* Case Switcher Bar with Semantic Contrast */}
         <div className="case-switcher-bar">
           <span className="case-switcher-label">
-            Holdout Scenario Contrast:
+            {t('sandbox.contrastLabel')}
           </span>
           <div
             className="case-switcher-buttons"
@@ -74,8 +84,12 @@ export const AgentScenarioSandbox: React.FC = () => {
                 className={`case-btn ${activeCaseIndex === idx ? 'active' : ''}`}
                 onClick={() => handleSwitchCase(idx)}
               >
-                <span className="case-btn-desktop">{c.contrastLabelDesktop}</span>
-                <span className="case-btn-mobile">{c.contrastLabelMobile}</span>
+                <span className="case-btn-desktop">
+                  {t(`sandbox.cases.${c.id}.contrastLabelDesktop`, { defaultValue: c.contrastLabelDesktop })}
+                </span>
+                <span className="case-btn-mobile">
+                  {t(`sandbox.cases.${c.id}.contrastLabelMobile`, { defaultValue: c.contrastLabelMobile })}
+                </span>
               </button>
             ))}
           </div>
@@ -88,7 +102,7 @@ export const AgentScenarioSandbox: React.FC = () => {
             <div className="agent-context-box">
               <div className="context-kicker-bar">
                 <span className="context-kicker-label">
-                  AGENT CONTEXT // WORKSPACE SNAPSHOT
+                  {t('sandbox.contextKicker')}
                 </span>
                 <span className="context-kicker-meta">
                   <code>routing-holdout.json</code> &bull; Case {activeCase.id}
@@ -97,9 +111,23 @@ export const AgentScenarioSandbox: React.FC = () => {
               <div className="context-body-text">
                 &ldquo;{activeCase.state}&rdquo;
               </div>
+
+              {/* Spanish Reading Translation (source of record remains canonical English above) */}
+              {isSpanish && (
+                <div className="context-reading-translation">
+                  <div className="reading-translation-header">
+                    <span className="reading-translation-label">{t('sandbox.readingTranslationLabel')}:</span>
+                  </div>
+                  <div className="reading-translation-body">
+                    &ldquo;{t(`sandbox.cases.${activeCase.id}.readingTranslation`)}&rdquo;
+                  </div>
+                </div>
+              )}
+
               <div className="context-footer-row">
                 <span className="context-scenario-name">
-                  Benchmark Case: <strong>{activeCase.name}</strong>
+                  {t('sandbox.benchmarkCase')}{' '}
+                  <strong>{t(`sandbox.cases.${activeCase.id}.name`, { defaultValue: activeCase.name })}</strong>
                 </span>
                 <span className="badge">{activeCase.difficulty}</span>
               </div>
@@ -110,7 +138,7 @@ export const AgentScenarioSandbox: React.FC = () => {
           <div className="actions-selection-panel">
             <fieldset className="actions-fieldset">
               <legend className="actions-legend">
-                Select the canonical action for the agent:
+                {t('sandbox.selectActionLegend')}
               </legend>
 
               {CANONICAL_ACTIONS.map((action) => {
@@ -139,7 +167,7 @@ export const AgentScenarioSandbox: React.FC = () => {
                         </span>
                       </div>
                       <span className="action-brief-desc">
-                        {action.description}
+                        {t(`sandbox.actions.${action.id}.description`, { defaultValue: action.description })}
                       </span>
                     </label>
                   </div>
@@ -154,26 +182,26 @@ export const AgentScenarioSandbox: React.FC = () => {
           <div
             className="sandbox-reveal-container"
             role="region"
-            aria-label="Benchmark comparison outcome"
+            aria-label={t('sandbox.outcomeTitle')}
           >
             <div className="reveal-header-row">
               <span className="panel-title">
-                Benchmark Comparison Outcome
+                {t('sandbox.outcomeTitle')}
               </span>
               {selectedAction === activeCase.expected ? (
                 <span className="reveal-match-badge match-success">
-                  Prediction Matches Benchmark Target
+                  {t('sandbox.matchSuccess')}
                 </span>
               ) : (
                 <span className="reveal-match-badge match-alternative">
-                  Alternative Choice (Benchmark Target: {activeCase.expected})
+                  {t('sandbox.matchAlternative', { expected: activeCase.expected })}
                 </span>
               )}
             </div>
 
             <div className="reveal-comparison-grid">
               <div className="reveal-comparison-card">
-                <span className="reveal-slot-label">Your Selection</span>
+                <span className="reveal-slot-label">{t('sandbox.yourSelection')}</span>
                 <span
                   className={`reveal-action-display ${
                     selectedAction === 'SEARCH_CODE'
@@ -188,7 +216,7 @@ export const AgentScenarioSandbox: React.FC = () => {
               </div>
 
               <div className="reveal-comparison-card">
-                <span className="reveal-slot-label">Benchmark Target</span>
+                <span className="reveal-slot-label">{t('sandbox.benchmarkTarget')}</span>
                 <span
                   className={`reveal-action-display ${
                     activeCase.expected === 'SEARCH_CODE'
@@ -205,10 +233,10 @@ export const AgentScenarioSandbox: React.FC = () => {
 
             <div className="reveal-rationale-section">
               <span className="rationale-title">
-                Why this target fits the routing definition:
+                {t('sandbox.whyTargetFits')}
               </span>
               <p className="rationale-text">
-                {activeCase.pedagogicalRationale}
+                {t(`sandbox.cases.${activeCase.id}.pedagogicalRationale`, { defaultValue: activeCase.pedagogicalRationale })}
               </p>
             </div>
 
@@ -218,14 +246,14 @@ export const AgentScenarioSandbox: React.FC = () => {
                 className="btn-secondary"
                 onClick={handleReset}
               >
-                Reset selection
+                {t('sandbox.resetSelection')}
               </button>
               <button
                 type="button"
                 className="btn-secondary"
                 onClick={() => handleSwitchCase(activeCaseIndex === 0 ? 1 : 0)}
               >
-                Switch to {activeCaseIndex === 0 ? 'Contrast Case (U01)' : 'Primary Case (S01)'}
+                {activeCaseIndex === 0 ? t('sandbox.switchToContrast') : t('sandbox.switchToPrimary')}
               </button>
             </div>
           </div>
@@ -239,3 +267,5 @@ export const AgentScenarioSandbox: React.FC = () => {
     </section>
   )
 }
+
+export default AgentScenarioSandbox

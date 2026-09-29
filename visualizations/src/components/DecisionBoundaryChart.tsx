@@ -1,8 +1,12 @@
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { BOUNDARY_EVOLUTION, type BoundaryResult } from '../data/research-results'
+import { useChartTheme } from '../hooks/useChartTheme'
 
 export const DecisionBoundaryChart: React.FC = () => {
+  const { t } = useTranslation(['charts', 'common'])
+  const chartTheme = useChartTheme()
   const [selectedBoundaryId, setSelectedBoundaryId] = useState<string>('V5U02')
 
   const selectedBoundary = useMemo(() => {
@@ -30,33 +34,27 @@ export const DecisionBoundaryChart: React.FC = () => {
       legend: {
         top: 15,
         right: 20,
-        textStyle: {
-          color: '#8b9bb4',
-          fontSize: 12,
-        },
+        textStyle: chartTheme.legendTextStyle,
         itemWidth: 14,
         itemHeight: 10,
         data: [
-          'SEARCH_CODE Choice Rate (%)',
-          'ASK_USER Choice Rate (%)',
-          'Average Margin P(top1)-P(top2)',
-          'Average Confidence',
+          t('boundary.searchRate', { ns: 'charts' }),
+          t('boundary.askRate', { ns: 'charts' }),
+          t('boundary.legendMargin', { ns: 'charts' }),
+          t('boundary.legendConfidence', { ns: 'charts' }),
         ],
       },
       tooltip: {
         trigger: 'axis',
-        backgroundColor: '#131720',
-        borderColor: '#333e54',
-        borderWidth: 1,
-        padding: [12, 16],
-        textStyle: {
-          color: '#f0f3f8',
-          fontSize: 13,
-        },
+        backgroundColor: chartTheme.tooltipConfig.backgroundColor,
+        borderColor: chartTheme.tooltipConfig.borderColor,
+        borderWidth: chartTheme.tooltipConfig.borderWidth,
+        padding: chartTheme.tooltipConfig.padding,
+        textStyle: chartTheme.tooltipConfig.textStyle,
         axisPointer: {
           type: 'shadow',
           shadowStyle: {
-            color: 'rgba(56, 189, 248, 0.05)',
+            color: 'rgba(0, 0, 0, 0.05)',
           },
         },
         formatter: (params: unknown) => {
@@ -66,27 +64,27 @@ export const DecisionBoundaryChart: React.FC = () => {
           const item: BoundaryResult = BOUNDARY_EVOLUTION[idx]
 
           return `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-width: 290px; line-height: 1.5;">
-              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222938; padding-bottom: 8px; margin-bottom: 8px;">
+            <div style="font-family: ${chartTheme.fontSans}; min-width: 290px; line-height: 1.5; color: ${chartTheme.textPrimary};">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid ${chartTheme.tooltipBorder}; padding-bottom: 8px; margin-bottom: 8px;">
                 <div>
-                  <strong style="color: #f0f3f8; font-size: 14px;">${item.id} (${item.experiment})</strong>
-                  <div style="color: #64748b; font-size: 11px;">${item.label}</div>
+                  <strong style="color: ${chartTheme.textPrimary}; font-size: 14px;">${item.id} (${item.experiment})</strong>
+                  <div style="color: ${chartTheme.textSecondary}; font-size: 11px;">${item.label}</div>
                 </div>
-                <span style="font-size: 11px; background: rgba(56,189,248,0.12); color: #38bdf8; padding: 2px 6px; border-radius: 4px; font-family: monospace;">${item.runs} Runs</span>
+                <span style="font-size: 11px; color: ${chartTheme.primary}; padding: 2px 6px; border-radius: 2px; font-family: ${chartTheme.fontMono};">${item.runs} Runs</span>
               </div>
               <div style="display: grid; grid-template-columns: 1fr auto; gap: 4px; font-size: 12px; margin-bottom: 6px;">
-                <span style="color: #8b9bb4;">Choice Distribution:</span>
+                <span style="color: ${chartTheme.textSecondary};">Choice Distribution:</span>
                 <span style="font-variant-numeric: tabular-nums;">
-                  <strong style="color: #38bdf8;">SEARCH_CODE: ${item.searchCodeRatePct}%</strong> (${item.searchCodeCount}) |
-                  <strong style="color: #f87171;">ASK_USER: ${item.askUserRatePct}%</strong> (${item.askUserCount})
+                  <strong style="color: ${chartTheme.searchCode};">SEARCH: ${item.searchCodeRatePct}%</strong> (${item.searchCodeCount}) |
+                  <strong style="color: ${chartTheme.askUser};">ASK: ${item.askUserRatePct}%</strong> (${item.askUserCount})
                 </span>
-                <span style="color: #8b9bb4;">Average Margin:</span>
-                <strong style="color: #fbbf24; font-variant-numeric: tabular-nums;">${item.averageMargin.toFixed(4)}</strong>
-                <span style="color: #8b9bb4;">Average Confidence:</span>
-                <strong style="color: #a78bfa; font-variant-numeric: tabular-nums;">${item.averageConfidence.toFixed(4)}</strong>
+                <span style="color: ${chartTheme.textSecondary};">${t('boundary.legendMargin', { ns: 'charts' })}:</span>
+                <strong style="color: ${chartTheme.accent}; font-variant-numeric: tabular-nums;">${item.averageMargin.toFixed(4)}</strong>
+                <span style="color: ${chartTheme.textSecondary};">${t('boundary.legendConfidence', { ns: 'charts' })}:</span>
+                <strong style="color: ${chartTheme.primary}; font-variant-numeric: tabular-nums;">${item.averageConfidence.toFixed(4)}</strong>
               </div>
-              <div style="font-size: 11px; color: #8b9bb4; border-top: 1px solid #222938; padding-top: 6px; margin-top: 6px;">
-                <strong style="color: #cbd5e1;">Empirical Interpretation:</strong> ${item.interpretation}
+              <div style="font-size: 11px; color: ${chartTheme.textMutedColor}; border-top: 1px solid ${chartTheme.tooltipBorder}; padding-top: 6px; margin-top: 6px;">
+                <strong style="color: ${chartTheme.textPrimary};">Empirical Interpretation:</strong> ${item.interpretation}
               </div>
             </div>
           `
@@ -95,192 +93,134 @@ export const DecisionBoundaryChart: React.FC = () => {
       xAxis: {
         type: 'category',
         data: xLabels,
-        axisLine: { lineStyle: { color: '#222938' } },
+        axisLine: chartTheme.axisLineStyle,
         axisLabel: {
-          color: '#cbd5e1',
-          fontSize: 11,
-          lineHeight: 15,
+          ...chartTheme.axisLabelStyle,
+          interval: 0,
+          margin: 12,
         },
         axisTick: { show: false },
       },
       yAxis: [
         {
           type: 'value',
+          name: t('boundary.searchRate', { ns: 'charts' }),
+          nameTextStyle: {
+            color: chartTheme.textColor,
+            fontSize: 11,
+          },
           min: 0,
           max: 100,
           interval: 20,
-          name: 'Distribution (%)',
-          nameTextStyle: { color: '#64748b', fontSize: 11 },
           axisLine: { show: false },
           axisLabel: {
-            color: '#64748b',
+            ...chartTheme.axisLabelStyle,
             fontSize: 11,
             formatter: '{value}%',
           },
-          splitLine: {
-            lineStyle: {
-              color: '#1a2234',
-              type: 'dashed',
-            },
-          },
+          splitLine: chartTheme.splitLineStyle,
         },
         {
           type: 'value',
+          name: t('boundary.yAxis', { ns: 'charts' }),
+          nameTextStyle: {
+            color: chartTheme.textColor,
+            fontSize: 11,
+          },
           min: 0,
-          max: 1.1,
+          max: 1.0,
           interval: 0.2,
-          name: 'Margin / Confidence',
-          nameTextStyle: { color: '#fbbf24', fontSize: 11 },
+          position: 'right',
           axisLine: { show: false },
           axisLabel: {
-            color: '#fbbf24',
+            ...chartTheme.axisLabelStyle,
             fontSize: 11,
-            formatter: '{value}',
+            formatter: (val: number) => val.toFixed(1),
           },
           splitLine: { show: false },
         },
       ],
       series: [
         {
-          name: 'SEARCH_CODE Choice Rate (%)',
+          name: t('boundary.searchRate', { ns: 'charts' }),
           type: 'bar',
-          stack: 'distribution',
-          barWidth: 32,
+          stack: 'choices',
+          barWidth: 28,
           data: searchCodeData,
-          itemStyle: {
-            color: '#38bdf8',
-          },
-          markArea: {
-            silent: true,
-            itemStyle: {
-              color: 'rgba(248, 113, 113, 0.04)',
-            },
-            data: [
-              [
-                {
-                  name: 'Observed low-margin mixed-choice states',
-                  xAxis: 0,
-                  label: {
-                    color: '#f87171',
-                    fontSize: 11,
-                    position: 'insideTopLeft',
-                    offset: [10, 10],
-                  },
-                },
-                {
-                  xAxis: 3.4,
-                },
-              ],
-              [
-                {
-                  name: 'Observed stable SEARCH_CODE routing',
-                  xAxis: 3.6,
-                  label: {
-                    color: '#38bdf8',
-                    fontSize: 11,
-                    position: 'insideTopLeft',
-                    offset: [10, 10],
-                  },
-                },
-                {
-                  xAxis: 5,
-                },
-              ],
-            ],
-          },
+          itemStyle: { color: chartTheme.searchCode },
         },
         {
-          name: 'ASK_USER Choice Rate (%)',
+          name: t('boundary.askRate', { ns: 'charts' }),
           type: 'bar',
-          stack: 'distribution',
-          barWidth: 32,
+          stack: 'choices',
+          barWidth: 28,
           data: askUserData,
-          itemStyle: {
-            color: '#f87171',
-            borderRadius: [4, 4, 0, 0],
-          },
+          itemStyle: { color: chartTheme.askUser },
         },
         {
-          name: 'Average Margin P(top1)-P(top2)',
+          name: t('boundary.legendMargin', { ns: 'charts' }),
           type: 'line',
           yAxisIndex: 1,
+          data: marginData,
           symbol: 'diamond',
           symbolSize: 9,
-          data: marginData,
-          lineStyle: {
-            color: '#fbbf24',
-            width: 2.5,
-          },
-          itemStyle: {
-            color: '#fbbf24',
-            borderColor: '#131720',
-            borderWidth: 1.5,
-          },
+          itemStyle: { color: chartTheme.accent },
+          lineStyle: { color: chartTheme.accent, width: 2 },
         },
         {
-          name: 'Average Confidence',
+          name: t('boundary.legendConfidence', { ns: 'charts' }),
           type: 'line',
           yAxisIndex: 1,
+          data: confidenceData,
           symbol: 'circle',
           symbolSize: 8,
-          data: confidenceData,
-          lineStyle: {
-            color: '#a78bfa',
-            width: 2,
-            type: 'dashed',
-          },
-          itemStyle: {
-            color: '#a78bfa',
-            borderColor: '#131720',
-            borderWidth: 1.5,
-          },
+          itemStyle: { color: chartTheme.primary },
+          lineStyle: { color: chartTheme.primary, width: 2, type: 'dashed' },
         },
       ],
     }
-  }, [])
+  }, [chartTheme, t])
 
   return (
-    <section className="section-container" id="decision-boundary" aria-label="ASK_USER vs SEARCH_CODE Decision Boundary">
+    <section className="section-container" id="decision-boundary" aria-label={t('boundary.title', { ns: 'charts' })}>
       <div className="section-header">
         <div className="section-badge-row">
-          <span className="badge badge-accent">Core Finding</span>
-          <span className="badge badge-warning">Empirical Boundary</span>
+          <span className="badge badge-accent">{t('boundary.badge', { ns: 'charts' })}</span>
+          <span className="badge">Diagnostic States</span>
         </div>
-        <h2 className="section-title">ASK_USER &harr; SEARCH_CODE Decision Boundary</h2>
-        <p className="section-subtitle">
-          Visualizing the empirical transition from mixed stochastic decisions near ambiguous semantic frontiers toward stable SEARCH_CODE routing in the tested runs.
-        </p>
+        <h2 className="section-title">{t('boundary.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('boundary.description', { ns: 'charts' })}</p>
       </div>
 
       <div className="chart-card">
         <div className="chart-header-row">
           <div>
-            <h3 className="card-title">100% Stacked Action Distribution vs. Probability Margin Evolution</h3>
+            <h3 className="card-title">Boundary Instability &amp; Top-1/Top-2 Margin Compression</h3>
             <p className="card-caption">
-              Evolution across 6 diagnostic states: Left bars show observed action split; right lines track top-1/top-2 margin and confidence.
+              Across repeated runs, states near the decision boundary exhibited choice switching accompanied by margin compression.
             </p>
           </div>
           <div className="legend-tag-group">
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#38bdf8' }}></span>
-              SEARCH_CODE Rate
+              <span className="legend-dot" style={{ background: chartTheme.searchCode }}></span>
+              SEARCH_CODE
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#f87171' }}></span>
-              ASK_USER Rate
+              <span className="legend-dot" style={{ background: chartTheme.askUser }}></span>
+              ASK_USER
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#fbbf24' }}></span>
-              Avg Margin (P1 - P2)
+              <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
+              Margin P1 - P2
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#a78bfa' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
               Avg Confidence
             </span>
           </div>
         </div>
 
-        <div className="chart-wrapper" style={{ height: 420 }}>
+        <div className="chart-wrapper" style={{ height: 400 }}>
           <ReactEChartsCore
             echarts={echarts}
             option={chartOption}
@@ -289,9 +229,9 @@ export const DecisionBoundaryChart: React.FC = () => {
           />
         </div>
 
-        {/* Boundary State Step Selector */}
-        <div className="boundary-inspect-section">
-          <div className="inspect-tabs" role="tablist" aria-label="Select boundary experiment for details">
+        {/* Interactive State Selector */}
+        <div className="router-inspect-section">
+          <div className="inspect-tabs" role="tablist" aria-label="Select diagnostic boundary state for inspection">
             {BOUNDARY_EVOLUTION.map((b) => (
               <button
                 key={b.id}
@@ -301,9 +241,7 @@ export const DecisionBoundaryChart: React.FC = () => {
                 onClick={() => setSelectedBoundaryId(b.id)}
               >
                 <span className="tab-name">{b.id}</span>
-                <span className="tab-split">
-                  {b.searchCodeRatePct}% / {b.askUserRatePct}%
-                </span>
+                <span className="tab-score">Margin: {b.averageMargin.toFixed(3)}</span>
               </button>
             ))}
           </div>
@@ -311,65 +249,59 @@ export const DecisionBoundaryChart: React.FC = () => {
           <div className="router-detail-card" aria-live="polite">
             <div className="router-detail-header">
               <div>
-                <div className="boundary-card-id-row">
-                  <h4 className="router-name">{selectedBoundary.id}: {selectedBoundary.label}</h4>
-                  <span className="badge badge-accent">{selectedBoundary.experiment}</span>
-                </div>
-                <p className="router-type-badge">{selectedBoundary.runs} Repeated Empirical Runs</p>
+                <h4 className="router-name">{selectedBoundary.id} — {selectedBoundary.label}</h4>
+                <span className="router-type-badge">{selectedBoundary.experiment}</span>
               </div>
-              <div className="boundary-rate-pill">
-                <span className="pill-search">{selectedBoundary.searchCodeRatePct}% SEARCH</span>
-                <span className="pill-divider">&bull;</span>
-                <span className="pill-ask">{selectedBoundary.askUserRatePct}% ASK</span>
+              <div className="router-score-badge">
+                <span className="score-val">{selectedBoundary.averageMargin.toFixed(4)}</span>
+                <span className="score-lbl">Top-1 / Top-2 Margin</span>
               </div>
             </div>
 
             <div className="router-metrics-grid">
               <div className="router-metric-item">
-                <span className="item-label">SEARCH_CODE Count</span>
-                <span className="item-value" style={{ color: '#38bdf8' }}>
-                  {selectedBoundary.searchCodeCount} / {selectedBoundary.runs}
+                <span className="item-label">Observed Choices</span>
+                <span className="item-value">
+                  {selectedBoundary.searchCodeCount} SEARCH / {selectedBoundary.askUserCount} ASK
                 </span>
-                <span className="item-sub">{selectedBoundary.searchCodeRatePct}% selection frequency</span>
+                <span className="item-sub">Across {selectedBoundary.runs} repeated runs</span>
               </div>
               <div className="router-metric-item">
-                <span className="item-label">ASK_USER Count</span>
-                <span className="item-value" style={{ color: '#f87171' }}>
-                  {selectedBoundary.askUserCount} / {selectedBoundary.runs}
+                <span className="item-label">Action Rates</span>
+                <span className="item-value">
+                  {selectedBoundary.searchCodeRatePct}% / {selectedBoundary.askUserRatePct}%
                 </span>
-                <span className="item-sub">{selectedBoundary.askUserRatePct}% selection frequency</span>
-              </div>
-              <div className="router-metric-item">
-                <span className="item-label">Average Margin (P1 - P2)</span>
-                <span className="item-value" style={{ color: '#fbbf24' }}>
-                  {selectedBoundary.averageMargin.toFixed(4)}
-                </span>
-                <span className="item-sub">
-                  {selectedBoundary.askUserRatePct > 0 ? 'Mixed action choices in tested runs' : 'Consistent SEARCH_CODE in tested runs'}
-                </span>
+                <span className="item-sub">SEARCH vs ASK distribution</span>
               </div>
               <div className="router-metric-item">
                 <span className="item-label">Average Confidence</span>
-                <span className="item-value" style={{ color: '#a78bfa' }}>
-                  {selectedBoundary.averageConfidence.toFixed(4)}
+                <span className="item-value">{selectedBoundary.averageConfidence.toFixed(4)}</span>
+                <span className="item-sub">Provider-returned signal</span>
+              </div>
+              <div className="router-metric-item">
+                <span className="item-label">Stability Assessment</span>
+                <span className="item-value">
+                  {selectedBoundary.askUserCount === 0 ? 'Single-Choice' : 'Mixed-Choice'}
                 </span>
-                <span className="item-sub">Provider-returned confidence signal</span>
+                <span className="item-sub">
+                  {selectedBoundary.askUserCount > 0 ? 'Boundary instability observed' : 'Consistent routing observed'}
+                </span>
               </div>
             </div>
 
             <div className="router-notes-box">
-              <strong className="notes-heading">Observed Boundary Dynamics:</strong> {selectedBoundary.interpretation}
+              <strong className="notes-heading">Diagnostic Finding:</strong> {selectedBoundary.interpretation}
             </div>
           </div>
         </div>
 
-        {/* Mandatory Methodological Disclaimer */}
+        {/* Methodological Caveat */}
         <div className="chart-methodology-note" role="note">
-          <strong className="notice-tag">Empirical Methodology Note:</strong>
+          <strong className="notice-tag">Boundary Interpretation:</strong>
           <span>
-            Repeated evaluations of identical text characterize empirical stochastic behavior and are not independent observations.
-            Mixed choices (e.g. 70% SEARCH_CODE / 30% ASK_USER in V5U02 or 80/20 in V8-C1) must NOT be described as random model failure.
-            Rather, they reflect observed routing instability near a semantic decision boundary where the probability margin between candidate actions is small in the tested runs.
+            These diagnostic cases were selected to stress-test routing transitions and characterize empirical drift.
+            A narrow margin indicates that the top two candidate actions had similar probabilities in the evaluated model,
+            which frequently coincided with mixed choices across repeated runs.
           </span>
         </div>
       </div>

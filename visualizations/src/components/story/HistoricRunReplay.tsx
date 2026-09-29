@@ -1,24 +1,27 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import './story.css'
 
 export const HistoricRunReplay: React.FC = () => {
+  const { t, i18n } = useTranslation(['story', 'common'])
+  const isSpanish = i18n.language.startsWith('es')
   const [isReplayed, setIsReplayed] = useState<boolean>(false)
   const [srAnnouncement, setSrAnnouncement] = useState<string>('')
 
   const handleReplay = () => {
     setIsReplayed(true)
     setSrAnnouncement(
-      'Historical evaluations replayed: 20 identical runs yielded 14 SEARCH_CODE and 6 ASK_USER choices. Average confidence: 0.315, average margin: 0.0705.'
+      isSpanish
+        ? 'Evaluaciones históricas reproducidas: 20 ejecuciones idénticas produjeron 14 elecciones SEARCH_CODE y 6 ASK_USER. Confianza promedio: 0.315, margen promedio: 0.0705.'
+        : 'Historical evaluations replayed: 20 identical runs yielded 14 SEARCH_CODE and 6 ASK_USER choices. Average confidence: 0.315, average margin: 0.0705.'
     )
   }
 
   const handleReset = () => {
     setIsReplayed(false)
-    setSrAnnouncement('Replay reset.')
+    setSrAnnouncement(isSpanish ? 'Repetición restablecida.' : 'Replay reset.')
   }
 
-  // Exact 20 historical runs aggregated by choice (14 SEARCH_CODE, 6 ASK_USER)
-  // No chronological order is implied or simulated
   const searchTokens = Array.from({ length: 14 }, (_, i) => ({
     id: `search-${i + 1}`,
     index: i + 1,
@@ -31,6 +34,9 @@ export const HistoricRunReplay: React.FC = () => {
     action: 'ASK_USER' as const,
   }))
 
+  const canonicalPrompt =
+    'An account was removed months ago and another person now requests the same username. Existing product documentation describes deletion but never states whether the identifier becomes available again.'
+
   return (
     <section
       className="story-section"
@@ -39,14 +45,11 @@ export const HistoricRunReplay: React.FC = () => {
     >
       <div className="story-header">
         <div className="story-badge-row">
-          <span className="badge badge-warning">Boundary Exploration</span>
-          <span className="badge">State V5U02 Diagnostic Probe</span>
+          <span className="badge badge-accent">{t('replay.badge')}</span>
+          <span className="badge">{t('replay.badge2')}</span>
         </div>
-        <h2 className="story-title">When One-Shot Accuracy Hides Decision Instability</h2>
-        <p className="story-subtitle">
-          In single-shot evaluations, an agent prompt yields a single routing choice.
-          What happens when the exact same prompt text is evaluated repeatedly across 20 identical runs?
-        </p>
+        <h2 className="story-title">{t('replay.title')}</h2>
+        <p className="story-subtitle">{t('replay.subtitle')}</p>
       </div>
 
       <div className="replay-workbench">
@@ -54,26 +57,37 @@ export const HistoricRunReplay: React.FC = () => {
         <div className="replay-prompt-box">
           <div className="context-kicker-bar">
             <span className="context-kicker-label">
-              HISTORICAL PROBE // STATE V5U02 (Requirement ambiguity)
+              {t('replay.contextKicker')}
             </span>
             <span className="context-kicker-meta">
-              Dataset: <code>routing-v5-cue-stripped.json</code> &bull; Target: <code>ASK_USER</code>
+              <code>routing-v5-cue-stripped.json</code> &bull; Target: <code>ASK_USER</code>
             </span>
           </div>
           <blockquote className="replay-prompt-body">
-            &ldquo;An account was removed months ago and another person now requests the same username.
-            Existing product documentation describes deletion but never states whether the identifier becomes available again.&rdquo;
+            &ldquo;{canonicalPrompt}&rdquo;
           </blockquote>
+
+          {/* Spanish Reading Translation */}
+          {isSpanish && (
+            <div className="context-reading-translation">
+              <div className="reading-translation-header">
+                <span className="reading-translation-label">{t('common.readingTranslationLabel', { ns: 'common' })}:</span>
+              </div>
+              <div className="reading-translation-body">
+                &ldquo;{t('replay.readingTranslation')}&rdquo;
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Pre-Replay: Strong Focal Question */}
         {!isReplayed ? (
           <div className="replay-pre-trigger-block">
             <div className="replay-question-lead">
-              In a single-shot benchmark, this state looked decisive.
+              {t('replay.questionLead')}
             </div>
             <div className="replay-question-sub">
-              What happened when the exact same prompt text was evaluated 20 times?
+              {t('replay.questionSub')}
             </div>
             <div className="replay-trigger-action-row">
               <button
@@ -82,10 +96,10 @@ export const HistoricRunReplay: React.FC = () => {
                 onClick={handleReplay}
               >
                 <span aria-hidden="true">&#x25B6;</span>
-                Replay observed evaluations
+                {t('replay.triggerButton')}
               </button>
               <span className="replay-trigger-hint">
-                Historical replay &bull; 20 recorded runs &bull; No live model inference
+                {t('replay.triggerHint')}
               </span>
             </div>
           </div>
@@ -99,13 +113,13 @@ export const HistoricRunReplay: React.FC = () => {
             {/* The Central Visual Takeaway */}
             <div className="replay-focal-headline">
               <div className="focal-title-row">
-                <span className="focal-tag">EMPIRICAL OUTCOME</span>
+                <span className="focal-tag">{t('replay.focalTag')}</span>
                 <span className="focal-main-title">
-                  SAME INPUT &bull; TWO OBSERVED ROUTING CHOICES
+                  {t('replay.focalTitle')}
                 </span>
               </div>
               <p className="focal-subtitle">
-                Evaluated across 20 identical runs under the same conditions, routing drifted between two competing actions.
+                {t('replay.focalSubtitle')}
               </p>
             </div>
 
@@ -113,10 +127,10 @@ export const HistoricRunReplay: React.FC = () => {
             <div className="distribution-bar-wrapper">
               <div className="distribution-labels-row">
                 <span className="label-search">
-                  SEARCH_CODE &bull; 14 of 20 (70%)
+                  {t('replay.distSearch')}
                 </span>
                 <span className="label-ask">
-                  ASK_USER &bull; 6 of 20 (30%)
+                  {t('replay.distAsk')}
                 </span>
               </div>
               <div
@@ -151,11 +165,11 @@ export const HistoricRunReplay: React.FC = () => {
                   className="outcome-markers-bank"
                   aria-label="14 historical runs routed to SEARCH_CODE"
                 >
-                  {searchTokens.map((t) => (
+                  {searchTokens.map((tItem) => (
                     <div
-                      key={t.id}
+                      key={tItem.id}
                       className="outcome-marker marker-search"
-                      title={`Observed evaluation: SEARCH_CODE (${t.index}/14)`}
+                      title={`Observed evaluation: SEARCH_CODE (${tItem.index}/14)`}
                     >
                       <span className="marker-icon" aria-hidden="true">⌕</span>
                       <span className="marker-label">SEARCH</span>
@@ -164,7 +178,7 @@ export const HistoricRunReplay: React.FC = () => {
                 </div>
 
                 <div className="outcome-region-caption">
-                  14 evaluations routed to autonomous codebase inspection
+                  {t('replay.searchCaption')}
                 </div>
               </div>
 
@@ -185,11 +199,11 @@ export const HistoricRunReplay: React.FC = () => {
                   className="outcome-markers-bank"
                   aria-label="6 historical runs routed to ASK_USER"
                 >
-                  {askTokens.map((t) => (
+                  {askTokens.map((tItem) => (
                     <div
-                      key={t.id}
+                      key={tItem.id}
                       className="outcome-marker marker-ask"
-                      title={`Observed evaluation: ASK_USER (${t.index}/6)`}
+                      title={`Observed evaluation: ASK_USER (${tItem.index}/6)`}
                     >
                       <span className="marker-icon" aria-hidden="true">?</span>
                       <span className="marker-label">ASK</span>
@@ -198,7 +212,7 @@ export const HistoricRunReplay: React.FC = () => {
                 </div>
 
                 <div className="outcome-region-caption">
-                  6 evaluations routed to developer clarification
+                  {t('replay.askCaption')}
                 </div>
               </div>
             </div>
@@ -206,54 +220,45 @@ export const HistoricRunReplay: React.FC = () => {
             {/* Secondary Explanatory Metrics Grid */}
             <div className="replay-metrics-grid">
               <div className="metric-stat-box">
-                <span className="metric-stat-label">Recorded Runs</span>
+                <span className="metric-stat-label">{t('replay.recordedRuns')}</span>
                 <span className="metric-stat-value">20</span>
-                <span className="metric-stat-sub">Identical evaluations</span>
+                <span className="metric-stat-sub">{t('replay.identicalEvals')}</span>
               </div>
 
               <div className="metric-stat-box">
-                <span className="metric-stat-label">Observed Split</span>
+                <span className="metric-stat-label">{t('replay.observedSplit')}</span>
                 <span className="metric-stat-value">70% / 30%</span>
-                <span className="metric-stat-sub">14 SEARCH / 6 ASK</span>
+                <span className="metric-stat-sub">{t('replay.splitSub')}</span>
               </div>
 
               <div className="metric-stat-box">
-                <span className="metric-stat-label">Average Confidence</span>
+                <span className="metric-stat-label">{t('replay.avgConfidence')}</span>
                 <span className="metric-stat-value">0.315</span>
-                <span className="metric-stat-sub">Provider-returned signal</span>
+                <span className="metric-stat-sub">{t('replay.confSub')}</span>
               </div>
 
               <div className="metric-stat-box">
-                <span className="metric-stat-label">Top-1 / Top-2 Margin</span>
+                <span className="metric-stat-label">{t('replay.topMargin')}</span>
                 <span className="metric-stat-value">0.0705</span>
-                <span className="metric-stat-sub">Low separation</span>
+                <span className="metric-stat-sub">{t('replay.marginSub')}</span>
               </div>
             </div>
 
             {/* Methodological Definitions & Threshold Disclaimer */}
             <div className="replay-notes-block">
               <div className="replay-note-item">
-                <span className="replay-note-term">Provider Confidence:</span>
-                <span className="replay-note-def">
-                  A provider-returned confidence signal. It is not treated as a calibrated
-                  probability that the selected action is correct, and its exact internal
-                  semantics are not assumed.
-                </span>
+                <span className="replay-note-term">{t('replay.providerConfTerm')}</span>
+                <span className="replay-note-def">{t('replay.providerConfDef')}</span>
               </div>
 
               <div className="replay-note-item">
-                <span className="replay-note-term">Top-1 / Top-2 Margin:</span>
-                <span className="replay-note-def">
-                  Top-1 / top-2 margin is the numerical gap between the two highest action probabilities.
-                </span>
+                <span className="replay-note-term">{t('replay.marginTerm')}</span>
+                <span className="replay-note-def">{t('replay.marginDef')}</span>
               </div>
 
               <div className="replay-note-item">
-                <span className="replay-note-term">Operational Threshold Caveat:</span>
-                <span className="replay-note-def">
-                  Small average margins appeared in several mixed-choice states observed in these experiments.
-                  The study did not establish a numeric operational threshold.
-                </span>
+                <span className="replay-note-term">{t('replay.thresholdTerm')}</span>
+                <span className="replay-note-def">{t('replay.thresholdDef')}</span>
               </div>
             </div>
 
@@ -264,10 +269,10 @@ export const HistoricRunReplay: React.FC = () => {
                 className="btn-secondary"
                 onClick={handleReset}
               >
-                Reset replay
+                {t('replay.resetReplay')}
               </button>
               <span className="replay-footer-meta">
-                Historical record &bull; V5 consistency suite
+                {t('replay.footerMeta')}
               </span>
             </div>
           </div>
@@ -281,3 +286,5 @@ export const HistoricRunReplay: React.FC = () => {
     </section>
   )
 }
+
+export default HistoricRunReplay

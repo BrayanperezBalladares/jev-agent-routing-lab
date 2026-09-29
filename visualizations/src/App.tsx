@@ -1,5 +1,8 @@
 import React, { Suspense } from 'react'
+import { useTranslation } from 'react-i18next'
 import './App.css'
+import { ThemeProvider } from './theme'
+import { HeaderNav } from './components/HeaderNav'
 import { Hero } from './components/Hero'
 import { ResearchOverview } from './components/ResearchOverview'
 import {
@@ -25,37 +28,22 @@ const V8ExplicitnessChart = React.lazy(
   () => import('./components/V8ExplicitnessChart')
 )
 
-const ChartLoadingFallback: React.FC = () => (
-  <div className="chart-card" style={{ minHeight: 380, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <span className="badge badge-accent">Loading Research Visualization...</span>
-  </div>
-)
+const ChartLoadingFallback: React.FC = () => {
+  const { t } = useTranslation(['common'])
+  return (
+    <div className="chart-card" style={{ minHeight: 380, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <span className="badge badge-accent">{t('common.loading')}</span>
+    </div>
+  )
+}
 
-export const App: React.FC = () => {
+const DashboardContent: React.FC = () => {
+  const { t } = useTranslation(['common'])
+
   return (
     <div className="dashboard-container">
-      {/* Sticky Quick-Navigation Header */}
-      <nav className="app-header-nav" aria-label="Dashboard Section Navigation">
-        <div className="nav-brand-group">
-          <span className="badge badge-accent">JEV LAB</span>
-          <span className="nav-brand-title">Agent Routing Research</span>
-        </div>
-        <div className="nav-links">
-          <a href="#hero" className="nav-anchor">Hero</a>
-          <a href="#agent-scenario-sandbox" className="nav-anchor">Scenario Sandbox</a>
-          <a href="#historic-run-replay" className="nav-anchor">Boundary Replay</a>
-          <a href="#margin-deconstructor" className="nav-anchor">Margin Deconstructor</a>
-          <a href="#explicitness-ladder" className="nav-anchor">Explicitness Ladder</a>
-          <a href="#research-overview" className="nav-anchor">Overview</a>
-          <a href="#holdout-comparison" className="nav-anchor">Holdout</a>
-          <a href="#benchmark-progression" className="nav-anchor">Progression</a>
-          <a href="#decision-boundary" className="nav-anchor">Boundary</a>
-          <a href="#v8-explicitness" className="nav-anchor">V8 Ablation</a>
-          <a href="#confidence-stability" className="nav-anchor">Confidence & Margin</a>
-          <a href="#conclusions" className="nav-anchor">Conclusions</a>
-          <a href="#methodology" className="nav-anchor">Methodology</a>
-        </div>
-      </nav>
+      {/* Monograph Sticky Header with Theme & Language Controls */}
+      <HeaderNav />
 
       {/* Main Research Content (Interactive Narrative Flow) */}
       <main id="main-content" style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
@@ -68,11 +56,10 @@ export const App: React.FC = () => {
         {/* Narrative Transition Banner 1 */}
         <div className="story-transition-banner" role="note" aria-label="Research transition note">
           <div className="transition-lead">
-            A correct one-shot decision still leaves another question: is that decision stable?
+            {t('transitions.step1to2Lead')}
           </div>
           <p className="transition-caption">
-            In production agent workflows, single-pass evaluations can mask underlying sensitivity.
-            When ambiguous operational states are presented repeatedly, how consistently does a semantic evaluator choose the same action?
+            {t('transitions.step1to2Caption')}
           </p>
         </div>
 
@@ -82,11 +69,10 @@ export const App: React.FC = () => {
         {/* Phase 2 Transition Banner: Deconstructing the Boundary */}
         <div className="story-transition-banner" role="note" aria-label="Research transition note">
           <div className="transition-lead">
-            So what does a result like this tell us about the decision?
+            {t('transitions.step2to3Lead')}
           </div>
           <p className="transition-caption">
-            To diagnose why routing alternates between SEARCH_CODE and ASK_USER, we must deconstruct the difference
-            between provider-returned confidence, candidate margin separation, and observed repeated-choice stability.
+            {t('transitions.step2to3Caption')}
           </p>
         </div>
 
@@ -96,11 +82,10 @@ export const App: React.FC = () => {
         {/* Phase 2 Transition Banner: Representation and Formulation */}
         <div className="story-transition-banner" role="note" aria-label="Research transition note">
           <div className="transition-lead">
-            What happens when the unresolved implementation state is expressed more explicitly?
+            {t('transitions.step3to4Lead')}
           </div>
           <p className="transition-caption">
-            Investigate how explicitly specifying the location and nature of unresolved operational information
-            coincided with changes in routing behavior across the controlled V8 ablation suite.
+            {t('transitions.step3to4Caption')}
           </p>
         </div>
 
@@ -110,15 +95,15 @@ export const App: React.FC = () => {
         {/* Primary Insight Transition to Deep Dashboard */}
         <div className="story-transition-banner" role="note" aria-label="Research progression note">
           <div className="transition-lead">
-            Primary Insight: One-shot accuracy can hide routing instability near semantic decision boundaries.
+            {t('common.keyTakeaways')}: One-shot accuracy can hide routing instability near semantic decision boundaries.
           </div>
           <p className="transition-caption">
-            With the experiential foundations established, examine how Jev performs across stationary holdouts,
+            With the experiential foundations established, examine how specialized routing performs across stationary holdouts,
             diagnostic stress suites, and full research datasets in the deep analytical sections below.
           </p>
         </div>
 
-        {/* Research Overview & Scope (Repositioned after experiential story) */}
+        {/* Research Overview & Scope */}
         <ResearchOverview />
 
         {/* 3. V3 Holdout Router Comparison */}
@@ -161,6 +146,14 @@ export const App: React.FC = () => {
         </div>
       </footer>
     </div>
+  )
+}
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <DashboardContent />
+    </ThemeProvider>
   )
 }
 

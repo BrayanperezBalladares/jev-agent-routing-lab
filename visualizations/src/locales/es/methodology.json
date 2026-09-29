@@ -1,0 +1,42 @@
+{
+  "title": "Metodología de Investigación y Limitaciones",
+  "badge": "Límites Experimentales",
+  "description": "Restricciones críticas, condiciones ambientales y parámetros metodológicos que rigen la interpretación de estos hallazgos experimentales.",
+  "items": {
+    "syntheticScenarios": {
+      "title": "Escenarios Sintéticos de Ingeniería",
+      "category": "Alcance y Dominio",
+      "content": "Los escenarios representan situaciones acotadas y aisladas de ingeniería de software construidas para evaluar elecciones de enrutamiento de un solo paso. Omiten deliberadamente historiales conversacionales multiturno, bucles de retroalimentación con desarrolladores y modificaciones en vivo del árbol de archivos."
+    },
+    "fixedActionSpace": {
+      "title": "Espacio Fijo de Acciones",
+      "category": "Encuadre de Acciones",
+      "content": "Los objetivos de enrutamiento se restringen a cinco acciones canónicas discretas: SEARCH_CODE, READ_FILE, RUN_TESTS, QUERY_DATABASE y ASK_USER. Este protocolo mide la discriminación entre acciones definidas, no el razonamiento abierto de agentes ni la creación dinámica de herramientas."
+    },
+    "diagnosticSuites": {
+      "title": "Suites Diagnósticas (V4–V8)",
+      "category": "Naturaleza del Dataset",
+      "content": "Las suites V4 a V8 fueron construidas iterativamente para someter a prueba fronteras semánticas, pares mínimos y eliminación de pistas. Como se formaliza en las directrices de investigación, estas suites son sondas diagnósticas adaptativas, NO conjuntos holdout intocados."
+    },
+    "repeatedRuns": {
+      "title": "Ejecuciones Idénticas Repetidas",
+      "category": "Dinámica de Muestreo",
+      "content": "Evaluar textos de entrada idénticos reiteradamente en 10 a 20 ejecuciones caracteriza el comportamiento estocástico empírico bajo condiciones reales de inferencia. Estas ejecuciones cuantifican la deriva de decisión, pero no representan observaciones estadísticas independientes."
+    },
+    "providerVariability": {
+      "title": "Variabilidad de Infraestructura del Proveedor",
+      "category": "Entorno de Ejecución",
+      "content": "Jev, GPT-5-mini y Nemotron Ultra operaron mediante stacks de infraestructura, gateways en la nube y endpoints geográficos distintos. Las latencias operativas, timeouts de red y reintentos de gateway reflejan estas diversas condiciones de ejecución."
+    },
+    "confidenceCalibration": {
+      "title": "Límites de Calibración de Confianza",
+      "category": "Límites de Métricas",
+      "content": "La confianza es una señal devuelta por el proveedor y no se interpreta como una probabilidad calibrada de que la acción seleccionada sea correcta."
+    },
+    "latencyCostComparability": {
+      "title": "Comparabilidad de Latencia y Costo",
+      "category": "Validez Comparativa",
+      "content": "Las cifras de costo y latencia entre modelos no pueden interpretarse como una tabla de clasificación universal. Como señalan los hallazgos de investigación, las bases de tarificación (costo de mercado observado vs. precio teórico de lista vs. capa experimental gratuita) y las políticas de reintento difirieron."
+    }
+  }
+}
