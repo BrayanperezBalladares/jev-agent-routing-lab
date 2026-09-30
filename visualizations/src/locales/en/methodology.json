@@ -1,42 +1,70 @@
 {
-  "title": "Research Methodology & Limitations",
-  "badge": "Experimental Boundaries",
-  "description": "Critical constraints, environmental conditions, and methodological parameters governing the interpretation of these experimental findings.",
+  "title": "Methodological Constraints & Research Notes",
+  "badge": "REFERENCE STANDARD",
+  "description": "Formal constraints, environmental parameters, and analytical boundaries governing the empirical interpretation of this study.",
   "items": {
-    "syntheticScenarios": {
-      "title": "Synthetic SE Scenarios",
+    "syntheticScope": {
+      "num": "01",
+      "title": "Synthetic Evaluation Scope",
       "category": "Scope & Domain",
-      "content": "Scenarios represent bounded, isolated software-engineering situations constructed to evaluate single-step routing choices. They deliberately omit full multi-turn conversational history, developer feedback loops, and live file tree modifications."
+      "content": "Scenarios represent bounded, isolated software-engineering situations designed to evaluate single-step routing choices. They deliberately omit full multi-turn conversational history, developer feedback loops, and live file tree modifications.",
+      "rule": "Single-step accuracy does not guarantee end-to-end multi-turn agent task completion."
     },
-    "fixedActionSpace": {
-      "title": "Fixed Action Space",
-      "category": "Action Framing",
-      "content": "Routing targets are constrained to five discrete canonical actions: SEARCH_CODE, READ_FILE, RUN_TESTS, QUERY_DATABASE, and ASK_USER. This protocol measures discrimination among defined action slots, not open-ended agent reasoning or dynamic tool creation."
-    },
-    "diagnosticSuites": {
-      "title": "Diagnostic Suites (V4–V8)",
-      "category": "Dataset Nature",
-      "content": "Suites V4 through V8 were iteratively curated to stress-test semantic boundaries, minimal pairs, and cue-stripping. As formalized in research guidelines, these suites are adaptive diagnostic probes, NOT untouched holdouts."
+    "frozenVsAdaptive": {
+      "num": "02",
+      "title": "Frozen Benchmark vs. Adaptive Diagnostics",
+      "category": "Dataset Topology",
+      "content": "Suites V1–V3 represent a progressive benchmark culminating in the balanced 50-case frozen holdout (V3). Suites V4–V8 are iterative, adversarial diagnostic probes designed to expose failure modes, not stationary holdouts.",
+      "rule": "Results on V4–V8 describe targeted stress-test behavior, not generalized population accuracy."
     },
     "repeatedRuns": {
-      "title": "Repeated Identical Runs",
+      "num": "03",
+      "title": "Repeated Identical Evaluations",
       "category": "Sampling Dynamics",
-      "content": "Evaluating identical input text repeatedly across 10 to 20 runs characterizes empirical stochastic behavior under real inference conditions. These runs quantify decision drift, but do not represent independent statistical observations."
+      "content": "Running identical inputs across repeated trials (10 to 20 runs) characterizes empirical stochastic switching under fixed temperature and prompt states. These repeated trials quantify local volatility, not independent statistical samples.",
+      "rule": "Choice frequencies (e.g. 14/6 in V5U02) are descriptive observations, not parametric probabilities."
     },
-    "providerVariability": {
-      "title": "Provider Infrastructure Variability",
-      "category": "Execution Environment",
-      "content": "Jev, GPT-5-mini, and Nemotron Ultra operated through distinct infrastructure stacks, cloud gateways, and geographic endpoints. Operational latencies, network timeouts, and gateway retries reflect these diverse runtime conditions."
+    "confidenceSignal": {
+      "num": "04",
+      "title": "Confidence Signal Limits",
+      "category": "Metric Interpretation",
+      "content": "Raw confidence values reflect model probability mass assigned to the top candidate action. High confidence can co-occur with misclassifications on edge cases, while low confidence can produce correct routing.",
+      "rule": "Confidence is a provider-returned uncertainty signal, not a calibrated probability of correctness."
     },
-    "confidenceCalibration": {
-      "title": "Confidence Calibration Limits",
-      "category": "Metric Boundaries",
-      "content": "Confidence is a provider-returned signal and is not treated as a calibrated probability that the selected action is correct."
+    "marginSignal": {
+      "num": "05",
+      "title": "Candidate Margin Separation",
+      "category": "Decision Boundary",
+      "content": "The decision-boundary margin is calculated strictly as margin = P(top1) - P(top2). Narrow margins indicate competition between adjacent actions, but do not provide an empirically validated universal threshold.",
+      "rule": "Margin compression signals local competition, not a universal cutoff for production gating."
     },
-    "latencyCostComparability": {
-      "title": "Latency & Cost Comparability",
+    "infrastructureDrops": {
+      "num": "06",
+      "title": "Infrastructure Failures vs. Semantic Errors",
+      "category": "Reliability Accounting",
+      "content": "Operational dropped requests, HTTP timeouts, and upstream network drops are reported separately from semantic routing errors. In V4, V5, and Nemotron evaluations, operational drops were isolated from candidate discrimination.",
+      "rule": "Infrastructure reliability and semantic discrimination must not be conflated into a single score."
+    },
+    "providerComparisons": {
+      "num": "07",
+      "title": "Provider Comparison Limitations",
       "category": "Comparative Validity",
-      "content": "Cost and latency figures across models cannot be interpreted as a universal benchmark leaderboard. As noted in research findings, pricing basis (observed gateway market cost vs. theoretical list price vs. free experimental tier) and retry policies varied."
+      "content": "Jev, GPT-5-mini, and Nemotron Ultra were evaluated across differing cloud gateways, inference runtimes, and networking stacks. Comparisons are descriptive of observed runs under test conditions.",
+      "rule": "Cross-provider results do not establish a universal model ranking or permanent capability hierarchy."
+    },
+    "costLatencyAccounting": {
+      "num": "08",
+      "title": "Cost & Latency Comparability",
+      "category": "Economics & Latency",
+      "content": "Latency metrics included retry outliers in cloud gateways, and cost accounting differed across sources (observed gateway market pricing vs. theoretical list pricing vs. free experimental tiers).",
+      "rule": "Observed market cost and latency reflect experimental testbed conditions, not production SLAs."
+    },
+    "architectureStatus": {
+      "num": "09",
+      "title": "Future Architecture & Governor Status",
+      "category": "Engineering Scope",
+      "content": "The illustrated Uncertainty Governor schema represents an architectural concept separating routing uncertainty from deterministic permissions. It is not an empirical finding or a production-certified runtime component.",
+      "rule": "Routing uncertainty mitigation must remain distinct from deterministic security and safety controls."
     }
   }
 }

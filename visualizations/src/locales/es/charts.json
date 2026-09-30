@@ -45,7 +45,7 @@
   "explicitness": {
     "title": "Ablación de Explicitud del Estado: Margen y Distribución (V8)",
     "badge": "Suite de Ablación V8",
-    "description": "Efecto de graduar la explicitud de la implementación (C1–C6) sobre el margen promedio y la estabilidad repetida de enrutamiento.",
+    "description": "Separación de margen entre candidatos y estabilidad repetida observadas a través de seis representaciones discretas de estado (C1–C6).",
     "legendMargin": "Margen Promedio",
     "legendConfidence": "Confianza Promedio",
     "legendSearchPct": "Tasa de SEARCH_CODE (%)",

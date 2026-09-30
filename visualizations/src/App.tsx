@@ -1,10 +1,9 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import './App.css'
 import { ThemeProvider } from './theme'
 import { HeaderNav } from './components/HeaderNav'
 import { Hero } from './components/Hero'
-import { ResearchOverview } from './components/ResearchOverview'
 import {
   AgentScenarioSandbox,
   HistoricRunReplay,
@@ -13,31 +12,9 @@ import {
   InvestigativeProgressionTimeline,
   UncertaintyGovernorSchema,
 } from './components/story'
-import { ConfidenceStabilitySection } from './components/ConfidenceStabilitySection'
-import { ResearchConclusion } from './components/ResearchConclusion'
+import { DeepDataLab } from './components/lab/DeepDataLab'
 import { MethodologyNotes } from './components/MethodologyNotes'
-
-const HoldoutComparisonChart = React.lazy(
-  () => import('./components/HoldoutComparisonChart')
-)
-const BenchmarkProgressionChart = React.lazy(
-  () => import('./components/BenchmarkProgressionChart')
-)
-const DecisionBoundaryChart = React.lazy(
-  () => import('./components/DecisionBoundaryChart')
-)
-const V8ExplicitnessChart = React.lazy(
-  () => import('./components/V8ExplicitnessChart')
-)
-
-const ChartLoadingFallback: React.FC = () => {
-  const { t } = useTranslation(['common'])
-  return (
-    <div className="chart-card" style={{ minHeight: 380, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <span className="badge badge-accent">{t('common.loading')}</span>
-    </div>
-  )
-}
+import { ResearchConclusion } from './components/ResearchConclusion'
 
 const DashboardContent: React.FC = () => {
   const { t } = useTranslation(['common'])
@@ -120,7 +97,7 @@ const DashboardContent: React.FC = () => {
         {/* Phase 3 Story: Step 6 — Uncertainty Governor Schema */}
         <UncertaintyGovernorSchema />
 
-        {/* Primary Insight Transition to Deep Dashboard */}
+        {/* Primary Insight Transition to Deep Data Lab */}
         <div className="story-transition-banner" role="note" aria-label="Research progression note">
           <div className="transition-lead">
             {t('transitions.deepDataLabLead')}
@@ -130,37 +107,14 @@ const DashboardContent: React.FC = () => {
           </p>
         </div>
 
-        {/* Research Overview & Scope */}
-        <ResearchOverview />
+        {/* Phase 4: Chapter V — Deep Data Lab (Question-Driven Analytical Workbench) */}
+        <DeepDataLab />
 
-        {/* 3. V3 Holdout Router Comparison */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <HoldoutComparisonChart />
-        </Suspense>
-
-        {/* 4. Jev Benchmark Progression */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <BenchmarkProgressionChart />
-        </Suspense>
-
-        {/* 5. ASK_USER ↔ SEARCH_CODE Decision Boundary */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <DecisionBoundaryChart />
-        </Suspense>
-
-        {/* 6. V8 Implementation-Explicitness Analysis */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <V8ExplicitnessChart />
-        </Suspense>
-
-        {/* 7. Confidence, Margin, and Stability */}
-        <ConfidenceStabilitySection />
-
-        {/* 8. Research Conclusions */}
-        <ResearchConclusion />
-
-        {/* 9. Methodology and Limitations */}
+        {/* Chapter VI — Methodological Constraints & Research Reference */}
         <MethodologyNotes />
+
+        {/* Chapter VII — Research Conclusions & Synthesis */}
+        <ResearchConclusion />
       </main>
 
       {/* Dashboard Footer */}

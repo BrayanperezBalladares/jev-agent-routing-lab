@@ -26,7 +26,7 @@ export const HeaderNav: React.FC = () => {
         <a href="#margin-deconstructor" className="nav-anchor">{t('nav.chapterBoundary')}</a>
         <a href="#investigative-timeline" className="nav-anchor">{t('nav.chapterInvestigation')}</a>
         <a href="#uncertainty-governor" className="nav-anchor">{t('nav.chapterArchitecture')}</a>
-        <a href="#research-overview" className="nav-anchor">{t('nav.chapterDataLab')}</a>
+        <a href="#deep-data-lab" className="nav-anchor">{t('nav.chapterDataLab')}</a>
         <a href="#methodology" className="nav-anchor">{t('nav.chapterMethodology')}</a>
       </nav>
 

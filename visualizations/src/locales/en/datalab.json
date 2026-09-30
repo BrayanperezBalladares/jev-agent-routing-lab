@@ -1,0 +1,52 @@
+{
+  "badge": "ANALYTICAL WORKBENCH",
+  "badgeChapter": "CHAPTER V — DEEP DATA LAB",
+  "title": "Deep Data Lab",
+  "subtitle": "The story above focused on the investigative path. This section exposes the underlying benchmark and diagnostic evidence for closer inspection.",
+  "tabsAriaLabel": "Deep Data Lab analytical figures",
+  "tabs": {
+    "holdout": {
+      "label": "Frozen Holdout",
+      "question": "How did the routing approaches behave on the balanced frozen holdout?",
+      "figureBadge": "FIGURE 01",
+      "figureTitle": "Balanced Stationary Evaluation (V3 Suite, 50 Cases)",
+      "caption": "Descriptive comparison of semantic decision accuracy and operational request success across 50 frozen test cases. Infrastructure conditions, retry policies, gateway latency, and pricing models differed across systems; this does not establish a universal winner.",
+      "methodology": "Provider comparisons were not normalized for latency, infrastructure, or cost accounting. Semantic accuracy reflects successful requests matching ground truth; all-attempt rate incorporates infrastructure drops."
+    },
+    "progression": {
+      "label": "Experimental Progression",
+      "question": "How did the Jev evaluation program evolve across benchmark and diagnostic stages?",
+      "figureBadge": "FIGURE 02",
+      "figureTitle": "Validation Suites (V1–V3) vs. Adaptive Diagnostic Probes (V4–V5)",
+      "caption": "Progression from initial formulation validation (V1–V3) to targeted adversarial stress testing (V4–V5). V4–V5 are adaptive diagnostic probe suites designed to find failure modes, not untouched holdouts.",
+      "methodology": "This trajectory is not a continuous model performance improvement curve. The evaluation objective shifted from stationary benchmark accuracy in V1–V3 to deliberate boundary search and cue-stripping in V4–V5."
+    },
+    "boundary": {
+      "label": "Decision Boundary",
+      "question": "Where did repeated routing behavior become mixed near semantic decision boundaries?",
+      "figureBadge": "FIGURE 03",
+      "figureTitle": "Repeated-Choice Distribution and Candidate Separation Across Boundary States",
+      "caption": "Observed routing behavior across repeated identical evaluations of selected boundary states. Confidence represents candidate probability mass, margin represents top-two candidate separation, and choice proportions reflect empirical stochastic switching.",
+      "methodology": "Repeated identical evaluations characterize empirical stochastic behavior under fixed prompts; they are not independent samples. Confidence is not calibrated correctness probability, and margin is candidate separation rather than a validated production threshold.",
+      "mobileScrollHint": "Scroll horizontally to inspect all 5 boundary states →"
+    },
+    "explicitness": {
+      "label": "Implementation Explicitness",
+      "question": "How did the six discrete V8 state representations differ in recorded routing stability?",
+      "figureBadge": "FIGURE 04",
+      "figureTitle": "Discrete State Variants C1–C6: Margin Separation and Instability Rates",
+      "caption": "Empirical comparison of six discrete prompt representations of missing implementation state. C1–C6 are distinct tested variants; this does not establish a continuous interpolation or a universal causal law across arbitrary agent prompts.",
+      "methodology": "C1 recorded mixed choices, while C2–C6 recorded a single SEARCH_CODE choice across their repeated evaluations. Candidate-separation signals also differed across these tested variants."
+    },
+    "stability": {
+      "label": "Confidence & Stability",
+      "question": "Why must confidence, candidate margin, and repeated stability be treated as distinct signals?",
+      "figureBadge": "FIGURE 05",
+      "figureTitle": "Conceptual Framework: Separating Probability Mass, Candidate Margin, and Empirical Frequency",
+      "caption": "Analytical guide to interpreting router uncertainty signals. High confidence can mask semantic edge-case errors, while low confidence can produce stable and correct decisions.",
+      "methodology": "Routing certainty signals should inform retry, clarification, or human-escalation policies, but should never be conflated with deterministic safety or permission enforcement."
+    }
+  },
+  "methodologyHeading": "Methodological Note",
+  "captionHeading": "Descriptive Reading"
+}

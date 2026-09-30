@@ -3,10 +3,17 @@ import { useTranslation } from 'react-i18next'
 import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { JEV_BENCHMARK_PROGRESSION, type BenchmarkResult } from '../data/research-results'
 import { useChartTheme } from '../hooks/useChartTheme'
+import { useTheme } from '../theme'
 
-export const BenchmarkProgressionChart: React.FC = () => {
+interface BenchmarkProgressionChartProps {
+  standalone?: boolean
+}
+
+export const BenchmarkProgressionChart: React.FC<BenchmarkProgressionChartProps> = ({ standalone = true }) => {
   const { t } = useTranslation(['charts', 'common'])
   const chartTheme = useChartTheme()
+  const { resolvedTheme } = useTheme()
+  const isDark = resolvedTheme === 'dark'
   const [selectedVersionId, setSelectedVersionId] = useState<string>('V3')
 
   const selectedVersion = useMemo(() => {
@@ -172,6 +179,71 @@ export const BenchmarkProgressionChart: React.FC = () => {
               return `${Number(p.value).toFixed(1)}%`
             },
           },
+          markArea: {
+            silent: true,
+            data: [
+              [
+                {
+                  name: 'Stationary Benchmark (V1–V3)',
+                  xAxis: -0.5,
+                  itemStyle: {
+                    color: isDark ? 'rgba(145, 167, 177, 0.08)' : 'rgba(54, 84, 100, 0.05)',
+                  },
+                  label: {
+                    position: 'insideTopLeft',
+                    color: chartTheme.primary,
+                    fontSize: 10,
+                    fontFamily: chartTheme.fontMono,
+                    padding: [4, 6],
+                  },
+                },
+                {
+                  xAxis: 2.5,
+                },
+              ],
+              [
+                {
+                  name: 'Adaptive Diagnostics (V4–V5)',
+                  xAxis: 2.5,
+                  itemStyle: {
+                    color: isDark ? 'rgba(217, 167, 74, 0.08)' : 'rgba(153, 107, 38, 0.05)',
+                  },
+                  label: {
+                    position: 'insideTopLeft',
+                    color: chartTheme.warning,
+                    fontSize: 10,
+                    fontFamily: chartTheme.fontMono,
+                    padding: [4, 6],
+                  },
+                },
+                {
+                  xAxis: 4.5,
+                },
+              ],
+            ],
+          },
+          markLine: {
+            symbol: 'none',
+            silent: true,
+            lineStyle: {
+              color: chartTheme.warning,
+              type: 'dashed',
+              width: 1.5,
+            },
+            data: [
+              {
+                xAxis: 2.5,
+                label: {
+                  show: true,
+                  formatter: 'Evaluation Shift',
+                  position: 'insideStartTop',
+                  color: chartTheme.warning,
+                  fontSize: 10,
+                  fontFamily: chartTheme.fontMono,
+                },
+              },
+            ],
+          },
         },
         {
           name: t('progression.legendAll', { ns: 'charts' }),
@@ -202,44 +274,40 @@ export const BenchmarkProgressionChart: React.FC = () => {
         },
       ],
     }
-  }, [chartTheme, t])
+  }, [chartTheme, isDark, t])
 
-  return (
-    <section className="section-container" id="benchmark-progression" aria-label={t('progression.title', { ns: 'charts' })}>
-      <div className="section-header">
-        <div className="section-badge-row">
-          <span className="badge badge-accent">{t('progression.badge', { ns: 'charts' })}</span>
-          <span className="badge">5 Test Suites</span>
+  const chartContent = (
+    <div className={`chart-card ${!standalone ? 'embedded-chart-card' : ''}`}>
+      <div className="chart-header-row">
+        <div>
+          <h3 className="card-title">Progression Across Benchmark Iterations (V1–V5)</h3>
+          <p className="card-caption">
+            {t('progression.notice', { ns: 'charts' })}
+          </p>
         </div>
-        <h2 className="section-title">{t('progression.title', { ns: 'charts' })}</h2>
-        <p className="section-subtitle">{t('progression.description', { ns: 'charts' })}</p>
+        <div className="legend-tag-group">
+          <span className="badge badge-accent" style={{ fontSize: '0.7rem' }}>
+            V1–V3: Stationary Suite
+          </span>
+          <span className="badge badge-warning" style={{ fontSize: '0.7rem' }}>
+            V4–V5: Adaptive Probes
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
+            Semantic Accuracy
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.success }}></span>
+            Request Success
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.methodology }}></span>
+            Avg Confidence
+          </span>
+        </div>
       </div>
 
-      <div className="chart-card">
-        <div className="chart-header-row">
-          <div>
-            <h3 className="card-title">Progression Across Benchmark Iterations (V1–V5)</h3>
-            <p className="card-caption">
-              {t('progression.notice', { ns: 'charts' })}
-            </p>
-          </div>
-          <div className="legend-tag-group">
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
-              Semantic Accuracy
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.success }}></span>
-              Request Success
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.methodology }}></span>
-              Avg Confidence
-            </span>
-          </div>
-        </div>
-
-        <div className="chart-wrapper" style={{ height: 380 }}>
+      <div className="chart-wrapper" style={{ height: 380 }}>
           <ReactEChartsCore
             echarts={echarts}
             option={chartOption}
@@ -316,6 +384,23 @@ export const BenchmarkProgressionChart: React.FC = () => {
           </div>
         </div>
       </div>
+  )
+
+  if (!standalone) {
+    return chartContent
+  }
+
+  return (
+    <section className="section-container" id="benchmark-progression" aria-label={t('progression.title', { ns: 'charts' })}>
+      <div className="section-header">
+        <div className="section-badge-row">
+          <span className="badge badge-accent">{t('progression.badge', { ns: 'charts' })}</span>
+          <span className="badge">5 Test Suites</span>
+        </div>
+        <h2 className="section-title">{t('progression.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('progression.description', { ns: 'charts' })}</p>
+      </div>
+      {chartContent}
     </section>
   )
 }

@@ -2,7 +2,11 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { RESEARCH_NOTES } from '../data/research-results'
 
-export const ConfidenceStabilitySection: React.FC = () => {
+interface ConfidenceStabilityProps {
+  embedded?: boolean
+}
+
+export const ConfidenceStabilitySection: React.FC<ConfidenceStabilityProps> = ({ embedded = false }) => {
   const { t } = useTranslation(['overview'])
 
   const conceptCards = [
@@ -32,24 +36,8 @@ export const ConfidenceStabilitySection: React.FC = () => {
     },
   ]
 
-  return (
-    <section
-      className="section-container confidence-stability-section"
-      id="confidence-stability"
-      aria-labelledby="confidence-stability-heading"
-    >
-      <header className="section-header">
-        <div className="section-header-content">
-          <h2 id="confidence-stability-heading" className="section-title">
-            {t('confidenceStability.title')}{' '}
-            <span className="badge badge-accent">{t('confidenceStability.badge')}</span>
-          </h2>
-          <p className="section-description">
-            {t('confidenceStability.description')}
-          </p>
-        </div>
-      </header>
-
+  const sectionContent = (
+    <div className={`confidence-stability-content ${embedded ? 'embedded-stability' : ''}`}>
       {/* Core Conceptual Cards */}
       <div className="concept-grid">
         {conceptCards.map((concept) => (
@@ -169,6 +157,31 @@ export const ConfidenceStabilitySection: React.FC = () => {
           </div>
         </div>
       </section>
+    </div>
+  )
+
+  if (embedded) {
+    return sectionContent
+  }
+
+  return (
+    <section
+      className="section-container confidence-stability-section"
+      id="confidence-stability"
+      aria-labelledby="confidence-stability-heading"
+    >
+      <header className="section-header">
+        <div className="section-header-content">
+          <h2 id="confidence-stability-heading" className="section-title">
+            {t('confidenceStability.title')}{' '}
+            <span className="badge badge-accent">{t('confidenceStability.badge')}</span>
+          </h2>
+          <p className="section-description">
+            {t('confidenceStability.description')}
+          </p>
+        </div>
+      </header>
+      {sectionContent}
     </section>
   )
 }

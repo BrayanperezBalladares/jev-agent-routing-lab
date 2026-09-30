@@ -1,42 +1,70 @@
 {
-  "title": "Metodología de Investigación y Limitaciones",
-  "badge": "Límites Experimentales",
-  "description": "Restricciones críticas, condiciones ambientales y parámetros metodológicos que rigen la interpretación de estos hallazgos experimentales.",
+  "title": "Restricciones Metodológicas y Notas de Investigación",
+  "badge": "ESTÁNDAR DE REFERENCIA",
+  "description": "Restricciones formales, parámetros ambientales y límites analíticos que rigen la interpretación empírica de este estudio.",
   "items": {
-    "syntheticScenarios": {
-      "title": "Escenarios Sintéticos de Ingeniería",
+    "syntheticScope": {
+      "num": "01",
+      "title": "Alcance de la Evaluación Sintética",
       "category": "Alcance y Dominio",
-      "content": "Los escenarios representan situaciones acotadas y aisladas de ingeniería de software construidas para evaluar elecciones de enrutamiento de un solo paso. Omiten deliberadamente historiales conversacionales multiturno, bucles de retroalimentación con desarrolladores y modificaciones en vivo del árbol de archivos."
+      "content": "Los escenarios representan situaciones acotadas y aisladas de ingeniería de software para evaluar decisiones de enrutamiento en un solo paso. Omiten deliberadamente historial conversacional de múltiples turnos, bucles de retroalimentación con el desarrollador y modificaciones en vivo del árbol de archivos.",
+      "rule": "La exactitud en un solo paso no garantiza la finalización exitosa de tareas completas de múltiples turnos."
     },
-    "fixedActionSpace": {
-      "title": "Espacio Fijo de Acciones",
-      "category": "Encuadre de Acciones",
-      "content": "Los objetivos de enrutamiento se restringen a cinco acciones canónicas discretas: SEARCH_CODE, READ_FILE, RUN_TESTS, QUERY_DATABASE y ASK_USER. Este protocolo mide la discriminación entre acciones definidas, no el razonamiento abierto de agentes ni la creación dinámica de herramientas."
-    },
-    "diagnosticSuites": {
-      "title": "Suites Diagnósticas (V4–V8)",
-      "category": "Naturaleza del Dataset",
-      "content": "Las suites V4 a V8 fueron construidas iterativamente para someter a prueba fronteras semánticas, pares mínimos y eliminación de pistas. Como se formaliza en las directrices de investigación, estas suites son sondas diagnósticas adaptativas, NO conjuntos holdout intocados."
+    "frozenVsAdaptive": {
+      "num": "02",
+      "title": "Benchmark Congelado vs. Diagnósticos Adaptativos",
+      "category": "Topología de Datos",
+      "content": "Las suites V1–V3 representan un benchmark progresivo que culmina en el holdout balanceado congelado de 50 casos (V3). Las suites V4–V8 son pruebas diagnósticas iterativas y adversariales diseñadas para exponer modos de fallo, no holdouts estacionarios.",
+      "rule": "Los resultados en V4–V8 describen comportamiento bajo estrés dirigido, no exactitud generalizable a la población."
     },
     "repeatedRuns": {
-      "title": "Ejecuciones Idénticas Repetidas",
+      "num": "03",
+      "title": "Evaluaciones Idénticas Repetidas",
       "category": "Dinámica de Muestreo",
-      "content": "Evaluar textos de entrada idénticos reiteradamente en 10 a 20 ejecuciones caracteriza el comportamiento estocástico empírico bajo condiciones reales de inferencia. Estas ejecuciones cuantifican la deriva de decisión, pero no representan observaciones estadísticas independientes."
+      "content": "Evaluar entradas idénticas repetidamente en 10 a 20 corridas caracteriza el comportamiento estocástico empírico bajo temperatura y prompts fijos. Estas corridas cuantifican la volatilidad local, pero no representan muestras estadísticas independientes.",
+      "rule": "Las frecuencias de elección (p. ej. 14/6 en V5U02) son observaciones descriptivas, no probabilidades paramétricas."
     },
-    "providerVariability": {
-      "title": "Variabilidad de Infraestructura del Proveedor",
-      "category": "Entorno de Ejecución",
-      "content": "Jev, GPT-5-mini y Nemotron Ultra operaron mediante stacks de infraestructura, gateways en la nube y endpoints geográficos distintos. Las latencias operativas, timeouts de red y reintentos de gateway reflejan estas diversas condiciones de ejecución."
+    "confidenceSignal": {
+      "num": "04",
+      "title": "Límites de la Señal de Confianza",
+      "category": "Interpretación de Métricas",
+      "content": "Los valores brutos de confianza reflejan la masa de probabilidad asignada a la acción candidata superior. Una confianza alta puede coincidir con errores en casos borde, mientras que una confianza baja puede producir decisiones correctas.",
+      "rule": "La confianza es una señal de incertidumbre entregada por el proveedor, no una probabilidad calibrada de acierto."
     },
-    "confidenceCalibration": {
-      "title": "Límites de Calibración de Confianza",
-      "category": "Límites de Métricas",
-      "content": "La confianza es una señal devuelta por el proveedor y no se interpreta como una probabilidad calibrada de que la acción seleccionada sea correcta."
+    "marginSignal": {
+      "num": "05",
+      "title": "Separación de Margen de Candidatos",
+      "category": "Frontera de Decisión",
+      "content": "El margen de frontera de decisión se calcula estrictamente como margen = P(top1) - P(top2). Márgenes estrechos indican competencia entre acciones adyacentes, pero no proveen un umbral universal validado para producción.",
+      "rule": "La compresión de margen señala competencia local, no un corte universal para compuertas de producción."
     },
-    "latencyCostComparability": {
-      "title": "Comparabilidad de Latencia y Costo",
+    "infrastructureDrops": {
+      "num": "06",
+      "title": "Fallas de Infraestructura vs. Errores Semánticos",
+      "category": "Contabilidad de Confiabilidad",
+      "content": "Las solicitudes caídas operativas, los tiempos de espera HTTP y las caídas de red upstream se reportan por separado de los errores semánticos de enrutamiento. En las evaluaciones de V4, V5 y Nemotron, las caídas operativas se aislaron de la discriminación de candidatos.",
+      "rule": "La confiabilidad de infraestructura y la discriminación semántica no deben mezclarse en un único puntaje."
+    },
+    "providerComparisons": {
+      "num": "07",
+      "title": "Limitaciones en la Comparación de Proveedores",
       "category": "Validez Comparativa",
-      "content": "Las cifras de costo y latencia entre modelos no pueden interpretarse como una tabla de clasificación universal. Como señalan los hallazgos de investigación, las bases de tarificación (costo de mercado observado vs. precio teórico de lista vs. capa experimental gratuita) y las políticas de reintento difirieron."
+      "content": "Jev, GPT-5-mini y Nemotron Ultra fueron evaluados bajo diferentes gateways cloud, runtimes de inferencia y pilas de red. Las comparaciones son descriptivas de las corridas observadas bajo las condiciones de prueba.",
+      "rule": "Los resultados entre proveedores no establecen un ranking universal de modelos ni una jerarquía permanente de capacidades."
+    },
+    "costLatencyAccounting": {
+      "num": "08",
+      "title": "Comparabilidad de Costo y Latencia",
+      "category": "Economía y Latencia",
+      "content": "Las métricas de latencia incluyeron valores atípicos de reintentos en gateways cloud, y la contabilidad de costos difirió según la fuente (costo de mercado observado de gateway vs. precio de lista teórico vs. capa experimental gratuita).",
+      "rule": "El costo de mercado y la latencia observados reflejan condiciones del banco de pruebas, no acuerdos de nivel de servicio (SLAs) de producción."
+    },
+    "architectureStatus": {
+      "num": "09",
+      "title": "Estado de Arquitectura Futura y Gobernador",
+      "category": "Alcance de Ingeniería",
+      "content": "El esquema ilustrado del Gobernador de Incertidumbre representa un concepto arquitectónico que separa la incertidumbre de enrutamiento de los permisos deterministas. No constituye un hallazgo empírico ni un componente de producción certificado.",
+      "rule": "La mitigación de incertidumbre de enrutamiento debe permanecer separada de los controles deterministas de seguridad y permisos."
     }
   }
 }

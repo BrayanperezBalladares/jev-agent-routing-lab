@@ -53,7 +53,7 @@
     "step2to3Lead": "So what does a result like this tell us about the decision?",
     "step2to3Caption": "To diagnose why routing alternates between SEARCH_CODE and ASK_USER, we must deconstruct the difference between provider-returned confidence, candidate margin separation, and observed repeated-choice stability.",
     "step3to4Lead": "What happens when the unresolved implementation state is expressed more explicitly?",
-    "step3to4Caption": "To study how agent-state representation influences boundary sensitivity, the V8 ablation tests six graduated formulations of the same scenario, from unstated operational doubts (C1) to an explicit question addressed to the user (C6).",
+    "step3to4Caption": "To study how agent-state representation relates to boundary sensitivity, the V8 ablation tests six graduated formulations of the same scenario, from unstated operational doubts (C1) to an explicit question addressed to the user (C6).",
     "step4to5Lead": "That boundary was not discovered in one experiment.",
     "step4to5Caption": "Follow the investigative trail from the initial five-action validation to the adaptive minimal pairs and cue-stripping experiments that eventually led to the boundary study.",
     "step5to6Lead": "What should an agent architecture do when its router is uncertain?",

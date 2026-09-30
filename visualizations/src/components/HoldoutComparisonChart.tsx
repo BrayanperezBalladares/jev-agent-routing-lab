@@ -4,7 +4,11 @@ import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { HOLDOUT_COMPARISON, type HoldoutRouterResult } from '../data/research-results'
 import { useChartTheme } from '../hooks/useChartTheme'
 
-export const HoldoutComparisonChart: React.FC = () => {
+interface HoldoutComparisonChartProps {
+  standalone?: boolean
+}
+
+export const HoldoutComparisonChart: React.FC<HoldoutComparisonChartProps> = ({ standalone = true }) => {
   const { t } = useTranslation(['charts', 'common'])
   const chartTheme = useChartTheme()
   const [selectedRouterId, setSelectedRouterId] = useState<string>('jev')
@@ -174,25 +178,15 @@ export const HoldoutComparisonChart: React.FC = () => {
     }
   }, [chartTheme, t])
 
-  return (
-    <section className="section-container" id="holdout-comparison" aria-label={t('holdout.title', { ns: 'charts' })}>
-      <div className="section-header">
-        <div className="section-badge-row">
-          <span className="badge badge-accent">{t('holdout.badge', { ns: 'charts' })}</span>
-          <span className="badge">50 Test Cases</span>
+  const chartContent = (
+    <div className={`chart-card ${!standalone ? 'embedded-chart-card' : ''}`}>
+      <div className="chart-header-row">
+        <div>
+          <h3 className="card-title">Semantic Decision Accuracy vs. Infrastructure Reliability</h3>
+          <p className="card-caption">
+            Primary metric: percentage of successful requests routed to ground-truth action (50 balanced test cases).
+          </p>
         </div>
-        <h2 className="section-title">{t('holdout.title', { ns: 'charts' })}</h2>
-        <p className="section-subtitle">{t('holdout.description', { ns: 'charts' })}</p>
-      </div>
-
-      <div className="chart-card">
-        <div className="chart-header-row">
-          <div>
-            <h3 className="card-title">Semantic Decision Accuracy vs. Infrastructure Reliability</h3>
-            <p className="card-caption">
-              Primary metric: percentage of successful requests routed to ground-truth action (50 balanced test cases).
-            </p>
-          </div>
           <div className="legend-tag-group">
             <span className="legend-tag">
               <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
@@ -298,6 +292,23 @@ export const HoldoutComparisonChart: React.FC = () => {
           </span>
         </div>
       </div>
+  )
+
+  if (!standalone) {
+    return chartContent
+  }
+
+  return (
+    <section className="section-container" id="holdout-comparison" aria-label={t('holdout.title', { ns: 'charts' })}>
+      <div className="section-header">
+        <div className="section-badge-row">
+          <span className="badge badge-accent">{t('holdout.badge', { ns: 'charts' })}</span>
+          <span className="badge">50 Test Cases</span>
+        </div>
+        <h2 className="section-title">{t('holdout.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('holdout.description', { ns: 'charts' })}</p>
+      </div>
+      {chartContent}
     </section>
   )
 }

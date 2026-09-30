@@ -45,7 +45,7 @@
   "explicitness": {
     "title": "State Explicitness Ablation: Margin & Choice Distribution (V8)",
     "badge": "V8 Ablation Suite",
-    "description": "Effect of graduating implementation explicitness (C1–C6) on average margin and repeated routing stability.",
+    "description": "Observed candidate margin separation and repeated routing stability across six discrete state representations (C1–C6).",
     "legendMargin": "Average Margin",
     "legendConfidence": "Average Confidence",
     "legendSearchPct": "SEARCH_CODE Rate (%)",

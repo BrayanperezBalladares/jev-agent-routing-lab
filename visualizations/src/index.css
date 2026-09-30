@@ -16,6 +16,7 @@
   --border-light: #E8E4DC;
 
   --primary: #365464;
+  --primary-fg: #FFFFFF;
   --primary-muted: #E5ECEF;
   --accent: #A25F3B;
   --accent-muted: #F2E6DF;
@@ -84,6 +85,7 @@
   --border-light: #2A2825;
 
   --primary: #91A7B1;
+  --primary-fg: #181817;
   --primary-muted: #293439;
   --accent: #C07A54;
   --accent-muted: #382A23;

@@ -69,7 +69,7 @@
       "stabilityMargin": {
         "title": "Estabilidad Empírica ≠ Certeza Interna",
         "tag": "Determinismo vs Margen",
-        "explanation": "Una tasa de selección del 100% en ejecuciones idénticas repetidas puede coexistir con un margen de probabilidad estrecho. El modelo puede elegir reiteradamente al mismo ganador, pero permanecer peligrosamente cerca de un candidato alternativo.",
+        "explanation": "Una tasa de selección del 100% en ejecuciones idénticas repetidas puede coexistir con un margen de probabilidad estrecho. El modelo puede seleccionar reiteradamente la misma acción principal, pero permanecer peligrosamente cerca de un candidato alternativo.",
         "evidence": "En V8-C2, 10 de 10 ejecuciones seleccionaron SEARCH_CODE (100% de estabilidad empírica), pero el margen promedio fue solo 0.284 con una probabilidad del segundo candidato de 0.250."
       }
     },
@@ -101,12 +101,51 @@
     "secondaryTakeawayBadge": "Conclusión Secundaria",
     "stateRepresentationTag": "Hallazgo de Representación de Estado",
     "secondaryFindingQuote": "El enrutamiento se volvió sustancialmente más claro cuando el estado del agente describió explícitamente qué información operativa aún faltaba.",
-    "secondaryFindingDesc": "En el entorno evaluado, la estabilidad de decisión estuvo fuertemente asociada a cómo el prompt representó el contexto operativo no resuelto. Cuando los prompts solo enunciaban requisitos, el enrutador mostró inestabilidad de frontera. Explicitar que se desconocía la ubicación de la implementación coincidió con un enrutamiento estable hacia SEARCH_CODE y amplió el margen de 0.034 a 1.00 en las pruebas realizadas.",
+    "secondaryFindingDesc": "En las variantes diagnósticas probadas, diferencias en la representación del estado coincidieron con diferencias en la estabilidad de enrutamiento observada. Cuando los prompts solo enunciaban requisitos, el enrutador mostró inestabilidad de frontera. Explicitar que se desconocía la ubicación de la implementación coincidió con una única elección observada de SEARCH_CODE en evaluaciones repetidas y amplió el margen de 0.034 a 1.00 en las pruebas realizadas.",
     "holdoutTitle": "Precisión Semántica Macro",
     "holdoutBadge": "Síntesis de Holdout",
     "boundaryTitle": "Oscilación Estocástica",
     "boundaryBadge": "Evolución de Frontera",
     "ablationTitle": "Desambiguación Operativa",
-    "ablationBadge": "Ablación de Explicitud"
+    "ablationBadge": "Ablación de Explicitud",
+    "principlesTitle": "Principios Empíricos Fundamentales",
+    "principlesBadge": "7 PRINCIPIOS",
+    "principles": [
+      {
+        "num": "01",
+        "title": "Formulación Sólida en Benchmark",
+        "desc": "La formulación de enrutamiento semántico de cinco acciones mostró un desempeño contundente en las suites evaluadas (100% de exactitud semántica en el holdout congelado V3 de 50 casos)."
+      },
+      {
+        "num": "02",
+        "title": "Enmascaramiento en Una Sola Corrida",
+        "desc": "La evaluación puntual en una sola corrida no reveló la incertidumbre local de enrutamiento. Una alta exactitud macro coexistió con márgenes estrechos entre candidatos."
+      },
+      {
+        "num": "03",
+        "title": "Alternancia Estocástica Observada",
+        "desc": "Evaluaciones repetidas bajo condiciones idénticas de prompt expusieron comportamiento mixto en estados de frontera seleccionados (ej. 14 SEARCH_CODE / 6 ASK_USER en V5U02)."
+      },
+      {
+        "num": "04",
+        "title": "Representación de Estado y Estabilidad Observada",
+        "desc": "En las variantes diagnósticas probadas, diferencias en la representación del estado coincidieron con diferencias en la estabilidad de enrutamiento observada: C1 registró elecciones mixtas, mientras que C2–C6 registraron una única elección de SEARCH_CODE en sus evaluaciones repetidas."
+      },
+      {
+        "num": "05",
+        "title": "Alcance Local y Adaptativo",
+        "desc": "Los estudios diagnósticos (V4–V8) constituyeron conjuntos locales de sondas adversariales para explorar fronteras, no una demostración universal del comportamiento del modelo."
+      },
+      {
+        "num": "06",
+        "title": "La Incertidumbre como Preocupación de Arquitectura",
+        "desc": "Las arquitecturas futuras de agentes pueden tratar la incertidumbre de enrutamiento como una preocupación de ingeniería separada, aplicando políticas de reintento, verificación o clarificación."
+      },
+      {
+        "num": "07",
+        "title": "Separación de Seguridad y Permisos",
+        "desc": "Las decisiones de enrutamiento semántico deben permanecer estrictamente desacopladas de las políticas deterministas de seguridad, permisos de herramientas y barreras de control."
+      }
+    ]
   }
 }

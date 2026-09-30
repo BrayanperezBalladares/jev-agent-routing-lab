@@ -1101,6 +1101,140 @@
   color: var(--color-warning);
 }
 
+/* Ruled Methodology Constraints (Monograph Style) */
+.methodology-ruled-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--radius-md, 6px);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.methodology-ruled-item {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background var(--transition-fast, 150ms ease);
+}
+
+.methodology-ruled-item:last-child {
+  border-bottom: none;
+}
+
+.methodology-ruled-item:hover {
+  background: var(--surface-hover, rgba(255, 255, 255, 0.02));
+}
+
+.ruled-item-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.ruled-item-num {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.9;
+  letter-spacing: 0.05em;
+  min-width: 24px;
+}
+
+.ruled-item-title-block {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ruled-item-category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.ruled-item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.ruled-item-body {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+  padding-left: 40px;
+}
+
+.ruled-item-rule {
+  font-size: 0.825rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--surface-secondary);
+  border-left: 3px solid var(--accent);
+  padding: 8px 14px;
+  border-radius: 0 4px 4px 0;
+  margin-left: 40px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.rule-tag {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.methodology-canonical-note {
+  font-size: 0.775rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin-left: 40px;
+  padding-top: 4px;
+}
+
+.canonical-tag {
+  color: var(--color-warning);
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* Embedded Chart Cards in DeepDataLab */
+.embedded-chart-card {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 640px) {
+  .methodology-ruled-item {
+    padding: 14px 16px;
+  }
+  .ruled-item-body,
+  .ruled-item-rule,
+  .methodology-canonical-note {
+    padding-left: 0;
+    margin-left: 0;
+  }
+  .ruled-item-header {
+    gap: 10px;
+  }
+}
+
 /* Breakpoints */
 @media (max-width: 1024px) {
   .metric-grid-4 {

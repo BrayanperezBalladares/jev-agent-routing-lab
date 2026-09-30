@@ -1,0 +1,52 @@
+{
+  "badge": "MESA DE TRABAJO ANALÍTICA",
+  "badgeChapter": "CAPÍTULO V — LABORATORIO DE DATOS",
+  "title": "Laboratorio de Datos",
+  "subtitle": "La historia anterior se centró en el recorrido de la investigación. Esta sección expone la evidencia subyacente de benchmark y diagnóstico para un examen detallado.",
+  "tabsAriaLabel": "Figuras analíticas del Laboratorio de Datos",
+  "tabs": {
+    "holdout": {
+      "label": "Holdout congelado",
+      "question": "¿Cómo se comportaron los enfoques de enrutamiento en el holdout congelado balanceado?",
+      "figureBadge": "FIGURA 01",
+      "figureTitle": "Evaluación estacionaria balanceada (Suite V3, 50 Casos)",
+      "caption": "Comparación descriptiva de exactitud semántica y éxito operativo en 50 casos de prueba congelados. Las condiciones de infraestructura, reintentos, latencia de gateway y modelos de costo difirieron entre sistemas; esto no establece un ganador universal.",
+      "methodology": "Las comparaciones de proveedores no se normalizaron en latencia, infraestructura o contabilidad de costos. La exactitud semántica refleja solicitudes exitosas que coinciden con el ground truth; la tasa de todos los intentos incorpora caídas operativas."
+    },
+    "progression": {
+      "label": "Progresión experimental",
+      "question": "¿Cómo evolucionó el programa de evaluación de Jev entre las etapas de benchmark y diagnósticos adaptativos?",
+      "figureBadge": "FIGURA 02",
+      "figureTitle": "Suites de validación (V1–V3) vs. Pruebas diagnósticas adaptativas (V4–V5)",
+      "caption": "Progresión desde la validación inicial de la formulación (V1–V3) hasta pruebas de estrés adversariales dirigidas (V4–V5). V4–V5 son suites diagnósticas adaptativas diseñadas para encontrar modos de fallo, no holdouts intactos.",
+      "methodology": "Esta trayectoria no es una curva de mejora continua de rendimiento del modelo. El objetivo de evaluación pasó de exactitud de benchmark estacionario en V1–V3 a búsqueda deliberada de fronteras y eliminación de pistas léxicas en V4–V5."
+    },
+    "boundary": {
+      "label": "Frontera de decisión",
+      "question": "¿Dónde se volvió mixto el comportamiento de enrutamiento ante fronteras semánticas ambiguas?",
+      "figureBadge": "FIGURA 03",
+      "figureTitle": "Distribución de elección repetida y separación de candidatos en estados de frontera",
+      "caption": "Comportamiento de enrutamiento observado en evaluaciones idénticas repetidas de estados de frontera seleccionados. La confianza representa masa de probabilidad, el margen representa separación entre los dos mejores candidatos y las proporciones reflejan alternancia estocástica empírica.",
+      "methodology": "Las evaluaciones idénticas repetidas caracterizan comportamiento estocástico empírico bajo prompts fijos; no son muestras independientes. La confianza no es probabilidad calibrada de acierto y el margen es separación de candidatos, no un umbral de producción validado.",
+      "mobileScrollHint": "Desliza horizontalmente para examinar los 5 estados de frontera →"
+    },
+    "explicitness": {
+      "label": "Explicitud de implementación",
+      "question": "¿Cómo difirieron las seis representaciones discretas de estado de V8 en la estabilidad observada?",
+      "figureBadge": "FIGURA 04",
+      "figureTitle": "Variantes discretas de estado C1–C6: Separación de margen y tasas de inestabilidad",
+      "caption": "Comparación empírica de seis representaciones discretas de prompt sobre estado faltante de implementación. C1–C6 son variantes probadas discretas; esto no establece una interpolación continua ni una ley causal universal entre prompts arbitrarios.",
+      "methodology": "C1 registró elecciones mixtas, mientras que C2–C6 registraron una única elección de SEARCH_CODE en sus evaluaciones repetidas. Las señales de separación entre candidatos también difirieron a través de estas variantes probadas."
+    },
+    "stability": {
+      "label": "Confianza y estabilidad",
+      "question": "¿Por qué la confianza, el margen de candidatos y la estabilidad repetida deben tratarse como señales distintas?",
+      "figureBadge": "FIGURA 05",
+      "figureTitle": "Marco conceptual: Separación de masa de probabilidad, margen de candidatos y frecuencia empírica",
+      "caption": "Guía analítica para interpretar las señales de incertidumbre del enrutador. La alta confianza puede enmascarar errores semánticos en casos borde, mientras que una confianza baja puede producir decisiones estables y correctas.",
+      "methodology": "Las señales de certeza de enrutamiento deben orientar políticas de reintento, aclaración o escalado humano, pero nunca deben confundirse con la aplicación determinista de permisos o seguridad."
+    }
+  },
+  "methodologyHeading": "Nota Metodológica",
+  "captionHeading": "Lectura Descriptiva"
+}

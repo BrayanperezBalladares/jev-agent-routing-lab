@@ -4,7 +4,11 @@ import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { V8_IMPLEMENTATION_EXPLICITNESS, type V8VariantResult } from '../data/research-results'
 import { useChartTheme } from '../hooks/useChartTheme'
 
-export const V8ExplicitnessChart: React.FC = () => {
+interface V8ExplicitnessChartProps {
+  standalone?: boolean
+}
+
+export const V8ExplicitnessChart: React.FC<V8ExplicitnessChartProps> = ({ standalone = true }) => {
   const { t } = useTranslation(['charts', 'common'])
   const chartTheme = useChartTheme()
   const [selectedVariantId, setSelectedVariantId] = useState<string>('C1')
@@ -179,42 +183,33 @@ export const V8ExplicitnessChart: React.FC = () => {
     }
   }, [chartTheme, t])
 
-  return (
-    <section className="section-container" id="v8-explicitness" aria-label={t('explicitness.title', { ns: 'charts' })}>
-      <div className="section-header">
-        <div className="section-badge-row">
-          <span className="badge badge-accent">{t('explicitness.badge', { ns: 'charts' })}</span>
-          <span className="badge">C1–C6 Progression</span>
+  const chartContent = (
+    <div className={`chart-card ${!standalone ? 'embedded-chart-card' : ''}`}>
+      <div className="chart-header-row">
+        <div>
+          <h3 className="card-title">Decision Margin &amp; Stability Across State Explicitness Variants</h3>
+          <p className="card-caption">
+            C1 recorded mixed choices, while C2–C6 recorded a single SEARCH_CODE choice across their repeated evaluations, coinciding with wider candidate margin separation in the tested runs.
+          </p>
         </div>
-        <h2 className="section-title">{t('explicitness.title', { ns: 'charts' })}</h2>
-        <p className="section-subtitle">{t('explicitness.description', { ns: 'charts' })}</p>
+        <div className="legend-tag-group">
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.askUser }}></span>
+            Instability Rate (%)
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
+            Margin (P1 - P2)
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
+            Avg Confidence
+          </span>
+        </div>
       </div>
 
-      <div className="chart-card">
-        <div className="chart-header-row">
-          <div>
-            <h3 className="card-title">Impact of State Explicitness on Decision Margin &amp; Stability</h3>
-            <p className="card-caption">
-              Making unresolved implementation location explicit (C2–C6) coincided with 0% instability and near-maximal margin separation in the evaluated runs.
-            </p>
-          </div>
-          <div className="legend-tag-group">
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.askUser }}></span>
-              Instability Rate (%)
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
-              Margin (P1 - P2)
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
-              Avg Confidence
-            </span>
-          </div>
-        </div>
-
-        <div className="chart-wrapper" style={{ height: 380 }}>
+      <div className="chart-scroll-viewport">
+        <div className="chart-wrapper" style={{ minWidth: 480, height: 380 }}>
           <ReactEChartsCore
             echarts={echarts}
             option={chartOption}
@@ -222,6 +217,7 @@ export const V8ExplicitnessChart: React.FC = () => {
             opts={{ renderer: 'svg' }}
           />
         </div>
+      </div>
 
         {/* Interactive Variant Tabs */}
         <div className="router-inspect-section">
@@ -301,6 +297,23 @@ export const V8ExplicitnessChart: React.FC = () => {
           </span>
         </div>
       </div>
+  )
+
+  if (!standalone) {
+    return chartContent
+  }
+
+  return (
+    <section className="section-container" id="v8-explicitness" aria-label={t('explicitness.title', { ns: 'charts' })}>
+      <div className="section-header">
+        <div className="section-badge-row">
+          <span className="badge badge-accent">{t('explicitness.badge', { ns: 'charts' })}</span>
+          <span className="badge">C1–C6 Progression</span>
+        </div>
+        <h2 className="section-title">{t('explicitness.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('explicitness.description', { ns: 'charts' })}</p>
+      </div>
+      {chartContent}
     </section>
   )
 }

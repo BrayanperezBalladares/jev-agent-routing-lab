@@ -4,8 +4,12 @@ import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { BOUNDARY_EVOLUTION, type BoundaryResult } from '../data/research-results'
 import { useChartTheme } from '../hooks/useChartTheme'
 
-export const DecisionBoundaryChart: React.FC = () => {
-  const { t } = useTranslation(['charts', 'common'])
+interface DecisionBoundaryChartProps {
+  standalone?: boolean
+}
+
+export const DecisionBoundaryChart: React.FC<DecisionBoundaryChartProps> = ({ standalone = true }) => {
+  const { t } = useTranslation(['charts', 'common', 'datalab'])
   const chartTheme = useChartTheme()
   const [selectedBoundaryId, setSelectedBoundaryId] = useState<string>('V5U02')
 
@@ -181,46 +185,41 @@ export const DecisionBoundaryChart: React.FC = () => {
     }
   }, [chartTheme, t])
 
-  return (
-    <section className="section-container" id="decision-boundary" aria-label={t('boundary.title', { ns: 'charts' })}>
-      <div className="section-header">
-        <div className="section-badge-row">
-          <span className="badge badge-accent">{t('boundary.badge', { ns: 'charts' })}</span>
-          <span className="badge">Diagnostic States</span>
+  const chartContent = (
+    <div className={`chart-card ${!standalone ? 'embedded-chart-card' : ''}`}>
+      <div className="chart-header-row">
+        <div>
+          <h3 className="card-title">Boundary Instability &amp; Top-1/Top-2 Margin Compression</h3>
+          <p className="card-caption">
+            Across repeated runs, states near the decision boundary exhibited choice switching accompanied by margin compression.
+          </p>
         </div>
-        <h2 className="section-title">{t('boundary.title', { ns: 'charts' })}</h2>
-        <p className="section-subtitle">{t('boundary.description', { ns: 'charts' })}</p>
+        <div className="legend-tag-group">
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.searchCode }}></span>
+            SEARCH_CODE
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.askUser }}></span>
+            ASK_USER
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
+            Margin P1 - P2
+          </span>
+          <span className="legend-tag">
+            <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
+            Avg Confidence
+          </span>
+        </div>
       </div>
 
-      <div className="chart-card">
-        <div className="chart-header-row">
-          <div>
-            <h3 className="card-title">Boundary Instability &amp; Top-1/Top-2 Margin Compression</h3>
-            <p className="card-caption">
-              Across repeated runs, states near the decision boundary exhibited choice switching accompanied by margin compression.
-            </p>
-          </div>
-          <div className="legend-tag-group">
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.searchCode }}></span>
-              SEARCH_CODE
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.askUser }}></span>
-              ASK_USER
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
-              Margin P1 - P2
-            </span>
-            <span className="legend-tag">
-              <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
-              Avg Confidence
-            </span>
-          </div>
-        </div>
+      <div className="mobile-scroll-hint" aria-hidden="true">
+        <span>{t('tabs.boundary.mobileScrollHint', { ns: 'datalab' })}</span>
+      </div>
 
-        <div className="chart-wrapper" style={{ height: 400 }}>
+      <div className="chart-scroll-viewport">
+        <div className="chart-wrapper" style={{ minWidth: 540, height: 400 }}>
           <ReactEChartsCore
             echarts={echarts}
             option={chartOption}
@@ -228,6 +227,7 @@ export const DecisionBoundaryChart: React.FC = () => {
             opts={{ renderer: 'svg' }}
           />
         </div>
+      </div>
 
         {/* Interactive State Selector */}
         <div className="router-inspect-section">
@@ -305,6 +305,23 @@ export const DecisionBoundaryChart: React.FC = () => {
           </span>
         </div>
       </div>
+  )
+
+  if (!standalone) {
+    return chartContent
+  }
+
+  return (
+    <section className="section-container" id="decision-boundary" aria-label={t('boundary.title', { ns: 'charts' })}>
+      <div className="section-header">
+        <div className="section-badge-row">
+          <span className="badge badge-accent">{t('boundary.badge', { ns: 'charts' })}</span>
+          <span className="badge">Diagnostic States</span>
+        </div>
+        <h2 className="section-title">{t('boundary.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('boundary.description', { ns: 'charts' })}</p>
+      </div>
+      {chartContent}
     </section>
   )
 }

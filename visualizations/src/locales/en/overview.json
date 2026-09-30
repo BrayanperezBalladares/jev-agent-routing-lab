@@ -69,7 +69,7 @@
       "stabilityMargin": {
         "title": "Empirical Stability ≠ Internal Certainty",
         "tag": "Determinism vs Margin",
-        "explanation": "A 100% selection rate across repeated identical runs can coexist with a narrow probability margin. The model may repeatedly choose the same winner, but remain perilously close to an alternative candidate.",
+        "explanation": "A 100% selection rate across repeated identical runs can coexist with a narrow probability margin. The model may repeatedly select the same top-1 action, but remain perilously close to an alternative candidate.",
         "evidence": "In V8-C2, 10 of 10 runs selected SEARCH_CODE (100% empirical stability), yet the average margin was only 0.284 with a runner-up probability of 0.250."
       }
     },
@@ -101,12 +101,51 @@
     "secondaryTakeawayBadge": "Secondary Takeaway",
     "stateRepresentationTag": "State-Representation Finding",
     "secondaryFindingQuote": "Routing became substantially clearer when the agent state explicitly described what operational information was still missing.",
-    "secondaryFindingDesc": "In the tested routing setting, decision stability was strongly associated with how the prompt represented unresolved operational context. When prompts solely stated requirements, the router exhibited boundary instability. Explicitly articulating that implementation location was unknown coincided with progression toward stable SEARCH_CODE routing and widened margin separation from 0.034 to 1.00 in the tested runs.",
+    "secondaryFindingDesc": "In the tested diagnostic variants, differences in state representation coincided with different observed routing stability. When prompts solely stated requirements, the router exhibited boundary instability. Explicitly articulating that implementation location was unknown coincided with a single observed SEARCH_CODE route across repeated evaluations and widened margin separation from 0.034 to 1.00 in the tested runs.",
     "holdoutTitle": "Macro Semantic Accuracy",
     "holdoutBadge": "Holdout Synthesis",
     "boundaryTitle": "Stochastic Oscillation",
     "boundaryBadge": "Boundary Evolution",
     "ablationTitle": "Operational Disambiguation",
-    "ablationBadge": "Explicitness Ablation"
+    "ablationBadge": "Explicitness Ablation",
+    "principlesTitle": "Core Empirical Takeaways",
+    "principlesBadge": "7 PRINCIPLES",
+    "principles": [
+      {
+        "num": "01",
+        "title": "Strong Benchmark Formulation",
+        "desc": "A five-action semantic routing formulation performed decisively on the tested benchmark suites (100% semantic accuracy on the 50-case frozen V3 holdout)."
+      },
+      {
+        "num": "02",
+        "title": "Single-Run Accuracy Masking",
+        "desc": "Single-pass benchmark evaluations did not reveal local routing uncertainty. High macro accuracy coexisted with narrow candidate separation."
+      },
+      {
+        "num": "03",
+        "title": "Observed Stochastic Switching",
+        "desc": "Repeated evaluations under identical prompt conditions exposed mixed routing behavior in selected boundary states (e.g. 14 SEARCH_CODE / 6 ASK_USER in V5U02)."
+      },
+      {
+        "num": "04",
+        "title": "State Representation & Observed Stability",
+        "desc": "In the tested diagnostic variants, differences in state representation coincided with different observed routing stability: C1 recorded mixed choices, while C2–C6 recorded a single SEARCH_CODE choice across their repeated evaluations."
+      },
+      {
+        "num": "05",
+        "title": "Local & Adaptive Scope",
+        "desc": "The diagnostic studies (V4–V8) were local, adversarial probe sets designed to explore boundaries, not universal proof of general model behavior."
+      },
+      {
+        "num": "06",
+        "title": "Uncertainty as an Architectural Concern",
+        "desc": "Future agent architectures can treat semantic routing uncertainty as a separate engineering concern, applying retry, verification, or clarification policies."
+      },
+      {
+        "num": "07",
+        "title": "Separation from Safety & Permissions",
+        "desc": "Semantic routing decisions should remain strictly decoupled from deterministic security policies, tool permissions, and safety gates."
+      }
+    ]
   }
 }

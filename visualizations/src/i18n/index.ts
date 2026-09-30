@@ -7,12 +7,14 @@ import enStory from '../locales/en/story.json';
 import enOverview from '../locales/en/overview.json';
 import enMethodology from '../locales/en/methodology.json';
 import enCharts from '../locales/en/charts.json';
+import enDatalab from '../locales/en/datalab.json';
 
 import esCommon from '../locales/es/common.json';
 import esStory from '../locales/es/story.json';
 import esOverview from '../locales/es/overview.json';
 import esMethodology from '../locales/es/methodology.json';
 import esCharts from '../locales/es/charts.json';
+import esDatalab from '../locales/es/datalab.json';
 
 function getInitialLanguage(): string {
   try {
@@ -36,6 +38,7 @@ const resources = {
     overview: enOverview,
     methodology: enMethodology,
     charts: enCharts,
+    datalab: enDatalab,
   },
   es: {
     common: esCommon,
@@ -43,6 +46,7 @@ const resources = {
     overview: esOverview,
     methodology: esMethodology,
     charts: esCharts,
+    datalab: esDatalab,
   },
 };
 
@@ -55,7 +59,7 @@ i18n
     lng: initialLng,
     fallbackLng: DEFAULT_LOCALE,
     defaultNS: 'common',
-    ns: ['common', 'story', 'overview', 'methodology', 'charts'],
+    ns: ['common', 'story', 'overview', 'methodology', 'charts', 'datalab'],
     interpolation: {
       escapeValue: false,
     },
