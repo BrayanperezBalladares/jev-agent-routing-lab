@@ -1,0 +1,151 @@
+{
+  "hero": {
+    "badge1": "Monografía de Investigación",
+    "badge2": "Sistemas de Agentes Autónomos",
+    "badge3": "Enrutamiento Semántico con Tipado Seguro",
+    "title": "¿Cómo decide un agente de código qué hacer a continuación?",
+    "subtitle": "El laboratorio Jev Agent Routing Lab estudia el enrutamiento semántico, la estabilidad y las fronteras de decisión a través de cinco acciones discretas de ingeniería de software.",
+    "description": "Cuando un agente autónomo recibe un reporte de bug ambiguo o una tarea compleja, elegir la herramienta incorrecta desperdicia tokens, desencadena bucles de ejecución innecesarios o interrumpe prematuramente a los desarrolladores. Experimente de primera mano el dilema de enrutamiento antes de explorar la investigación empírica."
+  },
+  "researchAreas": {
+    "badge": "Alcance y Objetivos",
+    "badge2": "5 Pilares Fundamentales",
+    "title": "Resumen de Investigación y Metodología",
+    "subtitle": "Investigando la estabilidad en decisiones semánticas, la separación de probabilidades y la formulación del estado para agentes de ingeniería autónomos más allá de benchmarks superficiales de un solo intento.",
+    "accuracy": {
+      "title": "Precisión en Enrutamiento Semántico",
+      "description": "Medición de la selección de acciones multicandidato en escenarios matizados de ingeniería de software frente a la intención real de referencia.",
+      "badge": "Evaluación"
+    },
+    "stability": {
+      "title": "Estabilidad en Decisiones Reiteradas",
+      "description": "Cuantificación de la deriva de enrutamiento estocástica en 10–20 evaluaciones de prompts idénticos para revelar no-determinismo oculto.",
+      "badge": "Confiabilidad"
+    },
+    "uncertainty": {
+      "title": "Incertidumbre en el Enrutamiento",
+      "description": "Análisis de los márgenes de probabilidad de candidatos top-1/top-2 y distribuciones de confianza bruta en transiciones de frontera.",
+      "badge": "Métricas"
+    },
+    "boundary": {
+      "title": "Fronteras ASK_USER ↔ SEARCH_CODE",
+      "description": "Caracterización de la transición semántica observada donde los agentes oscilan entre solicitar aclaración al usuario e inspeccionar autónomamente el código.",
+      "badge": "Frontera de Decisión"
+    },
+    "stateRep": {
+      "title": "Representación del Estado del Agente",
+      "description": "Evaluación de cómo estructurar explícitamente la información operativa no resuelta coincidió con una menor inestabilidad y un enrutamiento estable.",
+      "badge": "Ablación"
+    }
+  },
+  "distinction": {
+    "v1v3Badge": "V1–V3",
+    "v1v3Title": "Progresión del Benchmark",
+    "v1v3Text": "Suite estándar de evaluación congelada que progresa desde la validación de línea base inicial (V1, 20 casos) hasta distinciones semánticas exigentes (V2, 30 casos) y holdout balanceado (V3, 50 casos). Diseñada para medir precisión macro bajo condiciones estacionarias.",
+    "v1v3Footer": "Distribución de prueba congelada • Distribución de acciones balanceada • Holdout estacionario",
+    "v4v8Badge": "V4–V8",
+    "v4v8Title": "Experimentos Diagnósticos Adaptativos",
+    "v4v8Text": "Pares mínimos adversariales focalizados (V4), prompts desprovistos de pistas (V5) y suites de exploración de fronteras reiteradas (V6–V8) que sondean casos límite, colapso de margen y representación del estado.",
+    "v4v8NoticeLabel": "Nota Metodológica:",
+    "v4v8NoticeText": "V4–V8 son experimentos diagnósticos adaptativos, NO conjuntos holdout intocados."
+  },
+  "confidenceStability": {
+    "title": "Mecánica de Confianza, Margen y Estabilidad",
+    "badge": "Fundamentos Educativos",
+    "description": "Análisis del comportamiento de métricas en fronteras de decisión semánticas. Por qué las puntuaciones de confianza puntual, los márgenes entre candidatos principales y la repetición empírica no pueden tratarse como indicadores intercambiables de seguridad.",
+    "cards": {
+      "lowConf": {
+        "title": "Baja Confianza ≠ Incorrecto",
+        "tag": "Dispersión de Probabilidad",
+        "explanation": "Un enrutador puede seleccionar la acción correcta incluso cuando la probabilidad está distribuida difusamente entre varios candidatos viables. En tareas de software abiertas, múltiples rutas exploratorias pueden tener probabilidades plausibles sin invalidar la elección final.",
+        "evidence": "A lo largo de las pruebas diagnósticas, elecciones exploratorias válidas se resolvieron regularmente con confianza bruta en el rango de 0.30–0.45 manteniendo fidelidad semántica."
+      },
+      "highConf": {
+        "title": "Alta Confianza ≠ Universalmente Correcto",
+        "tag": "Certeza Espuria",
+        "explanation": "Una confianza máxima elevada puede encubrir sesgo léxico, atajos de aprendizaje o clasificaciones erróneas en casos límite. Un modelo puede asignar >0.95 de confianza basándose en palabras clave superficiales aun cuando restricciones sutiles exigen una acción alternativa.",
+        "evidence": "El campo de confianza es una señal devuelta por el proveedor, no una probabilidad calibrada de que la acción sea correcta ante entradas fuera de distribución."
+      },
+      "stabilityMargin": {
+        "title": "Estabilidad Empírica ≠ Certeza Interna",
+        "tag": "Determinismo vs Margen",
+        "explanation": "Una tasa de selección del 100% en ejecuciones idénticas repetidas puede coexistir con un margen de probabilidad estrecho. El modelo puede seleccionar reiteradamente la misma acción principal, pero permanecer peligrosamente cerca de un candidato alternativo.",
+        "evidence": "En V8-C2, 10 de 10 ejecuciones seleccionaron SEARCH_CODE (100% de estabilidad empírica), pero el margen promedio fue solo 0.284 con una probabilidad del segundo candidato de 0.250."
+      }
+    },
+    "formula": {
+      "badge": "Definición Matemática",
+      "title": "Margen de Frontera de Decisión",
+      "keyMetricBadge": "Métrica Diagnóstica Clave",
+      "definition": "La diferencia escalar entre la probabilidad asignada a la acción mejor clasificada y la del candidato inmediatamente posterior.",
+      "mechanicZeroTag": "Cuando margen → 0.00",
+      "mechanicZeroText": "El enrutador opera cerca de una frontera semántica empírica. Las evaluaciones observadas mostraron alternancia estocástica entre acciones candidatas (ej. SEARCH_CODE vs ASK_USER).",
+      "mechanicOneTag": "Cuando margen → 1.00",
+      "mechanicOneText": "El enrutador muestra una clara separación interna entre el candidato superior y el segundo, coincidiendo con un enrutamiento consistente en las ejecuciones probadas."
+    },
+    "caveat": {
+      "badge": "Precaución",
+      "title": "Sin Umbral de Seguridad Universal",
+      "body": "La observación empírica confirma que la magnitud del margen es específica del dominio y la política. Imponer reglas de producción universales (ej. \"margen < 0.2 siempre es inseguro\") es inválido. El margen de seguridad necesario depende de la asimetría de costos entre acciones: elegir entre dos consultas de solo lectura amerita un umbral distinto que elegir entre editar archivos autónomamente o escalar a un humano."
+    },
+    "warningsTitle": "Advertencias Metodológicas Canónicas de Investigación"
+  },
+  "conclusions": {
+    "title": "Conclusiones y Síntesis de Investigación",
+    "badge": "Ideas Clave",
+    "description": "Síntesis de hallazgos empíricos a través de suites congeladas de holdout, sondas de evolución de fronteras y ablaciones de explicitud del estado.",
+    "primaryTakeawayBadge": "Conclusión Principal",
+    "crossExperimentFinding": "Hallazgo Transversal",
+    "primaryFindingQuote": "La precisión puntual puede ocultar inestabilidad de enrutamiento cerca de fronteras de decisión semánticas.",
+    "primaryFindingDesc": "En nuestro entorno de enrutamiento para agentes de ingeniería de software, las evaluaciones de un solo intento enmascararon la inestabilidad empírica de enrutamiento. Incluso alcanzando 100% de precisión puntual en benchmarks balanceados, evaluaciones repetidas bajo condiciones idénticas descubrieron alternancia estocástica entre ASK_USER y SEARCH_CODE cerca de fronteras sutiles de decisión.",
+    "secondaryTakeawayBadge": "Conclusión Secundaria",
+    "stateRepresentationTag": "Hallazgo de Representación de Estado",
+    "secondaryFindingQuote": "El enrutamiento se volvió sustancialmente más claro cuando el estado del agente describió explícitamente qué información operativa aún faltaba.",
+    "secondaryFindingDesc": "En las variantes diagnósticas probadas, diferencias en la representación del estado coincidieron con diferencias en la estabilidad de enrutamiento observada. Cuando los prompts solo enunciaban requisitos, el enrutador mostró inestabilidad de frontera. Explicitar que se desconocía la ubicación de la implementación coincidió con una única elección observada de SEARCH_CODE en evaluaciones repetidas y amplió el margen de 0.034 a 1.00 en las pruebas realizadas.",
+    "holdoutTitle": "Precisión Semántica Macro",
+    "holdoutBadge": "Síntesis de Holdout",
+    "boundaryTitle": "Oscilación Estocástica",
+    "boundaryBadge": "Evolución de Frontera",
+    "ablationTitle": "Desambiguación Operativa",
+    "ablationBadge": "Ablación de Explicitud",
+    "principlesTitle": "Principios Empíricos Fundamentales",
+    "principlesBadge": "7 PRINCIPIOS",
+    "principles": [
+      {
+        "num": "01",
+        "title": "Formulación Sólida en Benchmark",
+        "desc": "La formulación de enrutamiento semántico de cinco acciones mostró un desempeño contundente en las suites evaluadas (100% de exactitud semántica en el holdout congelado V3 de 50 casos)."
+      },
+      {
+        "num": "02",
+        "title": "Enmascaramiento en Una Sola Corrida",
+        "desc": "La evaluación puntual en una sola corrida no reveló la incertidumbre local de enrutamiento. Una alta exactitud macro coexistió con márgenes estrechos entre candidatos."
+      },
+      {
+        "num": "03",
+        "title": "Alternancia Estocástica Observada",
+        "desc": "Evaluaciones repetidas bajo condiciones idénticas de prompt expusieron comportamiento mixto en estados de frontera seleccionados (ej. 14 SEARCH_CODE / 6 ASK_USER en V5U02)."
+      },
+      {
+        "num": "04",
+        "title": "Representación de Estado y Estabilidad Observada",
+        "desc": "En las variantes diagnósticas probadas, diferencias en la representación del estado coincidieron con diferencias en la estabilidad de enrutamiento observada: C1 registró elecciones mixtas, mientras que C2–C6 registraron una única elección de SEARCH_CODE en sus evaluaciones repetidas."
+      },
+      {
+        "num": "05",
+        "title": "Alcance Local y Adaptativo",
+        "desc": "Los estudios diagnósticos (V4–V8) constituyeron conjuntos locales de sondas adversariales para explorar fronteras, no una demostración universal del comportamiento del modelo."
+      },
+      {
+        "num": "06",
+        "title": "La Incertidumbre como Preocupación de Arquitectura",
+        "desc": "Las arquitecturas futuras de agentes pueden tratar la incertidumbre de enrutamiento como una preocupación de ingeniería separada, aplicando políticas de reintento, verificación o clarificación."
+      },
+      {
+        "num": "07",
+        "title": "Separación de Seguridad y Permisos",
+        "desc": "Las decisiones de enrutamiento semántico deben permanecer estrictamente desacopladas de las políticas deterministas de seguridad, permisos de herramientas y barreras de control."
+      }
+    ]
+  }
+}

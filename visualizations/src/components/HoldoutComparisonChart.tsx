@@ -1,8 +1,16 @@
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { echarts, ReactEChartsCore, type EChartsOption } from './echarts-core'
 import { HOLDOUT_COMPARISON, type HoldoutRouterResult } from '../data/research-results'
+import { useChartTheme } from '../hooks/useChartTheme'
 
-export const HoldoutComparisonChart: React.FC = () => {
+interface HoldoutComparisonChartProps {
+  standalone?: boolean
+}
+
+export const HoldoutComparisonChart: React.FC<HoldoutComparisonChartProps> = ({ standalone = true }) => {
+  const { t } = useTranslation(['charts', 'common'])
+  const chartTheme = useChartTheme()
   const [selectedRouterId, setSelectedRouterId] = useState<string>('jev')
 
   const selectedRouter = useMemo(() => {
@@ -16,21 +24,21 @@ export const HoldoutComparisonChart: React.FC = () => {
       itemStyle: {
         color:
           r.id === 'jev'
-            ? '#38bdf8'
+            ? chartTheme.primary
             : r.id === 'nemotron-ultra'
-              ? '#34d399'
+              ? chartTheme.methodology
               : r.id === 'gpt-5-mini'
-                ? '#818cf8'
-                : '#64748b',
-        borderRadius: [4, 4, 0, 0],
+                ? chartTheme.accent
+                : chartTheme.baselineSeries,
+        borderRadius: [2, 2, 0, 0],
       },
     }))
 
     const allAttemptCorrectData = HOLDOUT_COMPARISON.map((r) => ({
       value: r.allAttemptCorrectRatePct,
       itemStyle: {
-        color: '#475569',
-        borderRadius: [4, 4, 0, 0],
+        color: chartTheme.secondarySeries,
+        borderRadius: [2, 2, 0, 0],
       },
     }))
 
@@ -47,28 +55,25 @@ export const HoldoutComparisonChart: React.FC = () => {
       legend: {
         top: 10,
         right: 20,
-        textStyle: {
-          color: '#8b9bb4',
-          fontSize: 12,
-        },
+        textStyle: chartTheme.legendTextStyle,
         itemWidth: 14,
         itemHeight: 10,
-        data: ['Semantic Accuracy (Successful Requests)', 'All-Attempt Correct Rate (Infra + Semantic)'],
+        data: [
+          t('holdout.legendSemantic', { ns: 'charts' }),
+          t('holdout.legendAll', { ns: 'charts' }),
+        ],
       },
       tooltip: {
         trigger: 'axis',
-        backgroundColor: '#131720',
-        borderColor: '#333e54',
-        borderWidth: 1,
-        padding: [12, 16],
-        textStyle: {
-          color: '#f0f3f8',
-          fontSize: 13,
-        },
+        backgroundColor: chartTheme.tooltipConfig.backgroundColor,
+        borderColor: chartTheme.tooltipConfig.borderColor,
+        borderWidth: chartTheme.tooltipConfig.borderWidth,
+        padding: chartTheme.tooltipConfig.padding,
+        textStyle: chartTheme.tooltipConfig.textStyle,
         axisPointer: {
           type: 'shadow',
           shadowStyle: {
-            color: 'rgba(56, 189, 248, 0.08)',
+            color: 'rgba(0, 0, 0, 0.05)',
           },
         },
         formatter: (params: unknown) => {
@@ -86,27 +91,25 @@ export const HoldoutComparisonChart: React.FC = () => {
           const costInfo = item.costUsd !== undefined ? `$${item.costUsd.toFixed(6)}` : 'N/A'
 
           return `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-width: 260px; line-height: 1.5;">
-              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222938; padding-bottom: 8px; margin-bottom: 8px;">
-                <strong style="color: #f0f3f8; font-size: 14px;">${item.name}</strong>
-                <span style="color: #38bdf8; font-size: 11px; background: rgba(56,189,248,0.12); padding: 2px 6px; border-radius: 4px; font-family: monospace;">${item.routerType}</span>
+            <div style="font-family: ${chartTheme.fontSans}; min-width: 260px; line-height: 1.5; color: ${chartTheme.textPrimary};">
+              <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid ${chartTheme.tooltipBorder}; padding-bottom: 8px; margin-bottom: 8px;">
+                <strong style="color: ${chartTheme.textPrimary}; font-size: 14px;">${item.name}</strong>
+                <span style="color: ${chartTheme.primary}; font-size: 11px; padding: 2px 6px; border-radius: 2px; font-family: ${chartTheme.fontMono};">${item.routerType}</span>
               </div>
               <div style="display: grid; grid-template-columns: 1fr auto; gap: 4px; font-size: 12px; margin-bottom: 6px;">
-                <span style="color: #8b9bb4;">Semantic Accuracy (Successful):</span>
-                <strong style="color: #38bdf8; font-variant-numeric: tabular-nums;">${item.semanticAccuracySuccessfulPct.toFixed(1)}%</strong>
-                <span style="color: #8b9bb4;">All-Attempt Correct Rate:</span>
-                <strong style="color: #94a3b8; font-variant-numeric: tabular-nums;">${item.allAttemptCorrectRatePct.toFixed(1)}%</strong>
-                <span style="color: #8b9bb4;">Successful / Total Attempts:</span>
-                <span style="color: #f0f3f8; font-variant-numeric: tabular-nums;">${item.successfulRequests} / ${item.attempts}</span>
-                <span style="color: #8b9bb4;">Correct Responses:</span>
-                <span style="color: #f0f3f8; font-variant-numeric: tabular-nums;">${item.correctSuccessfulResponses}</span>
-                <span style="color: #8b9bb4;">Latency:</span>
-                <span style="color: #f0f3f8; font-variant-numeric: tabular-nums;">${latencyInfo}</span>
-                <span style="color: #8b9bb4;">Cost:</span>
-                <span style="color: #f0f3f8; font-variant-numeric: tabular-nums;">${costInfo}</span>
+                <span style="color: ${chartTheme.textSecondary};">${t('holdout.semanticAccuracy', { ns: 'charts' })}:</span>
+                <strong style="color: ${chartTheme.primary}; font-variant-numeric: tabular-nums;">${item.semanticAccuracySuccessfulPct.toFixed(1)}%</strong>
+                <span style="color: ${chartTheme.textSecondary};">${t('holdout.allAttemptRate', { ns: 'charts' })}:</span>
+                <strong style="color: ${chartTheme.textSecondary}; font-variant-numeric: tabular-nums;">${item.allAttemptCorrectRatePct.toFixed(1)}%</strong>
+                <span style="color: ${chartTheme.textSecondary};">${t('holdout.successfulRequests', { ns: 'charts' })} / ${t('holdout.attempts', { ns: 'charts' })}:</span>
+                <span style="color: ${chartTheme.textPrimary}; font-variant-numeric: tabular-nums;">${item.successfulRequests} / ${item.attempts}</span>
+                <span style="color: ${chartTheme.textSecondary};">${t('holdout.medianLatency', { ns: 'charts' })}:</span>
+                <span style="color: ${chartTheme.textPrimary}; font-variant-numeric: tabular-nums;">${latencyInfo}</span>
+                <span style="color: ${chartTheme.textSecondary};">${t('holdout.cost', { ns: 'charts' })}:</span>
+                <span style="color: ${chartTheme.textPrimary}; font-variant-numeric: tabular-nums;">${costInfo}</span>
               </div>
-              <div style="font-size: 11px; color: #56657f; border-top: 1px solid #222938; padding-top: 6px; margin-top: 6px;">
-                <em>Cost Basis:</em> ${item.costBasis}
+              <div style="font-size: 11px; color: ${chartTheme.textMutedColor}; border-top: 1px solid ${chartTheme.tooltipBorder}; padding-top: 6px; margin-top: 6px;">
+                <em>${t('holdout.costBasis', { ns: 'charts' })}:</em> ${item.costBasis}
               </div>
             </div>
           `
@@ -115,10 +118,9 @@ export const HoldoutComparisonChart: React.FC = () => {
       xAxis: {
         type: 'category',
         data: routerNames,
-        axisLine: { lineStyle: { color: '#222938' } },
+        axisLine: chartTheme.axisLineStyle,
         axisLabel: {
-          color: '#cbd5e1',
-          fontSize: 12,
+          ...chartTheme.axisLabelStyle,
           margin: 12,
         },
         axisTick: { show: false },
@@ -130,20 +132,15 @@ export const HoldoutComparisonChart: React.FC = () => {
         interval: 20,
         axisLine: { show: false },
         axisLabel: {
-          color: '#64748b',
+          ...chartTheme.axisLabelStyle,
           fontSize: 11,
           formatter: '{value}%',
         },
-        splitLine: {
-          lineStyle: {
-            color: '#1a2234',
-            type: 'dashed',
-          },
-        },
+        splitLine: chartTheme.splitLineStyle,
       },
       series: [
         {
-          name: 'Semantic Accuracy (Successful Requests)',
+          name: t('holdout.legendSemantic', { ns: 'charts' }),
           type: 'bar',
           barWidth: 28,
           barGap: '20%',
@@ -151,7 +148,7 @@ export const HoldoutComparisonChart: React.FC = () => {
           label: {
             show: true,
             position: 'top',
-            color: '#cbd5e1',
+            color: chartTheme.textSecondary,
             fontSize: 11,
             formatter: (params: unknown) => {
               const p = params as { value?: number | string | null }
@@ -161,14 +158,14 @@ export const HoldoutComparisonChart: React.FC = () => {
           },
         },
         {
-          name: 'All-Attempt Correct Rate (Infra + Semantic)',
+          name: t('holdout.legendAll', { ns: 'charts' }),
           type: 'bar',
           barWidth: 28,
           data: allAttemptCorrectData,
           label: {
             show: true,
             position: 'top',
-            color: '#64748b',
+            color: chartTheme.textMutedColor,
             fontSize: 11,
             formatter: (params: unknown) => {
               const p = params as { value?: number | string | null }
@@ -179,44 +176,32 @@ export const HoldoutComparisonChart: React.FC = () => {
         },
       ],
     }
-  }, [])
+  }, [chartTheme, t])
 
-  return (
-    <section className="section-container" id="holdout-comparison" aria-label="V3 Holdout Router Comparison">
-      <div className="section-header">
-        <div className="section-badge-row">
-          <span className="badge badge-accent">V3 Benchmark</span>
-          <span className="badge">50 Test Cases</span>
+  const chartContent = (
+    <div className={`chart-card ${!standalone ? 'embedded-chart-card' : ''}`}>
+      <div className="chart-header-row">
+        <div>
+          <h3 className="card-title">Semantic Decision Accuracy vs. Infrastructure Reliability</h3>
+          <p className="card-caption">
+            Primary metric: percentage of successful requests routed to ground-truth action (50 balanced test cases).
+          </p>
         </div>
-        <h2 className="section-title">V3 Holdout Router Comparison</h2>
-        <p className="section-subtitle">
-          Evaluating semantic decision fidelity and infrastructure reliability across four distinct routing architectures on a frozen 50-case benchmark.
-        </p>
-      </div>
-
-      <div className="chart-card">
-        <div className="chart-header-row">
-          <div>
-            <h3 className="card-title">Semantic Decision Accuracy vs. Infrastructure Reliability</h3>
-            <p className="card-caption">
-              Primary metric: percentage of successful requests routed to ground-truth action (50 balanced test cases).
-            </p>
-          </div>
           <div className="legend-tag-group">
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#38bdf8' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.primary }}></span>
               Jev (Specialized)
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#34d399' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.methodology }}></span>
               Nemotron Ultra
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#818cf8' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.accent }}></span>
               GPT-5-mini
             </span>
             <span className="legend-tag">
-              <span className="legend-dot" style={{ background: '#64748b' }}></span>
+              <span className="legend-dot" style={{ background: chartTheme.baselineSeries }}></span>
               Rule Baseline
             </span>
           </div>
@@ -256,25 +241,25 @@ export const HoldoutComparisonChart: React.FC = () => {
               </div>
               <div className="router-score-badge">
                 <span className="score-val">{selectedRouter.semanticAccuracySuccessfulPct.toFixed(1)}%</span>
-                <span className="score-lbl">Semantic Accuracy</span>
+                <span className="score-lbl">{t('holdout.semanticAccuracy', { ns: 'charts' })}</span>
               </div>
             </div>
 
             <div className="router-metrics-grid">
               <div className="router-metric-item">
-                <span className="item-label">Request Success</span>
+                <span className="item-label">{t('holdout.successfulRequests', { ns: 'charts' })}</span>
                 <span className="item-value">{selectedRouter.requestSuccessRatePct}%</span>
                 <span className="item-sub">
                   {selectedRouter.successfulRequests} of {selectedRouter.attempts} attempts
                 </span>
               </div>
               <div className="router-metric-item">
-                <span className="item-label">Correct Responses</span>
+                <span className="item-label">{t('holdout.allAttemptRate', { ns: 'charts' })}</span>
                 <span className="item-value">{selectedRouter.correctSuccessfulResponses}</span>
                 <span className="item-sub">All-attempt rate: {selectedRouter.allAttemptCorrectRatePct}%</span>
               </div>
               <div className="router-metric-item">
-                <span className="item-label">Latency Profile</span>
+                <span className="item-label">{t('holdout.medianLatency', { ns: 'charts' })}</span>
                 <span className="item-value">
                   {selectedRouter.medianLatencyMs ? `${selectedRouter.medianLatencyMs}ms` : `${selectedRouter.averageLatencyMs}ms`}
                 </span>
@@ -283,7 +268,7 @@ export const HoldoutComparisonChart: React.FC = () => {
                 </span>
               </div>
               <div className="router-metric-item">
-                <span className="item-label">Cost / Cost Basis</span>
+                <span className="item-label">{t('holdout.cost', { ns: 'charts' })}</span>
                 <span className="item-value">
                   {selectedRouter.costUsd !== undefined ? `$${selectedRouter.costUsd.toFixed(6)}` : 'N/A'}
                 </span>
@@ -292,7 +277,7 @@ export const HoldoutComparisonChart: React.FC = () => {
             </div>
 
             <div className="router-notes-box">
-              <strong className="notes-heading">Evaluation Context:</strong> {selectedRouter.notes}
+              <strong className="notes-heading">{t('holdout.notes', { ns: 'charts' })}:</strong> {selectedRouter.notes}
             </div>
           </div>
         </div>
@@ -307,6 +292,23 @@ export const HoldoutComparisonChart: React.FC = () => {
           </span>
         </div>
       </div>
+  )
+
+  if (!standalone) {
+    return chartContent
+  }
+
+  return (
+    <section className="section-container" id="holdout-comparison" aria-label={t('holdout.title', { ns: 'charts' })}>
+      <div className="section-header">
+        <div className="section-badge-row">
+          <span className="badge badge-accent">{t('holdout.badge', { ns: 'charts' })}</span>
+          <span className="badge">50 Test Cases</span>
+        </div>
+        <h2 className="section-title">{t('holdout.title', { ns: 'charts' })}</h2>
+        <p className="section-subtitle">{t('holdout.description', { ns: 'charts' })}</p>
+      </div>
+      {chartContent}
     </section>
   )
 }

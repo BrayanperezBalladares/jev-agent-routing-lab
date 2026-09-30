@@ -1,0 +1,56 @@
+{
+  "holdout": {
+    "title": "Macro Holdout Evaluation (V3 Balanced Suite)",
+    "badge": "V3 Holdout Suite",
+    "description": "50 balanced software-engineering scenarios comparing specialized semantic routing against generalist models and a keyword baseline.",
+    "legendSemantic": "Semantic Accuracy (Successful Requests)",
+    "legendAll": "All-Attempt Correct Rate (Infra + Semantic)",
+    "yAxis": "Accuracy (%)",
+    "routerDetailsTitle": "Selected Architecture Details",
+    "semanticAccuracy": "Semantic Accuracy (Successful)",
+    "allAttemptRate": "All-Attempt Correct Rate",
+    "attempts": "Total Attempts",
+    "successfulRequests": "Successful Requests",
+    "medianLatency": "Median Latency",
+    "averageLatency": "Average Latency",
+    "cost": "Cost",
+    "costBasis": "Cost Basis",
+    "notes": "Architectural Notes"
+  },
+  "progression": {
+    "title": "Benchmark Suite Progression (V1–V5)",
+    "badge": "Stationary vs Diagnostic Progression",
+    "description": "Progression across evaluation versions from initial calibration (V1) to balanced holdout (V3) and diagnostic probes (V4–V5).",
+    "legendSemantic": "Semantic Accuracy (%)",
+    "legendAll": "All-Attempt Correct (%)",
+    "legendConfidence": "Average Confidence",
+    "yAxisAccuracy": "Accuracy (%)",
+    "yAxisConfidence": "Confidence (0–1)",
+    "initial": "Initial",
+    "hard": "Hard",
+    "holdout": "Holdout",
+    "diagnostic": "Diagnostic",
+    "notice": "Note: V1–V3 represent stationary benchmark progression. V4–V5 represent adaptive diagnostic stress tests."
+  },
+  "boundary": {
+    "title": "Decision Boundary Evolution Across Diagnostic States",
+    "badge": "Boundary Evolution",
+    "description": "Average confidence, top-1/top-2 margin, and repeated-choice distribution across six key diagnostic boundary states.",
+    "legendConfidence": "Average Confidence",
+    "legendMargin": "Top-1 / Top-2 Margin",
+    "yAxis": "Score (0.00 – 1.00)",
+    "searchRate": "SEARCH_CODE Choice Rate (%)",
+    "askRate": "ASK_USER Choice Rate (%)"
+  },
+  "explicitness": {
+    "title": "State Explicitness Ablation: Margin & Choice Distribution (V8)",
+    "badge": "V8 Ablation Suite",
+    "description": "Observed candidate margin separation and repeated routing stability across six discrete state representations (C1–C6).",
+    "legendMargin": "Average Margin",
+    "legendConfidence": "Average Confidence",
+    "legendSearchPct": "SEARCH_CODE Rate (%)",
+    "legendInstability": "Choice Instability Rate (%)",
+    "yAxisMargin": "Margin & Confidence",
+    "yAxisPct": "Rate (%)"
+  }
+}

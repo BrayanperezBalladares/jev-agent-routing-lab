@@ -1,71 +1,46 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { RESEARCH_NOTES } from '../data/research-results'
 
-interface ConceptCardData {
-  id: string
-  title: string
-  tag: string
-  tagType: 'warning' | 'danger' | 'accent'
-  explanation: string
-  empiricalEvidence: string
+interface ConfidenceStabilityProps {
+  embedded?: boolean
 }
 
-const CONCEPT_CARDS: ConceptCardData[] = [
-  {
-    id: 'low-conf',
-    title: 'Low Confidence \u2260 Incorrect',
-    tag: 'Probability Dispersion',
-    tagType: 'accent',
-    explanation:
-      'A router can select the correct action even when probability is diffusely spread across several viable candidates. In open-ended software tasks, multiple exploratory paths (e.g., searching code vs. inspecting tests) can carry plausible likelihood without invalidating the final pick.',
-    empiricalEvidence:
-      'Across diagnostic runs, valid exploratory choices regularly resolved with raw confidence in the 0.30–0.45 range while maintaining semantic fidelity.',
-  },
-  {
-    id: 'high-conf',
-    title: 'High Confidence \u2260 Universally Correct',
-    tag: 'Spurious Certainty',
-    tagType: 'danger',
-    explanation:
-      'High peak confidence can mask lexical bias, shortcut learning, or edge-case misclassification. A model can assign >0.95 confidence to a route based on strong surface keywords even when subtle semantic constraints dictate an alternative action.',
-    empiricalEvidence:
-      'The confidence field is a provider-returned confidence signal, not a calibrated probability that the selected action is correct across out-of-distribution inputs.',
-  },
-  {
-    id: 'stability-margin',
-    title: 'Empirical Stability \u2260 Internal Certainty',
-    tag: 'Determinism vs Margin',
-    tagType: 'warning',
-    explanation:
-      'A 100% selection rate across repeated identical runs can coexist with a narrow probability margin. The model may repeatedly choose the same winner, but remain perilously close to an alternative candidate.',
-    empiricalEvidence:
-      'In V8-C2, 10 of 10 runs selected SEARCH_CODE (100% empirical stability), yet the average margin was only 0.284 with a runner-up probability of 0.250.',
-  },
-]
+export const ConfidenceStabilitySection: React.FC<ConfidenceStabilityProps> = ({ embedded = false }) => {
+  const { t } = useTranslation(['overview'])
 
-export const ConfidenceStabilitySection: React.FC = () => {
-  return (
-    <section
-      className="section-container confidence-stability-section"
-      aria-labelledby="confidence-stability-heading"
-    >
-      <header className="section-header">
-        <div className="section-header-content">
-          <h2 id="confidence-stability-heading" className="section-title">
-            Confidence, Margin &amp; Stability Mechanics
-            <span className="badge badge-accent">Educational Foundations</span>
-          </h2>
-          <p className="section-description">
-            Analysis of metric behaviors at semantic decision frontiers. Why
-            one-shot confidence scores, top-candidate margins, and empirical
-            repetition cannot be treated as interchangeable indicators of safety.
-          </p>
-        </div>
-      </header>
+  const conceptCards = [
+    {
+      id: 'low-conf',
+      title: t('confidenceStability.cards.lowConf.title'),
+      tag: t('confidenceStability.cards.lowConf.tag'),
+      tagType: 'accent',
+      explanation: t('confidenceStability.cards.lowConf.explanation'),
+      empiricalEvidence: t('confidenceStability.cards.lowConf.evidence'),
+    },
+    {
+      id: 'high-conf',
+      title: t('confidenceStability.cards.highConf.title'),
+      tag: t('confidenceStability.cards.highConf.tag'),
+      tagType: 'danger',
+      explanation: t('confidenceStability.cards.highConf.explanation'),
+      empiricalEvidence: t('confidenceStability.cards.highConf.evidence'),
+    },
+    {
+      id: 'stability-margin',
+      title: t('confidenceStability.cards.stabilityMargin.title'),
+      tag: t('confidenceStability.cards.stabilityMargin.tag'),
+      tagType: 'warning',
+      explanation: t('confidenceStability.cards.stabilityMargin.explanation'),
+      empiricalEvidence: t('confidenceStability.cards.stabilityMargin.evidence'),
+    },
+  ]
 
+  const sectionContent = (
+    <div className={`confidence-stability-content ${embedded ? 'embedded-stability' : ''}`}>
       {/* Core Conceptual Cards */}
       <div className="concept-grid">
-        {CONCEPT_CARDS.map((concept) => (
+        {conceptCards.map((concept) => (
           <article key={concept.id} className="concept-card">
             <div className="concept-header">
               <span className={`badge badge-${concept.tagType}`}>
@@ -86,10 +61,10 @@ export const ConfidenceStabilitySection: React.FC = () => {
       <article className="formula-card" aria-label="Decision Boundary Margin Formula">
         <div className="formula-header">
           <div className="formula-title-group">
-            <span className="badge badge-purple">Mathematical Definition</span>
-            <h3 className="formula-title">Decision Boundary Margin</h3>
+            <span className="badge badge-accent">{t('confidenceStability.formula.badge')}</span>
+            <h3 className="formula-title">{t('confidenceStability.formula.title')}</h3>
           </div>
-          <span className="formula-badge">Key Diagnostic Metric</span>
+          <span className="formula-badge">{t('confidenceStability.formula.keyMetricBadge')}</span>
         </div>
 
         <div className="formula-content-wrapper">
@@ -102,31 +77,26 @@ export const ConfidenceStabilitySection: React.FC = () => {
               <span className="formula-fn">P(top<sub>2</sub>)</span>
             </div>
             <p className="formula-definition">
-              The scalar difference between the probability assigned to the
-              highest-ranked action and the immediate runner-up candidate action.
+              {t('confidenceStability.formula.definition')}
             </p>
           </div>
 
           <div className="formula-mechanics-grid">
             <div className="mechanic-item">
               <span className="mechanic-tag boundary">
-                As margin &rarr; 0.00
+                {t('confidenceStability.formula.mechanicZeroTag')}
               </span>
               <p className="mechanic-text">
-                The router operates near an empirical semantic decision boundary.
-                Observed evaluations showed stochastic alternation between candidate
-                actions (e.g., <code>SEARCH_CODE</code> vs <code>ASK_USER</code>).
+                {t('confidenceStability.formula.mechanicZeroText')}
               </p>
             </div>
 
             <div className="mechanic-item">
               <span className="mechanic-tag separated">
-                As margin &rarr; 1.00
+                {t('confidenceStability.formula.mechanicOneTag')}
               </span>
               <p className="mechanic-text">
-                The router exhibits clear internal separation between the top
-                candidate and runner-up, coinciding with consistent routing in the
-                tested runs.
+                {t('confidenceStability.formula.mechanicOneText')}
               </p>
             </div>
           </div>
@@ -135,19 +105,13 @@ export const ConfidenceStabilitySection: React.FC = () => {
         {/* Universal Threshold Avoidance Note */}
         <div className="threshold-caveat-card">
           <div className="caveat-header">
-            <span className="badge badge-warning">Caution</span>
+            <span className="badge badge-warning">{t('confidenceStability.caveat.badge')}</span>
             <strong className="caveat-title">
-              No Universal Safety Threshold
+              {t('confidenceStability.caveat.title')}
             </strong>
           </div>
           <p className="caveat-body">
-            Empirical observation confirms that margin magnitude is domain- and
-            policy-specific. Asserting universal production rules (e.g.{' '}
-            <em>&ldquo;margin &lt; 0.2 is always unsafe&rdquo;</em>) is invalid.
-            The required safety margin depends on the cost asymmetry between
-            candidate actions: selecting between two read-only queries warrants
-            a different threshold than selecting between autonomous file editing
-            and human escalation.
+            {t('confidenceStability.caveat.body')}
           </p>
         </div>
       </article>
@@ -155,7 +119,7 @@ export const ConfidenceStabilitySection: React.FC = () => {
       {/* Canonical Warnings from RESEARCH_NOTES */}
       <section className="warnings-section" aria-label="Canonical Research Warnings">
         <h3 className="warnings-section-title">
-          Canonical Research Methodological Warnings
+          {t('confidenceStability.warningsTitle')}
         </h3>
         <div className="warnings-grid">
           <div className="warning-card">
@@ -185,7 +149,7 @@ export const ConfidenceStabilitySection: React.FC = () => {
 
           <div className="warning-card">
             <div className="warning-card-header">
-              <span className="badge badge-purple">Diagnostic Nature</span>
+              <span className="badge">Diagnostic Nature</span>
             </div>
             <p className="warning-card-text">
               {RESEARCH_NOTES.diagnosticWarning}
@@ -193,6 +157,31 @@ export const ConfidenceStabilitySection: React.FC = () => {
           </div>
         </div>
       </section>
+    </div>
+  )
+
+  if (embedded) {
+    return sectionContent
+  }
+
+  return (
+    <section
+      className="section-container confidence-stability-section"
+      id="confidence-stability"
+      aria-labelledby="confidence-stability-heading"
+    >
+      <header className="section-header">
+        <div className="section-header-content">
+          <h2 id="confidence-stability-heading" className="section-title">
+            {t('confidenceStability.title')}{' '}
+            <span className="badge badge-accent">{t('confidenceStability.badge')}</span>
+          </h2>
+          <p className="section-description">
+            {t('confidenceStability.description')}
+          </p>
+        </div>
+      </header>
+      {sectionContent}
     </section>
   )
 }

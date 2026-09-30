@@ -1,0 +1,151 @@
+{
+  "hero": {
+    "badge1": "Research Monograph",
+    "badge2": "Autonomous Agent Systems",
+    "badge3": "Typesafe Semantic Routing",
+    "title": "How Does a Coding Agent Decide What to Do Next?",
+    "subtitle": "Jev Agent Routing Lab studies semantic routing, stability, and decision boundaries across five discrete software-engineering actions.",
+    "description": "When an autonomous agent receives an ambiguous bug report or complex task, choosing the wrong tool wastes tokens, triggers unnecessary execution loops, or interrupts developers prematurely. Experience the routing dilemma firsthand below before exploring the empirical research."
+  },
+  "researchAreas": {
+    "badge": "Scope & Objectives",
+    "badge2": "5 Core Pillars",
+    "title": "Research Overview & Methodology",
+    "subtitle": "Investigating semantic decision stability, probability separation, and state formulation for autonomous engineering agents beyond superficial one-shot benchmarks.",
+    "accuracy": {
+      "title": "Semantic Routing Accuracy",
+      "description": "Measuring multi-candidate action selection across nuanced software-engineering scenarios against ground-truth intent.",
+      "badge": "Evaluation"
+    },
+    "stability": {
+      "title": "Repeated Decision Stability",
+      "description": "Quantifying stochastic routing drift across 10–20 identical prompt evaluations to expose hidden non-determinism.",
+      "badge": "Reliability"
+    },
+    "uncertainty": {
+      "title": "Routing Uncertainty",
+      "description": "Analyzing top-1/top-2 candidate probability margins and raw confidence distributions across boundary transitions.",
+      "badge": "Metrics"
+    },
+    "boundary": {
+      "title": "ASK_USER ↔ SEARCH_CODE Boundaries",
+      "description": "Characterizing the observed semantic transition where agents alternate between requesting user clarification and autonomous codebase inspection.",
+      "badge": "Decision Frontier"
+    },
+    "stateRep": {
+      "title": "Agent-State Representation",
+      "description": "Evaluating how explicitly structuring unresolved operational information coincided with reduced choice instability and stable routing in the tested runs.",
+      "badge": "Ablation"
+    }
+  },
+  "distinction": {
+    "v1v3Badge": "V1–V3",
+    "v1v3Title": "Benchmark Progression",
+    "v1v3Text": "Standard frozen evaluation suite progressing from initial baseline validation (V1, 20 cases) to hard semantic distinctions (V2, 30 cases) and balanced holdout (V3, 50 cases). Designed to measure macro semantic accuracy under stationary conditions.",
+    "v1v3Footer": "Frozen test distribution • Balanced action distribution • Stationary holdout",
+    "v4v8Badge": "V4–V8",
+    "v4v8Title": "Adaptive Diagnostic Experiments",
+    "v4v8Text": "Targeted adversarial minimal pairs (V4), cue-stripped prompts (V5), and repeated boundary exploration suites (V6–V8) probing routing edge cases, margin collapse, and state representation.",
+    "v4v8NoticeLabel": "Methodological Note:",
+    "v4v8NoticeText": "V4–V8 are adaptive diagnostic experiments, NOT untouched holdouts."
+  },
+  "confidenceStability": {
+    "title": "Confidence, Margin & Stability Mechanics",
+    "badge": "Educational Foundations",
+    "description": "Analysis of metric behaviors at semantic decision frontiers. Why one-shot confidence scores, top-candidate margins, and empirical repetition cannot be treated as interchangeable indicators of safety.",
+    "cards": {
+      "lowConf": {
+        "title": "Low Confidence ≠ Incorrect",
+        "tag": "Probability Dispersion",
+        "explanation": "A router can select the correct action even when probability is diffusely spread across several viable candidates. In open-ended software tasks, multiple exploratory paths (e.g., searching code vs. inspecting tests) can carry plausible likelihood without invalidating the final pick.",
+        "evidence": "Across diagnostic runs, valid exploratory choices regularly resolved with raw confidence in the 0.30–0.45 range while maintaining semantic fidelity."
+      },
+      "highConf": {
+        "title": "High Confidence ≠ Universally Correct",
+        "tag": "Spurious Certainty",
+        "explanation": "High peak confidence can mask lexical bias, shortcut learning, or edge-case misclassification. A model can assign >0.95 confidence to a route based on strong surface keywords even when subtle semantic constraints dictate an alternative action.",
+        "evidence": "The confidence field is a provider-returned confidence signal, not a calibrated probability that the selected action is correct across out-of-distribution inputs."
+      },
+      "stabilityMargin": {
+        "title": "Empirical Stability ≠ Internal Certainty",
+        "tag": "Determinism vs Margin",
+        "explanation": "A 100% selection rate across repeated identical runs can coexist with a narrow probability margin. The model may repeatedly select the same top-1 action, but remain perilously close to an alternative candidate.",
+        "evidence": "In V8-C2, 10 of 10 runs selected SEARCH_CODE (100% empirical stability), yet the average margin was only 0.284 with a runner-up probability of 0.250."
+      }
+    },
+    "formula": {
+      "badge": "Mathematical Definition",
+      "title": "Decision Boundary Margin",
+      "keyMetricBadge": "Key Diagnostic Metric",
+      "definition": "The scalar difference between the probability assigned to the highest-ranked action and the immediate runner-up candidate action.",
+      "mechanicZeroTag": "As margin → 0.00",
+      "mechanicZeroText": "The router operates near an empirical semantic decision boundary. Observed evaluations showed stochastic alternation between candidate actions (e.g., SEARCH_CODE vs ASK_USER).",
+      "mechanicOneTag": "As margin → 1.00",
+      "mechanicOneText": "The router exhibits clear internal separation between the top candidate and runner-up, coinciding with consistent routing in the tested runs."
+    },
+    "caveat": {
+      "badge": "Caution",
+      "title": "No Universal Safety Threshold",
+      "body": "Empirical observation confirms that margin magnitude is domain- and policy-specific. Asserting universal production rules (e.g. \"margin < 0.2 is always unsafe\") is invalid. The required safety margin depends on the cost asymmetry between candidate actions: selecting between two read-only queries warrants a different threshold than selecting between autonomous file editing and human escalation."
+    },
+    "warningsTitle": "Canonical Research Methodological Warnings"
+  },
+  "conclusions": {
+    "title": "Research Conclusions & Synthesis",
+    "badge": "Core Insights",
+    "description": "Synthesis of empirical findings across frozen holdout suites, boundary evolution probes, and state-explicitness ablations.",
+    "primaryTakeawayBadge": "Primary Takeaway",
+    "crossExperimentFinding": "Cross-Experiment Finding",
+    "primaryFindingQuote": "One-shot accuracy can hide routing instability near semantic decision boundaries.",
+    "primaryFindingDesc": "In our evaluated software-engineering agent routing setting, single-pass benchmark evaluations masked empirical routing instability. Even when achieving 100% one-shot accuracy on balanced benchmarks, repeated evaluations under identical conditions uncovered stochastic switching between ASK_USER and SEARCH_CODE near subtle decision boundaries.",
+    "secondaryTakeawayBadge": "Secondary Takeaway",
+    "stateRepresentationTag": "State-Representation Finding",
+    "secondaryFindingQuote": "Routing became substantially clearer when the agent state explicitly described what operational information was still missing.",
+    "secondaryFindingDesc": "In the tested diagnostic variants, differences in state representation coincided with different observed routing stability. When prompts solely stated requirements, the router exhibited boundary instability. Explicitly articulating that implementation location was unknown coincided with a single observed SEARCH_CODE route across repeated evaluations and widened margin separation from 0.034 to 1.00 in the tested runs.",
+    "holdoutTitle": "Macro Semantic Accuracy",
+    "holdoutBadge": "Holdout Synthesis",
+    "boundaryTitle": "Stochastic Oscillation",
+    "boundaryBadge": "Boundary Evolution",
+    "ablationTitle": "Operational Disambiguation",
+    "ablationBadge": "Explicitness Ablation",
+    "principlesTitle": "Core Empirical Takeaways",
+    "principlesBadge": "7 PRINCIPLES",
+    "principles": [
+      {
+        "num": "01",
+        "title": "Strong Benchmark Formulation",
+        "desc": "A five-action semantic routing formulation performed decisively on the tested benchmark suites (100% semantic accuracy on the 50-case frozen V3 holdout)."
+      },
+      {
+        "num": "02",
+        "title": "Single-Run Accuracy Masking",
+        "desc": "Single-pass benchmark evaluations did not reveal local routing uncertainty. High macro accuracy coexisted with narrow candidate separation."
+      },
+      {
+        "num": "03",
+        "title": "Observed Stochastic Switching",
+        "desc": "Repeated evaluations under identical prompt conditions exposed mixed routing behavior in selected boundary states (e.g. 14 SEARCH_CODE / 6 ASK_USER in V5U02)."
+      },
+      {
+        "num": "04",
+        "title": "State Representation & Observed Stability",
+        "desc": "In the tested diagnostic variants, differences in state representation coincided with different observed routing stability: C1 recorded mixed choices, while C2–C6 recorded a single SEARCH_CODE choice across their repeated evaluations."
+      },
+      {
+        "num": "05",
+        "title": "Local & Adaptive Scope",
+        "desc": "The diagnostic studies (V4–V8) were local, adversarial probe sets designed to explore boundaries, not universal proof of general model behavior."
+      },
+      {
+        "num": "06",
+        "title": "Uncertainty as an Architectural Concern",
+        "desc": "Future agent architectures can treat semantic routing uncertainty as a separate engineering concern, applying retry, verification, or clarification policies."
+      },
+      {
+        "num": "07",
+        "title": "Separation from Safety & Permissions",
+        "desc": "Semantic routing decisions should remain strictly decoupled from deterministic security policies, tool permissions, and safety gates."
+      }
+    ]
+  }
+}

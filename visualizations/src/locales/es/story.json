@@ -1,0 +1,339 @@
+{
+  "sandbox": {
+    "badge": "Espacio de Problema Interactivo",
+    "badge2": "Formulación Canónica de 5 Acciones",
+    "title": "¿Qué debería hacer el agente a continuación?",
+    "subtitle": "Los agentes de ingeniería autónomos deben asignar estados operativos no estructurados a una acción discreta. Lea el escenario verificado a continuación y prediga qué herramienta debe invocarse.",
+    "contrastLabel": "Contraste de Escenarios Holdout:",
+    "contextKicker": "CONTEXTO DEL AGENTE // INSTANTÁNEA DEL ESPACIO DE TRABAJO",
+    "datasetLabel": "routing-holdout.json • Caso",
+    "benchmarkCase": "Caso de Benchmark:",
+    "selectActionLegend": "Seleccione la acción canónica para el agente:",
+    "outcomeTitle": "Resultado de Comparación con el Benchmark",
+    "matchSuccess": "La predicción coincide con el objetivo del benchmark",
+    "matchAlternative": "Elección alternativa (Objetivo del benchmark: {{expected}})",
+    "yourSelection": "Su Selección",
+    "benchmarkTarget": "Objetivo del Benchmark",
+    "whyTargetFits": "Por qué este objetivo se ajusta a la definición de enrutamiento:",
+    "resetSelection": "Restablecer selección",
+    "switchToContrast": "Cambiar a Caso de Contraste (U01)",
+    "switchToPrimary": "Cambiar a Caso Principal (S01)",
+    "readingTranslationLabel": "Traducción para lectura",
+    "cases": {
+      "S01": {
+        "name": "Responsable de reintento de pago desconocido",
+        "contrastLabelDesktop": "S01 — Incertidumbre en código",
+        "contrastLabelMobile": "S01 — Búsqueda",
+        "difficulty": "intermedio",
+        "state": "Customers occasionally receive two payment attempts after a timeout. The API route, payment provider and queue worker are known, but nobody has established which component decides whether a failed charge should be retried.",
+        "readingTranslation": "Los clientes ocasionalmente reciben dos intentos de cobro tras un tiempo de espera. La ruta de la API, el proveedor de pagos y el worker de la cola son conocidos, pero nadie ha establecido qué componente decide si un cobro fallido debe reintentarse.",
+        "pedagogicalRationale": "La ruta de la API, el proveedor de pagos y el worker de la cola ya son conocidos en el sistema, pero el componente de código específico responsable de decidir la política de reintento no ha sido identificado. Dado que se trata de un detalle de implementación existente en la base de código, SEARCH_CODE es la acción objetivo para localizar el manejador antes de tomar acciones de modificación."
+      },
+      "U01": {
+        "name": "Política de reintento de pago fallido",
+        "contrastLabelDesktop": "U01 — Ambigüedad en requisitos",
+        "contrastLabelMobile": "U01 — Preguntar",
+        "difficulty": "intermedio",
+        "state": "The system can either retry a failed payment automatically, require the customer to retry manually, or cancel the order. The product requirements specify the failure state but never choose among those behaviors.",
+        "readingTranslation": "El sistema puede reintentar un pago fallido automáticamente, requerir que el cliente reintente manualmente o cancelar el pedido. Los requisitos de producto especifican el estado de fallo pero nunca eligen entre esos comportamientos.",
+        "pedagogicalRationale": "Existen múltiples vías de recuperación de negocio contrapuestas (reintento automático vs. reintento manual vs. cancelación de la orden), pero los requisitos de producto nunca especificaron cuál aplicar. Dado que el código no puede inventar reglas de negocio, ASK_USER es la acción objetivo para solicitar directivas al desarrollador humano."
+      }
+    },
+    "actions": {
+      "SEARCH_CODE": {
+        "description": "Buscar símbolos, archivos o referencias en el repositorio para localizar implementaciones o pistas."
+      },
+      "READ_FILE": {
+        "description": "Inspeccionar una ruta de archivo conocida para examinar su contenido exacto o configuración."
+      },
+      "RUN_TESTS": {
+        "description": "Ejecutar suites de pruebas para observar el comportamiento en tiempo de ejecución, regresión o fallo."
+      },
+      "QUERY_DATABASE": {
+        "description": "Ejecutar consultas a la base de datos para inspeccionar el esquema, estado o consistencia de registros."
+      },
+      "ASK_USER": {
+        "description": "Solicitar al desarrollador aclaración o directivas ante requisitos no especificados o ambiguos."
+      }
+    }
+  },
+  "replay": {
+    "badge": "Exploración de Frontera",
+    "badge2": "Sonda Diagnóstica Estado V5U02",
+    "title": "Cuando la Precisión Puntual Oculta Inestabilidad de Decisión",
+    "subtitle": "En evaluaciones de un solo intento, un prompt de agente produce una única elección de ruta. ¿Qué ocurre cuando exactamente el mismo texto de prompt se evalúa repetidamente en 20 ejecuciones idénticas?",
+    "contextKicker": "SONDA HISTÓRICA // ESTADO V5U02 (Ambigüedad de requisitos)",
+    "datasetLabel": "Dataset: routing-v5-cue-stripped.json • Objetivo: ASK_USER",
+    "promptText": "An account was removed months ago and another person now requests the same username. Existing product documentation describes deletion but never states whether the identifier becomes available again.",
+    "readingTranslation": "Una cuenta fue eliminada hace meses y otra persona ahora solicita el mismo nombre de usuario. La documentación de producto existente describe la eliminación pero nunca establece si el identificador vuelve a estar disponible.",
+    "questionLead": "En un benchmark de un solo intento, este estado parecía decisivo.",
+    "questionSub": "¿Qué ocurrió cuando exactamente el mismo texto de prompt fue evaluado 20 veces?",
+    "triggerButton": "Reproducir evaluaciones observadas",
+    "triggerHint": "Repetición histórica • 20 ejecuciones registradas • Sin inferencia de modelo en vivo",
+    "focalTag": "RESULTADO EMPÍRICO",
+    "focalTitle": "MISMO INPUT • DOS ELECCIONES DE RUTA OBSERVADAS",
+    "focalSubtitle": "Evaluado en 20 ejecuciones idénticas bajo las mismas condiciones, el enrutamiento osciló entre dos acciones contrapuestas.",
+    "distSearch": "SEARCH_CODE • 14 de 20 (70%)",
+    "distAsk": "ASK_USER • 6 de 20 (30%)",
+    "searchCaption": "14 evaluaciones enrutadas a inspección autónoma del código",
+    "askCaption": "6 evaluaciones enrutadas a aclaración del desarrollador",
+    "recordedRuns": "Ejecuciones Registradas",
+    "identicalEvals": "Evaluaciones idénticas",
+    "observedSplit": "Distribución Observada",
+    "splitSub": "14 SEARCH / 6 ASK",
+    "avgConfidence": "Confianza Promedio",
+    "confSub": "Señal devuelta por proveedor",
+    "topMargin": "Margen Top-1 / Top-2",
+    "marginSub": "Baja separación",
+    "providerConfTerm": "Confianza del Proveedor:",
+    "providerConfDef": "Señal de confianza devuelta por el proveedor. No se interpreta como probabilidad calibrada de que la acción sea correcta y no se asume su semántica interna exacta.",
+    "marginTerm": "Margen Top-1 / Top-2:",
+    "marginDef": "El margen top-1 / top-2 es la brecha numérica entre las dos probabilidades de acción más altas.",
+    "thresholdTerm": "Advertencia sobre Umbrales Operativos:",
+    "thresholdDef": "Márgenes promedio reducidos aparecieron en varios estados de elección mixta observados en estos experimentos. El estudio no estableció un umbral operativo numérico.",
+    "resetReplay": "Restablecer repetición",
+    "footerMeta": "Registro histórico • Suite de consistencia V5"
+  },
+  "margin": {
+    "badge": "Marco Conceptual",
+    "badge2": "Análisis de Frontera Diagnóstica",
+    "title": "Deconstrucción de la Frontera de Decisión",
+    "subtitle": "Comprender el comportamiento de frontera exige distinguir entre la confianza del proveedor, la separación de margen entre candidatos y la estabilidad observada en elecciones reiteradas.",
+    "recordedStates": "Estados de Frontera Registrados:",
+    "kicker": "ESTADO DIAGNÓSTICO // {{id}}",
+    "suite": "Suite:",
+    "identicalEvals": "{{count}} Evaluaciones Idénticas",
+    "mixedChoices": "Elecciones Mixtas Observadas",
+    "singleChoice": "Elección Única Observada",
+    "pillar1Tag": "SEÑAL 1",
+    "pillar1Title": "Confianza del Proveedor",
+    "pillar1Caption": "Señal devuelta por proveedor • No calibrada",
+    "pillar2Tag": "SEÑAL 2",
+    "pillar2Title": "Margen Top-1 / Top-2",
+    "pillar2Caption": "Separación de candidatos • Brecha Top-1 vs Top-2",
+    "pillar3Tag": "COMPORTAMIENTO",
+    "pillar3Title": "Estabilidad en Elecciones Reiteradas",
+    "pillar3Caption": "SEARCH_CODE vs ASK_USER ({{runs}} ejecuciones)",
+    "findingLabel": "Hallazgo Diagnóstico Observado",
+    "referenceGuide": {
+      "confidenceTerm": "Confianza del Proveedor",
+      "confidenceDesc": "Señal de confianza devuelta por el proveedor. No se interpreta como probabilidad calibrada de que la acción seleccionada sea correcta.",
+      "marginTerm": "Margen Top-1 / Top-2",
+      "marginDesc": "El margen top-1 / top-2 es la diferencia numérica entre las dos probabilidades de acción más altas.",
+      "stabilityTerm": "Estabilidad en Elecciones Reiteradas",
+      "stabilityDesc": "Las evaluaciones repetidas muestran si un texto de entrada idéntico produjo elecciones de ruta iguales o mixtas en este experimento."
+    },
+    "guardrailTitle": "Interpretación Metodológica y Política de No Umbral",
+    "guardrailBody": "Varios estados de elección mixta en estas suites diagnósticas mostraron márgenes promedio reducidos (como V5U02 en 0.0705 o V8-C1 en 0.034). En estas ejecuciones registradas, V8-C2 mostró una única elección observada de SEARCH_CODE en 10 evaluaciones con un margen promedio de 0.284. Sin embargo, el estudio no estableció un umbral de margen universal, y una sola observación de bajo margen no es evidencia suficiente de inestabilidad. Las evaluaciones repetidas caracterizan comportamiento estocástico empírico en lugar de muestras independientes. La estabilidad en una sonda diagnóstica no implica corrección universal ni preparación para producción."
+  },
+  "ladder": {
+    "badge": "Estudio de Ablación",
+    "badge2": "Análisis de Formulación del Estado",
+    "title": "Cómo la Formulación del Estado Modela la Estabilidad de Enrutamiento",
+    "subtitle": "Explore seis variantes discretas evaluadas (C1–C6) para observar cómo explicitar la ubicación de la incertidumbre en la implementación coincidió con cambios en la estabilidad del enrutamiento.",
+    "testedVariants": "Variantes de Explicitud Evaluadas",
+    "contrastSub": "C1 → C2 Contraste de Descubrimiento Principal • C3–C6 Variantes Evaluadas Adicionales",
+    "discreteHint": "Variantes discretas de benchmark • No continuas",
+    "primaryContrast": "Contraste Principal:",
+    "additionalVariants": "Variantes Adicionales Evaluadas:",
+    "stateRepKicker": "REPRESENTACIÓN DEL ESTADO // {{id}}",
+    "promptCueBadge": "Pista del Prompt Evaluada",
+    "exactCueText": "Texto Exacto de la Pista Evaluada:",
+    "whatChanged": "¿Qué cambió en este estado?",
+    "observedOutcomeKicker": "RESULTADO OBSERVADO // {{runs}} EJECUCIONES",
+    "mixedChoicesBadge": "Elecciones Mixtas Observadas (20%)",
+    "singleChoiceBadge": "Elección Única Observada (0% Mixto)",
+    "ratioLabel": "Proporción SEARCH_CODE a ASK_USER: {{search}}% a {{ask}}%",
+    "avgConfidence": "Confianza Promedio",
+    "avgMargin": "Margen Promedio",
+    "mixedRate": "Tasa de Elección Mixta",
+    "observedBehavior": "Comportamiento Observado:",
+    "contextBadgeC1": "Contexto de Variante Observada",
+    "contextBadgeC2": "Transición Local Observada",
+    "contextBadgeOther": "Variante Adicional Evaluada",
+    "contextTextC1": "Se registraron elecciones mixtas en esta variante evaluada.",
+    "contextTextC2": "Transición local observada: las elecciones registradas pasaron de 8/2 en C1 a 10/0 en C2, mientras el margen promedio aumentó de 0.034 a 0.284.",
+    "contextTextOther": "Esta variante conservó una única elección observada de SEARCH_CODE a lo largo de las 10 ejecuciones registradas.",
+    "disclaimerTitle": "Alcance Metodológico y Límites de No Generalización",
+    "disclaimerBody": "En estas ejecuciones registradas, V8-C2 mostró una única elección observada de SEARCH_CODE en 10 evaluaciones con un margen promedio de 0.284. A través de estos estados evaluados, hacer más explícita la información de implementación no resuelta coincidió con un enrutamiento crecientemente estable hacia SEARCH_CODE en las ejecuciones registradas. Sin embargo, este fue un estudio diagnóstico controlado local. No establece una ley causal universal sobre enrutadores semánticos, no prueba que la redacción de prompts elimine universalmente la inestabilidad y no establece que un margen de 0.284 constituya una garantía operativa de corrección.",
+    "cFocus": {
+      "C1": "Únicamente requisito aprobado sin explicitar dónde radica la incertidumbre de implementación. El modelo enfrenta una frontera operativa ambigua entre inspeccionar código y preguntar al usuario.",
+      "C2": "Añade que la implementación no está discutida. Esto aclara que el comportamiento existe conceptualmente, pero su ubicación en código sigue siendo desconocida.",
+      "C3": "Declara explícitamente que no está claro dónde está implementado el comportamiento. Orienta directamente al agente hacia la inspección autónoma del código.",
+      "C4": "Declara que la implementación responsable del comportamiento es desconocida.",
+      "C5": "Declara que la implementación responsable del comportamiento no ha sido localizada.",
+      "C6": "Declara explícitamente que la implementación no ha sido localizada en el repositorio."
+    }
+  },
+  "timeline": {
+    "badge": "Secuencia de Investigación",
+    "badge2": "Progresión Empírica V1 → V8",
+    "title": "Cómo Evolucionó la Investigación: de V1 a V8",
+    "subtitle": "La investigación no comenzó con un estudio de frontera de decisión. Siga la secuencia de preguntas, observaciones empíricas e incertidumbres emergentes que motivaron cada experimento diagnóstico posterior.",
+    "phaseValidation": "Fase de Validación / Benchmark",
+    "phaseValidationDesc": "Evaluaciones orientadas a benchmark sobre suites congeladas que establecieron la capacidad base.",
+    "phaseDiagnostic": "Fase de Diagnóstico Adaptativo",
+    "phaseDiagnosticDesc": "Sondas dirigidas diseñadas para aislar el comportamiento de frontera local a partir de observaciones previas. No son conjuntos holdout intactos.",
+    "pivotKicker": "PIVOTE DE INVESTIGACIÓN",
+    "pivotTitle": "De la Validación General en Benchmark a los Diagnósticos Locales de Frontera",
+    "pivotDesc": "Tras alcanzar un 100% de acierto en el holdout V3, las evaluaciones de un solo intento dejaron abierta la duda de si la inestabilidad de decisión acechaba cerca de fronteras semánticas sutiles. La investigación pivotó de pruebas amplias hacia pares mínimos adversariales y eliminación de pistas léxicas.",
+    "milestoneSelectorLabel": "Seleccionar hito de investigación",
+    "layerQuestion": "PREGUNTA DE INVESTIGACIÓN",
+    "layerTest": "PRUEBA EXPERIMENTAL",
+    "layerObserved": "HALLAZGOS OBSERVADOS",
+    "layerNextQuestion": "SIGUIENTE PREGUNTA E INCERTIDUMBRE NO RESUELTA",
+    "jumpToNext": "Continuar al Siguiente Hito ({{id}})",
+    "keyboardHint": "Use las teclas de flecha izquierda / derecha para navegar entre hitos",
+    "milestones": {
+      "V1": {
+        "name": "Línea Base",
+        "phase": "validation",
+        "question": "¿Puede funcionar en absoluto la formulación de enrutamiento semántico de cinco acciones?",
+        "test": "Suite de enrutamiento base con 20 escenarios de ingeniería de software con marcadores léxicos estándar.",
+        "observed": "20 / 20 coincidencias exactas (100%). Confianza promedio: 0.9525. Latencia media de extremo a extremo: ~314.7 ms (media del proveedor: ~132 ms). Estimación histórica del costo de mercado en gateway: ~$0.000383 agregado para la suite.",
+        "nextQuestion": "¿Sobrevive la misma formulación de enrutamiento a distinciones semánticas más complejas sin degradación?"
+      },
+      "V2": {
+        "name": "Casos Complejos",
+        "phase": "validation",
+        "question": "¿Se mantiene la precisión del enrutamiento cuando las distinciones se vuelven más complejas?",
+        "test": "Suite más exigente de 30 casos utilizando las mismas definiciones congeladas de cinco acciones con mayor complejidad estructural.",
+        "observed": "30 / 30 coincidencias exactas (100%). Confianza promedio: 0.979. Latencia media de extremo a extremo: ~442 ms (media del proveedor: ~279.7 ms). Estimación histórica del costo de mercado en gateway: ~$0.000583 agregado.",
+        "nextQuestion": "¿Puede mantenerse la formulación en un holdout balanceado congelado y cómo se compara descriptivamente con enfoques alternativos?"
+      },
+      "V3": {
+        "name": "Holdout Balanceado Congelado",
+        "phase": "validation",
+        "question": "¿Se sostiene el rendimiento en una suite balanceada no vista?",
+        "test": "Holdout balanceado de 50 casos evaluado bajo criterios congelados junto a una línea base determinista por palabras clave, GPT-5-mini y Nemotron Ultra.",
+        "observed": "Jev: 50 / 50 correctos (100%). Línea base por reglas: 24 / 50 (48%). GPT-5-mini: 40 / 50 (80%). Nemotron Ultra: 48 / 50 éxito operativo, 47 / 48 corrección semántica entre peticiones exitosas (47 / 50 global). Media del proveedor en Jev: ~142 ms; mediana de extremo a extremo: ~292 ms (la media de ~3649 ms estuvo distorsionada por dos reintentos atípicos). Costo histórico en gateway: ~$0.000965 agregado. Nota: Las bases de latencia y precios no estuvieron normalizadas entre proveedores; esto no constituye una tabla de posiciones universal.",
+        "nextQuestion": "Si cada caso del holdout en Jev fue correcto en una sola evaluación, ¿podría aún esconderse incertidumbre cerca de fronteras semánticas locales?"
+      },
+      "V4": {
+        "name": "Pares Mínimos",
+        "phase": "diagnostic",
+        "question": "¿Pueden cambios semánticos mínimos exigir diferentes acciones de enrutamiento?",
+        "test": "40 casos diagnósticos de pares mínimos adversariales donde pequeñas alteraciones operativas cambian deliberadamente la herramienta apropiada.",
+        "observed": "40 intentos; 39 operativamente exitosos (1 fallo de infraestructura). 39 / 39 semánticamente correctos entre peticiones exitosas (100%). Confianza promedio: 0.9646.",
+        "nextQuestion": "¿Qué sucede cuando se eliminan las pistas léxicas obvias?"
+      },
+      "V5": {
+        "name": "Casos sin Pistas Léxicas",
+        "phase": "diagnostic",
+        "question": "¿Sigue el enrutamiento respondiendo a distinciones semánticas cuando se eliminan pistas evidentes?",
+        "test": "40 casos desprovistos de marcadores clave explícitos y con evidencia contextual contrapuesta.",
+        "observed": "40 intentos; 39 operativamente exitosos (1 tiempo de espera de infraestructura). 39 / 39 semánticamente correctos entre peticiones exitosas (100%). Confianza promedio: ~0.9356. Notablemente, el estado V5U02 exhibió una separación de candidatos inusualmente baja.",
+        "nextQuestion": "Un estado particular, V5U02, exhibió una separación reducida entre candidatos. ¿Qué ocurre si ese EXACTO MISMO estado se evalúa repetidamente?"
+      },
+      "V5_repeat": {
+        "name": "Evaluación Reiterada de V5U02",
+        "phase": "diagnostic",
+        "question": "¿Es estable la elección de ruta cuando se evalúa repetidamente un texto de entrada idéntico?",
+        "test": "20 evaluaciones idénticas reiteradas del estado V5U02 bajo idénticas condiciones de inferencia.",
+        "observed": "14 evaluaciones enrutadas a SEARCH_CODE; 6 enrutadas a ASK_USER (distribución 70% / 30%). Confianza promedio: 0.315. Margen promedio top-1 / top-2: 0.0705. Las evaluaciones idénticas reiteradas caracterizan comportamiento estocástico empírico, no muestras estadísticas independientes.",
+        "nextQuestion": "¿Dónde se manifiesta esta frontera local SEARCH_CODE / ASK_USER bajo redacciones próximas?"
+      },
+      "V6": {
+        "name": "Mapeo de Frontera",
+        "phase": "diagnostic",
+        "question": "¿Dónde se manifiesta la frontera semántica local bajo redacciones próximas?",
+        "test": "Suite paramétrica de frontera que mapea la separación de candidatos ante variaciones de redacción contiguas, destacando el estado V6-B3.",
+        "observed": "Estado V6-B3 (redacción indirecta de documentación): 10 evaluaciones produjeron 6 SEARCH_CODE / 4 ASK_USER. Confianza promedio: 0.317. Margen promedio: 0.068.",
+        "nextQuestion": "¿Pueden distinciones de redacción más específicas aislar qué factor está influyendo?"
+      },
+      "V7": {
+        "name": "Distinciones Locales de Redacción",
+        "phase": "diagnostic",
+        "question": "¿Qué distinciones locales de redacción coinciden con comportamientos de enrutamiento reiterado diferentes?",
+        "test": "Contraste específico que aísla declaraciones de política aprobada frente a pistas de implementación, destacando el estado V7-A5.",
+        "observed": "Estado V7-A5 (únicamente regla aprobada): 10 evaluaciones produjeron 7 SEARCH_CODE / 3 ASK_USER (confianza promedio 0.248, margen 0.047). En contraste, añadir incertidumbre explícita sobre la ubicación de implementación en estados contiguos produjo SEARCH_CODE en 10 / 10 evaluaciones registradas.",
+        "nextQuestion": "¿Qué ocurre si la explicitud de la implementación se varía de manera sistemática?"
+      },
+      "V8": {
+        "name": "Explicitud de la Implementación",
+        "phase": "diagnostic",
+        "question": "¿Cómo se relaciona la representación de información no resuelta de implementación con el comportamiento de enrutamiento observado?",
+        "test": "Seis variantes discretas evaluadas (C1–C6) que articulan sistemáticamente la ubicación desconocida de la implementación.",
+        "observed": "C1 (solo regla aprobada): 8 SEARCH / 2 ASK (confianza prom. 0.242, margen 0.034, 20% mixto). C2 (no discutida): 10 SEARCH / 0 ASK (confianza prom. 0.534, margen 0.284, 0% mixto). C3 a C6: 10 / 0 SEARCH_CODE (confianza 0.98–1.00, margen 0.98–1.00, 0% mixto). En estos estados evaluados, una representación crecientemente explícita coincidió con un enrutamiento más estable hacia SEARCH_CODE en las ejecuciones registradas. Este diagnóstico local no establece una ley causal universal.",
+        "nextQuestion": "¿Qué implicaciones de ingeniería podrían tener estos hallazgos para una futura arquitectura de agentes de software?"
+      }
+    }
+  },
+  "governor": {
+    "badge": "Arquitectura Futura Conceptual",
+    "badge2": "Aún no Calibrada para Producción",
+    "title": "Gobernador de Incertidumbre y Arquitectura de Ejecución",
+    "subtitle": "Trasladando los hallazgos empíricos de frontera a una arquitectura de agente de software resiliente. Un sistema autónomo debe distinguir entre seleccionar una acción candidata y poseer permiso determinista para ejecutarla.",
+    "statusNotice": "Estado Metodológico: Arquitectura Conceptual • Aún no Calibrada para Producción",
+    "corePrincipleTag": "PRINCIPIO ARQUITECTÓNICO FUNDAMENTAL",
+    "corePrincipleTitle": "Decisión de Enrutamiento ≠ Permiso de Ejecución",
+    "corePrincipleDesc": "El enrutador semántico evalúa el contexto operativo para recomendar una acción de herramienta candidata. Dicha evaluación no otorga autoridad de ejecución. Una capa determinista de políticas de seguridad y permisos opera aguas abajo y de forma independiente.",
+    "modesLabel": "Explorar Recorrido Conceptual:",
+    "modeClear": "Ruta Ilustrativa de Continuación",
+    "modeClearSub": "Flujo hipotético de ejecución estándar (ilustrativo)",
+    "modeUncertain": "Ruta Ilustrativa de Mitigación",
+    "modeUncertainSub": "Flujo hipotético de contingencia arquitectónica (ilustrativo)",
+    "walkthroughDisclaimer": "Recorrido conceptual — no constituye una medición experimental ni una regla de decisión en producción. No se infiere ningún umbral universal de margen.",
+    "proceedFlowIndicator": "Flujo de Continuación (Ilustrativo)",
+    "fallbackFlowIndicator": "Flujo de Contingencia (Ilustrativo)",
+    "nodes": {
+      "state": {
+        "title": "Estado del Agente / Scratchpad",
+        "role": "Contexto de Entrada",
+        "desc": "Agrega contexto del espacio de trabajo, rutas de archivos, errores recientes y solicitudes del usuario."
+      },
+      "evaluator": {
+        "title": "Evaluador Semántico Jev",
+        "role": "Motor de Inferencia",
+        "desc": "Clasifica el contexto en acciones candidatas de enrutamiento y genera señales de distribución."
+      },
+      "signals": {
+        "title": "Acción Seleccionada + Señales",
+        "role": "Salida de Enrutamiento",
+        "desc": "Emite la acción candidata principal junto con la confianza bruta y el margen de separación entre candidatos."
+      },
+      "policy": {
+        "title": "Política de Incertidumbre",
+        "role": "Compuerta del Gobernador",
+        "desc": "Evalúa separación de candidatos, riesgo de acción, reversibilidad y calibración del dominio. No utiliza umbrales fijos universales."
+      },
+      "proceed": {
+        "title": "Ruta Ilustrativa de Continuación",
+        "role": "Flujo Estándar",
+        "desc": "Escenario hipotético donde la separación de candidatos satisface los criterios operativos específicos del dominio y continúa hacia las verificaciones de permisos."
+      },
+      "permission": {
+        "title": "Política Determinista de Seguridad y Permisos",
+        "role": "Guardia de Ejecución",
+        "desc": "Verificación independiente: alcance de credenciales, bloqueos de escritura, políticas de sandbox y consentimiento del usuario."
+      },
+      "execution": {
+        "title": "Ejecución de Herramienta",
+        "role": "Invocación de Herramienta",
+        "desc": "Ejecuta SEARCH_CODE, READ_FILE, RUN_TESTS o QUERY_DATABASE en el entorno objetivo."
+      },
+      "fallback": {
+        "title": "Ruta Ilustrativa de Mitigación",
+        "role": "Flujo de Mitigación",
+        "desc": "Escenario hipotético donde la ambigüedad de candidatos, el riesgo operativo o las políticas del dominio activan mitigaciones arquitectónicas."
+      }
+    },
+    "fallbacks": {
+      "title": "Opciones Arquitectónicas de Contingencia (Conceptos no Calibrados):",
+      "opt1Title": "1. Aclarar y Enriquecer el Estado",
+      "opt1Desc": "Complementar el prompt con consultas explícitas sobre información faltante o pistas del espacio de trabajo antes de re-enrutar.",
+      "opt2Title": "2. Verificación / Segunda Pasada",
+      "opt2Desc": "Ejecutar una pasada de verificación independiente o una comprobación de auto-consistencia en ensamble.",
+      "opt3Title": "3. Escalación Humana (ASK_USER)",
+      "opt3Desc": "Consultar al desarrollador cuando la ambigüedad involucre requisitos de negocio que no puedan descubrirse en el código."
+    },
+    "policySignals": {
+      "title": "Factores de Decisión en la Política de Incertidumbre:",
+      "factor1": "Señales de enrutamiento devueltas por el proveedor",
+      "factor2": "Separación de candidatos / Margen Top-1 vs Top-2",
+      "factor3": "Reversibilidad de la acción y radio de impacto",
+      "factor4": "Calibración sobre el dominio objetivo y contexto disponible"
+    },
+    "mandatoryDisclosure": "Las políticas de incertidumbre en producción requieren calibración sobre el dominio objetivo. Este estudio no estableció un umbral universal de confianza ni de margen."
+  }
+}

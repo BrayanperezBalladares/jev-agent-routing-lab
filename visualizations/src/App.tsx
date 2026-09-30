@@ -1,88 +1,120 @@
-import React, { Suspense } from 'react'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import './App.css'
+import { ThemeProvider } from './theme'
+import { HeaderNav } from './components/HeaderNav'
 import { Hero } from './components/Hero'
-import { ResearchOverview } from './components/ResearchOverview'
-import { ConfidenceStabilitySection } from './components/ConfidenceStabilitySection'
-import { ResearchConclusion } from './components/ResearchConclusion'
+import {
+  AgentScenarioSandbox,
+  HistoricRunReplay,
+  MarginDeconstructor,
+  ExplicitnessLadder,
+  InvestigativeProgressionTimeline,
+  UncertaintyGovernorSchema,
+} from './components/story'
+import { DeepDataLab } from './components/lab/DeepDataLab'
 import { MethodologyNotes } from './components/MethodologyNotes'
+import { ResearchConclusion } from './components/ResearchConclusion'
 
-const HoldoutComparisonChart = React.lazy(
-  () => import('./components/HoldoutComparisonChart')
-)
-const BenchmarkProgressionChart = React.lazy(
-  () => import('./components/BenchmarkProgressionChart')
-)
-const DecisionBoundaryChart = React.lazy(
-  () => import('./components/DecisionBoundaryChart')
-)
-const V8ExplicitnessChart = React.lazy(
-  () => import('./components/V8ExplicitnessChart')
-)
+const DashboardContent: React.FC = () => {
+  const { t } = useTranslation(['common'])
 
-const ChartLoadingFallback: React.FC = () => (
-  <div className="chart-card" style={{ minHeight: 380, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-    <span className="badge badge-accent">Loading Research Visualization...</span>
-  </div>
-)
-
-export const App: React.FC = () => {
   return (
     <div className="dashboard-container">
-      {/* Sticky Quick-Navigation Header */}
-      <nav className="app-header-nav" aria-label="Dashboard Section Navigation">
-        <div className="nav-brand-group">
-          <span className="badge badge-accent">JEV LAB</span>
-          <span className="nav-brand-title">Agent Routing Research</span>
-        </div>
-        <div className="nav-links">
-          <a href="#hero" className="nav-anchor">Hero</a>
-          <a href="#research-overview" className="nav-anchor">Overview</a>
-          <a href="#holdout-comparison" className="nav-anchor">Holdout</a>
-          <a href="#benchmark-progression" className="nav-anchor">Progression</a>
-          <a href="#decision-boundary" className="nav-anchor">Boundary</a>
-          <a href="#v8-explicitness" className="nav-anchor">V8 Ablation</a>
-          <a href="#confidence-stability" className="nav-anchor">Confidence & Margin</a>
-          <a href="#conclusions" className="nav-anchor">Conclusions</a>
-          <a href="#methodology" className="nav-anchor">Methodology</a>
-        </div>
-      </nav>
+      {/* Monograph Sticky Header with Theme & Language Controls */}
+      <HeaderNav />
 
-      {/* Main Research Content (Order 1 through 9) */}
+      {/* Main Research Content (Interactive Narrative Flow) */}
       <main id="main-content" style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-        {/* 1. Hero */}
+        {/* 1. Hero: Minimal Narrative Hook */}
         <Hero />
 
-        {/* 2. Research Overview & Scope */}
-        <ResearchOverview />
+        {/* Phase 1 Story: Step 1 — Interactive Agent Scenario Sandbox */}
+        <AgentScenarioSandbox />
 
-        {/* 3. V3 Holdout Router Comparison */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <HoldoutComparisonChart />
-        </Suspense>
+        {/* Narrative Transition Banner 1 */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step1to2Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step1to2Caption')}
+          </p>
+        </div>
 
-        {/* 4. Jev Benchmark Progression */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <BenchmarkProgressionChart />
-        </Suspense>
+        {/* Phase 1 Story: Step 2 — Historic Run Replay (V5U02) */}
+        <HistoricRunReplay />
 
-        {/* 5. ASK_USER ↔ SEARCH_CODE Decision Boundary */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <DecisionBoundaryChart />
-        </Suspense>
+        {/* Phase 2 Transition Banner: Deconstructing the Boundary */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step2to3Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step2to3Caption')}
+          </p>
+        </div>
 
-        {/* 6. V8 Implementation-Explicitness Analysis */}
-        <Suspense fallback={<ChartLoadingFallback />}>
-          <V8ExplicitnessChart />
-        </Suspense>
+        {/* Phase 2 Story: Step 3 — Margin Deconstructor */}
+        <MarginDeconstructor />
 
-        {/* 7. Confidence, Margin, and Stability */}
-        <ConfidenceStabilitySection />
+        {/* Phase 2 Transition Banner: Representation and Formulation */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step3to4Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step3to4Caption')}
+          </p>
+        </div>
 
-        {/* 8. Research Conclusions */}
-        <ResearchConclusion />
+        {/* Phase 2 Story: Step 4 — Explicitness Ladder (C1–C6) */}
+        <ExplicitnessLadder />
 
-        {/* 9. Methodology and Limitations */}
+        {/* Phase 3 Transition Banner: Investigative Trail */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step4to5Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step4to5Caption')}
+          </p>
+        </div>
+
+        {/* Phase 3 Story: Step 5 — Investigative Progression Timeline (V1–V8) */}
+        <InvestigativeProgressionTimeline />
+
+        {/* Phase 3 Transition Banner: Future Agent Architecture */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step5to6Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step5to6Caption')}
+          </p>
+        </div>
+
+        {/* Phase 3 Story: Step 6 — Uncertainty Governor Schema */}
+        <UncertaintyGovernorSchema />
+
+        {/* Primary Insight Transition to Deep Data Lab */}
+        <div className="story-transition-banner" role="note" aria-label="Research progression note">
+          <div className="transition-lead">
+            {t('transitions.deepDataLabLead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.deepDataLabCaption')}
+          </p>
+        </div>
+
+        {/* Phase 4: Chapter V — Deep Data Lab (Question-Driven Analytical Workbench) */}
+        <DeepDataLab />
+
+        {/* Chapter VI — Methodological Constraints & Research Reference */}
         <MethodologyNotes />
+
+        {/* Chapter VII — Research Conclusions & Synthesis */}
+        <ResearchConclusion />
       </main>
 
       {/* Dashboard Footer */}
@@ -95,6 +127,14 @@ export const App: React.FC = () => {
         </div>
       </footer>
     </div>
+  )
+}
+
+export const App: React.FC = () => {
+  return (
+    <ThemeProvider>
+      <DashboardContent />
+    </ThemeProvider>
   )
 }
 

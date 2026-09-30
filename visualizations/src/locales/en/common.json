@@ -1,0 +1,64 @@
+{
+  "brand": {
+    "badge": "JEV LAB",
+    "title": "Agent Routing Research",
+    "monograph": "Research Monograph"
+  },
+  "nav": {
+    "ariaLabel": "Dashboard Section Navigation",
+    "hero": "Introduction",
+    "sandbox": "Scenario Sandbox",
+    "replay": "Historic Replay",
+    "margin": "Margin Deconstructor",
+    "ladder": "Explicitness Ladder",
+    "overview": "Overview",
+    "holdout": "Holdout",
+    "progression": "Progression",
+    "boundary": "Boundary",
+    "ablation": "V8 Ablation",
+    "confidence": "Confidence & Margin",
+    "conclusions": "Conclusions",
+    "methodology": "Methodology",
+    "chapterStory": "Story",
+    "chapterBoundary": "Boundary",
+    "chapterInvestigation": "Investigation",
+    "chapterArchitecture": "Architecture",
+    "chapterDataLab": "Data Lab",
+    "chapterMethodology": "Methodology"
+  },
+  "controls": {
+    "theme": {
+      "ariaLabel": "Theme selection",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "language": {
+      "ariaLabel": "Language selection",
+      "en": "EN",
+      "es": "ES"
+    }
+  },
+  "common": {
+    "loading": "Loading Research Visualization...",
+    "canonicalLabel": "Canonical Source of Record (English)",
+    "readingTranslationLabel": "Reading Translation",
+    "note": "Note",
+    "warning": "Warning",
+    "keyTakeaways": "Key Takeaways"
+  },
+  "transitions": {
+    "step1to2Lead": "A correct one-shot decision still leaves another question: is that decision stable?",
+    "step1to2Caption": "In production agent workflows, single-pass evaluations can mask underlying sensitivity. When ambiguous operational states are presented repeatedly, how consistently does a semantic evaluator choose the same action?",
+    "step2to3Lead": "So what does a result like this tell us about the decision?",
+    "step2to3Caption": "To diagnose why routing alternates between SEARCH_CODE and ASK_USER, we must deconstruct the difference between provider-returned confidence, candidate margin separation, and observed repeated-choice stability.",
+    "step3to4Lead": "What happens when the unresolved implementation state is expressed more explicitly?",
+    "step3to4Caption": "To study how agent-state representation relates to boundary sensitivity, the V8 ablation tests six graduated formulations of the same scenario, from unstated operational doubts (C1) to an explicit question addressed to the user (C6).",
+    "step4to5Lead": "That boundary was not discovered in one experiment.",
+    "step4to5Caption": "Follow the investigative trail from the initial five-action validation to the adaptive minimal pairs and cue-stripping experiments that eventually led to the boundary study.",
+    "step5to6Lead": "What should an agent architecture do when its router is uncertain?",
+    "step5to6Caption": "The empirical investigation showed where routing uncertainty can appear near semantic boundaries. The next engineering challenge is translating those insights into a resilient software-agent architecture.",
+    "deepDataLabLead": "With the experiential foundations established, examine the full research datasets.",
+    "deepDataLabCaption": "Explore how specialized routing performs across stationary holdouts, diagnostic stress suites, and implementation ablations in the deep analytical sections below."
+  }
+}
