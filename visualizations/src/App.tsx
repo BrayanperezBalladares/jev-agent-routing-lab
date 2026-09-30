@@ -10,6 +10,8 @@ import {
   HistoricRunReplay,
   MarginDeconstructor,
   ExplicitnessLadder,
+  InvestigativeProgressionTimeline,
+  UncertaintyGovernorSchema,
 } from './components/story'
 import { ConfidenceStabilitySection } from './components/ConfidenceStabilitySection'
 import { ResearchConclusion } from './components/ResearchConclusion'
@@ -92,14 +94,39 @@ const DashboardContent: React.FC = () => {
         {/* Phase 2 Story: Step 4 — Explicitness Ladder (C1–C6) */}
         <ExplicitnessLadder />
 
+        {/* Phase 3 Transition Banner: Investigative Trail */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step4to5Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step4to5Caption')}
+          </p>
+        </div>
+
+        {/* Phase 3 Story: Step 5 — Investigative Progression Timeline (V1–V8) */}
+        <InvestigativeProgressionTimeline />
+
+        {/* Phase 3 Transition Banner: Future Agent Architecture */}
+        <div className="story-transition-banner" role="note" aria-label="Research transition note">
+          <div className="transition-lead">
+            {t('transitions.step5to6Lead')}
+          </div>
+          <p className="transition-caption">
+            {t('transitions.step5to6Caption')}
+          </p>
+        </div>
+
+        {/* Phase 3 Story: Step 6 — Uncertainty Governor Schema */}
+        <UncertaintyGovernorSchema />
+
         {/* Primary Insight Transition to Deep Dashboard */}
         <div className="story-transition-banner" role="note" aria-label="Research progression note">
           <div className="transition-lead">
-            {t('common.keyTakeaways')}: One-shot accuracy can hide routing instability near semantic decision boundaries.
+            {t('transitions.deepDataLabLead')}
           </div>
           <p className="transition-caption">
-            With the experiential foundations established, examine how specialized routing performs across stationary holdouts,
-            diagnostic stress suites, and full research datasets in the deep analytical sections below.
+            {t('transitions.deepDataLabCaption')}
           </p>
         </div>
 

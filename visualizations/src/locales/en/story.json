@@ -161,5 +161,176 @@
       "C5": "States that the implementation responsible for the behavior has not been located.",
       "C6": "Explicitly states that the implementation has not been located in the repository."
     }
+  },
+  "timeline": {
+    "badge": "Investigative Sequence",
+    "badge2": "V1 → V8 Empirical Progression",
+    "title": "How the Investigation Evolved: V1 to V8",
+    "subtitle": "The research did not begin with a decision-boundary study. Follow the sequence of questions, empirical observations, and emerging uncertainties that forced each subsequent diagnostic experiment.",
+    "phaseValidation": "Validation / Benchmark Phase",
+    "phaseValidationDesc": "Benchmark-oriented evaluations on frozen suites establishing baseline capability.",
+    "phaseDiagnostic": "Adaptive Diagnostic Phase",
+    "phaseDiagnosticDesc": "Targeted probes designed to isolate local boundary behavior based on earlier run observations. Not untouched holdouts.",
+    "pivotKicker": "INVESTIGATIVE PIVOT",
+    "pivotTitle": "From General Benchmark Validation to Local Boundary Diagnostics",
+    "pivotDesc": "After 100% accuracy on the V3 holdout, single-pass evaluations left open whether decision instability was lurking near subtle semantic boundaries. The research pivoted from broader testing to adversarial minimal pairs and cue-stripping.",
+    "milestoneSelectorLabel": "Select investigative milestone",
+    "layerQuestion": "RESEARCH QUESTION",
+    "layerTest": "EXPERIMENTAL TEST",
+    "layerObserved": "OBSERVED FINDINGS",
+    "layerNextQuestion": "NEXT QUESTION & UNRESOLVED UNCERTAINTY",
+    "jumpToNext": "Proceed to Next Milestone ({{id}})",
+    "keyboardHint": "Use Left / Right arrow keys to navigate milestones",
+    "milestones": {
+      "V1": {
+        "name": "Baseline",
+        "phase": "validation",
+        "question": "Can the five-action semantic-routing formulation work at all?",
+        "test": "Baseline routing suite comprising 20 software-engineering scenarios with standard lexical markers.",
+        "observed": "20 / 20 exact matches (100%). Average confidence: 0.9525. Mean end-to-end latency: ~314.7 ms (provider mean: ~132 ms). Historical gateway market-cost estimate: ~$0.000383 aggregate for the suite.",
+        "nextQuestion": "Does the same routing formulation survive harder semantic distinctions without degradation?"
+      },
+      "V2": {
+        "name": "Hard Cases",
+        "phase": "validation",
+        "question": "Does routing remain accurate when distinctions become harder?",
+        "test": "Harder 30-case suite using the same frozen five-action definitions with increased structural complexity.",
+        "observed": "30 / 30 exact matches (100%). Average confidence: 0.979. Mean end-to-end latency: ~442 ms (provider mean: ~279.7 ms). Historical gateway market-cost estimate: ~$0.000583 aggregate.",
+        "nextQuestion": "Can the formulation hold on a balanced frozen holdout and how does it compare descriptively with alternative routing approaches?"
+      },
+      "V3": {
+        "name": "Balanced Frozen Holdout",
+        "phase": "validation",
+        "question": "Does performance hold on a balanced unseen suite?",
+        "test": "Balanced 50-case holdout evaluated under frozen criteria alongside a deterministic keyword baseline, GPT-5-mini, and Nemotron Ultra.",
+        "observed": "Jev: 50 / 50 correct (100%). Rule baseline: 24 / 50 (48%). GPT-5-mini: 40 / 50 (80%). Nemotron Ultra: 48 / 50 operational success, 47 / 48 semantic correctness among successful requests (47 / 50 overall). Jev provider mean: ~142 ms; end-to-end median: ~292 ms (mean: ~3649 ms was distorted by two retry outliers). Historical gateway cost: ~$0.000965 aggregate. Note: Latency and pricing bases were not normalized across providers; this is not a universal leaderboard.",
+        "nextQuestion": "If every Jev holdout case was correct in a single evaluation, could uncertainty still be hiding near local semantic boundaries?"
+      },
+      "V4": {
+        "name": "Minimal Pairs",
+        "phase": "diagnostic",
+        "question": "Can small semantic changes require different routing actions?",
+        "test": "40 minimal-pair diagnostic cases where small operational alterations deliberately switch the appropriate routing tool.",
+        "observed": "40 attempts; 39 operationally successful (1 infrastructure failure). 39 / 39 semantically correct among successful requests (100%). Average confidence: 0.9646.",
+        "nextQuestion": "What happens when obvious lexical cues are removed?"
+      },
+      "V5": {
+        "name": "Cue-Stripped Cases",
+        "phase": "diagnostic",
+        "question": "Does routing still follow semantic distinctions when obvious cues are removed?",
+        "test": "40 cue-stripped cases with explicit keyword markers removed and competing contextual cues introduced.",
+        "observed": "40 attempts; 39 operationally successful (1 infrastructure timeout). 39 / 39 semantically correct among successful requests (100%). Average confidence: ~0.9356. Notably, state V5U02 exhibited unusually low candidate separation.",
+        "nextQuestion": "One particular state, V5U02, exhibited low candidate separation. What happens if the exact same state is evaluated repeatedly?"
+      },
+      "V5_repeat": {
+        "name": "Repeated Evaluation of V5U02",
+        "phase": "diagnostic",
+        "question": "Is the routing choice stable when identical input text is evaluated repeatedly?",
+        "test": "20 identical repeated evaluations of state V5U02 under identical inference conditions.",
+        "observed": "14 evaluations routed to SEARCH_CODE; 6 routed to ASK_USER (70% / 30% split). Average confidence: 0.315. Average top-1 / top-2 margin: 0.0705. Repeated identical runs characterize empirical stochastic behavior, not independent statistical samples.",
+        "nextQuestion": "Where does this local SEARCH_CODE / ASK_USER boundary appear under nearby wording?"
+      },
+      "V6": {
+        "name": "Boundary Mapping",
+        "phase": "diagnostic",
+        "question": "Where does the local semantic boundary appear under nearby wording?",
+        "test": "Parametric boundary suite mapping candidate separation across adjacent wording variations, highlighting state V6-B3.",
+        "observed": "State V6-B3 (indirect documentation wording): 10 evaluations produced 6 SEARCH_CODE / 4 ASK_USER. Average confidence: 0.317. Average margin: 0.068.",
+        "nextQuestion": "Can more specific wording distinctions isolate what is changing?"
+      },
+      "V7": {
+        "name": "Local Wording Distinctions",
+        "phase": "diagnostic",
+        "question": "Which local wording distinctions coincide with different repeated routing behavior?",
+        "test": "Targeted contrast isolating approved policy statements from implementation cues, highlighting state V7-A5.",
+        "observed": "State V7-A5 (approved rule only): 10 evaluations produced 7 SEARCH_CODE / 3 ASK_USER (avg confidence 0.248, margin 0.047). In contrast, adding explicit implementation-location uncertainty in neighboring states produced SEARCH_CODE in 10 / 10 recorded evaluations.",
+        "nextQuestion": "What happens if implementation explicitness is varied systematically?"
+      },
+      "V8": {
+        "name": "Implementation Explicitness",
+        "phase": "diagnostic",
+        "question": "How does representation of unresolved implementation information relate to observed routing behavior?",
+        "test": "Six discrete tested variants (C1–C6) systematically articulating missing implementation location.",
+        "observed": "C1 (approved rule only): 8 SEARCH / 2 ASK (avg confidence 0.242, margin 0.034, 20% mixed). C2 (not discussed): 10 SEARCH / 0 ASK (avg confidence 0.534, margin 0.284, 0% mixed). C3 through C6: 10 / 0 SEARCH_CODE (confidence 0.98–1.00, margin 0.98–1.00, 0% mixed). Across these tested states, increasingly explicit representation coincided with increasingly stable SEARCH_CODE routing in recorded runs. This local diagnostic does not establish a universal causal law.",
+        "nextQuestion": "What engineering implications could these findings have for a future software-agent architecture?"
+      }
+    }
+  },
+  "governor": {
+    "badge": "Conceptual Future Architecture",
+    "badge2": "Not Yet Production-Calibrated",
+    "title": "Uncertainty Governor & Execution Architecture",
+    "subtitle": "Translating empirical boundary findings into a resilient software-agent architecture. An autonomous system must distinguish between selecting a candidate action and possessing deterministic permission to execute it.",
+    "statusNotice": "Methodological Status: Conceptual Architecture • Not Yet Production-Calibrated",
+    "corePrincipleTag": "CORE ARCHITECTURAL PRINCIPLE",
+    "corePrincipleTitle": "Routing Decision ≠ Permission to Execute",
+    "corePrincipleDesc": "The semantic router evaluates operational context to recommend a candidate tool action. That evaluation does not grant execution authority. A deterministic permission and safety policy layer remains downstream and independent.",
+    "modesLabel": "Explore Conceptual Walkthrough:",
+    "modeClear": "Illustrative Proceed Path",
+    "modeClearSub": "Hypothetical unconstrained execution flow (illustrative)",
+    "modeUncertain": "Illustrative Fallback Path",
+    "modeUncertainSub": "Hypothetical architectural mitigation flow (illustrative)",
+    "walkthroughDisclaimer": "Conceptual walkthrough — not an experimental measurement or production decision rule. No universal margin threshold is implied.",
+    "proceedFlowIndicator": "Proceed Flow (Illustrative)",
+    "fallbackFlowIndicator": "Fallback Flow (Illustrative)",
+    "nodes": {
+      "state": {
+        "title": "Agent State / Scratchpad",
+        "role": "Input Context",
+        "desc": "Aggregates workspace context, file paths, recent errors, and user prompts."
+      },
+      "evaluator": {
+        "title": "Jev Semantic Evaluator",
+        "role": "Inference Engine",
+        "desc": "Classifies context into candidate routing actions and computes distribution signals."
+      },
+      "signals": {
+        "title": "Selected Action + Signals",
+        "role": "Routing Output",
+        "desc": "Emits top candidate action alongside raw confidence and candidate margin separation."
+      },
+      "policy": {
+        "title": "Uncertainty Policy",
+        "role": "Governor Gate",
+        "desc": "Assesses candidate separation, action risk, reversibility, and target calibration. Does not use fixed universal thresholds."
+      },
+      "proceed": {
+        "title": "Illustrative Proceed Path",
+        "role": "Standard Execution Flow",
+        "desc": "Hypothetical scenario where candidate separation satisfies domain-specific operational criteria and continues toward permission checks."
+      },
+      "permission": {
+        "title": "Deterministic Safety & Permission Policy",
+        "role": "Execution Guard",
+        "desc": "Independent verification: credential scope, write locks, sandbox policies, and user consent."
+      },
+      "execution": {
+        "title": "Tool Execution",
+        "role": "Tool Invocation",
+        "desc": "Executes SEARCH_CODE, READ_FILE, RUN_TESTS, or QUERY_DATABASE in the target environment."
+      },
+      "fallback": {
+        "title": "Illustrative Fallback Path",
+        "role": "Mitigation Flow",
+        "desc": "Hypothetical scenario where candidate ambiguity, operational risk, or domain policy triggers architectural mitigations."
+      }
+    },
+    "fallbacks": {
+      "title": "Architectural Fallback Options (Non-Calibrated Concepts):",
+      "opt1Title": "1. Clarify & Enrich State",
+      "opt1Desc": "Augment prompt with explicit missing-information queries or workspace cues before re-routing.",
+      "opt2Title": "2. Verification / Second Pass",
+      "opt2Desc": "Execute an independent verification pass or ensemble self-consistency check.",
+      "opt3Title": "3. Human Escalation (ASK_USER)",
+      "opt3Desc": "Prompt the developer when ambiguity involves business requirements that cannot be discovered in code."
+    },
+    "policySignals": {
+      "title": "Uncertainty Policy Decision Factors:",
+      "factor1": "Provider-returned routing signals",
+      "factor2": "Candidate separation / Top-1 vs Top-2 margin",
+      "factor3": "Action reversibility & blast radius",
+      "factor4": "Target-domain calibration & context availability"
+    },
+    "mandatoryDisclosure": "Production uncertainty policies require calibration on the target domain. This study did not establish a universal confidence or margin threshold."
   }
 }

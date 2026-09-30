@@ -18,7 +18,13 @@
     "ablation": "Ablación V8",
     "confidence": "Confianza y Margen",
     "conclusions": "Conclusiones",
-    "methodology": "Metodología"
+    "methodology": "Metodología",
+    "chapterStory": "Historia",
+    "chapterBoundary": "Frontera",
+    "chapterInvestigation": "Investigación",
+    "chapterArchitecture": "Arquitectura",
+    "chapterDataLab": "Laboratorio",
+    "chapterMethodology": "Metodología"
   },
   "controls": {
     "theme": {
@@ -47,6 +53,12 @@
     "step2to3Lead": "¿Qué nos revela exactamente un resultado como este sobre la decisión?",
     "step2to3Caption": "Para diagnosticar por qué el enrutamiento alterna entre SEARCH_CODE y ASK_USER, debemos descomponer la diferencia entre la confianza devuelta por el proveedor, la separación de margen entre candidatos y la estabilidad observada en elecciones reiteradas.",
     "step3to4Lead": "¿Qué ocurre cuando el estado de implementación no resuelto se expresa con mayor explicitud?",
-    "step3to4Caption": "Para estudiar cómo la formulación del estado influye en la sensibilidad de frontera, la ablación V8 evalúa seis formulaciones graduales del mismo escenario, desde dudas operativas tácitas (C1) hasta una pregunta explícita dirigida al usuario (C6)."
+    "step3to4Caption": "Para estudiar cómo la formulación del estado influye en la sensibilidad de frontera, la ablación V8 evalúa seis formulaciones graduales del mismo escenario, desde dudas operativas tácitas (C1) hasta una pregunta explícita dirigida al usuario (C6).",
+    "step4to5Lead": "Esa frontera no se descubrió en un único experimento.",
+    "step4to5Caption": "Siga el rastro de la investigación desde la validación inicial de cinco acciones hasta los pares mínimos adaptativos y experimentos de eliminación de pistas que finalmente condujeron al estudio de frontera.",
+    "step5to6Lead": "¿Qué debería hacer la arquitectura de un agente cuando su enrutador tiene incertidumbre?",
+    "step5to6Caption": "La investigación empírica evidenció dónde puede surgir la incertidumbre de enrutamiento cerca de fronteras semánticas. El siguiente reto de ingeniería consiste en trasladar estos hallazgos a una arquitectura de agente de software resiliente.",
+    "deepDataLabLead": "Con los fundamentos empíricos establecidos, examine los conjuntos de datos completos.",
+    "deepDataLabCaption": "Explore el desempeño del enrutamiento especializado frente a holdouts estacionarios, suites de estrés diagnóstico y ablaciones de implementación en las secciones analíticas a continuación."
   }
 }

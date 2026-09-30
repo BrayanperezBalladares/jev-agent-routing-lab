@@ -22,19 +22,12 @@ export const HeaderNav: React.FC = () => {
       </div>
 
       <nav className="nav-links" aria-label={t('nav.ariaLabel')}>
-        <a href="#hero" className="nav-anchor">{t('nav.hero')}</a>
-        <a href="#agent-scenario-sandbox" className="nav-anchor">{t('nav.sandbox')}</a>
-        <a href="#historic-run-replay" className="nav-anchor">{t('nav.replay')}</a>
-        <a href="#margin-deconstructor" className="nav-anchor">{t('nav.margin')}</a>
-        <a href="#explicitness-ladder" className="nav-anchor">{t('nav.ladder')}</a>
-        <a href="#research-overview" className="nav-anchor">{t('nav.overview')}</a>
-        <a href="#holdout-comparison" className="nav-anchor">{t('nav.holdout')}</a>
-        <a href="#benchmark-progression" className="nav-anchor">{t('nav.progression')}</a>
-        <a href="#decision-boundary" className="nav-anchor">{t('nav.boundary')}</a>
-        <a href="#v8-explicitness" className="nav-anchor">{t('nav.ablation')}</a>
-        <a href="#confidence-stability" className="nav-anchor">{t('nav.confidence')}</a>
-        <a href="#conclusions" className="nav-anchor">{t('nav.conclusions')}</a>
-        <a href="#methodology" className="nav-anchor">{t('nav.methodology')}</a>
+        <a href="#agent-scenario-sandbox" className="nav-anchor">{t('nav.chapterStory')}</a>
+        <a href="#margin-deconstructor" className="nav-anchor">{t('nav.chapterBoundary')}</a>
+        <a href="#investigative-timeline" className="nav-anchor">{t('nav.chapterInvestigation')}</a>
+        <a href="#uncertainty-governor" className="nav-anchor">{t('nav.chapterArchitecture')}</a>
+        <a href="#research-overview" className="nav-anchor">{t('nav.chapterDataLab')}</a>
+        <a href="#methodology" className="nav-anchor">{t('nav.chapterMethodology')}</a>
       </nav>
 
       <div className="nav-controls-group">
