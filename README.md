@@ -1,1070 +1,270 @@
 # Jev Agent Routing Lab
 
-## Interactive Dashboard
+**An empirical study of semantic next-action routing for software-engineering agents.** This repository pairs a research record with an interactive monograph. It examines not only whether a router chooses an expected action once, but also how repeated decisions behave near semantic boundaries.
 
-Explore the live research dashboard:
+[**Open the live monograph**](https://brayanperezballadares.github.io/jev-agent-routing-lab/) · [Research summary](docs/results-summary.md) · [Methodology](docs/methodology.md) · [Findings](docs/findings.md) · [Experiments](docs/experiments.md)
 
-https://brayanperezballadares.github.io/jev-agent-routing-lab/
+| Repository | Interface | Languages | Themes |
+|---|---|---|---|
+| [BrayanperezBalladares/jev-agent-routing-lab](https://github.com/BrayanperezBalladares/jev-agent-routing-lab) | [Live GitHub Pages demo](https://brayanperezballadares.github.io/jev-agent-routing-lab/) | English and Spanish | Light, dark, and system |
 
-Experimental evaluation of **Jev (`typesafe-ai/jev`) as a semantic decision router for software-engineering agents**.
-
-The project studies whether a specialized evaluator can reliably answer a deceptively simple question:
-
-> **What should a coding agent do next?**
-
-Instead of asking a large language model to perform every step of an agent workflow, this repository explores using Jev to route small but important decisions between tools and actions.
+> **Research integrity.** Results describe a small, synthetic software-engineering routing task. Repeated runs are empirical, non-independent observations—not population-level estimates. They do not establish causal effects, calibrated correctness probabilities, a universal uncertainty threshold, or production performance.
 
 ---
 
-## Highlights
+## The question
 
-- Evaluated Jev across progressively harder software-engineering routing scenarios.
-- Compared semantic routing against a simple rule-based baseline and general-purpose LLM approaches.
-- Tested routing stability by repeating the **exact same state** multiple times.
-- Found cases where a correct one-shot answer hid genuine decision instability.
-- Investigated semantic decision boundaries between `ASK_USER` and `SEARCH_CODE`.
-- Studied `confidence`, returned probabilities, top-1/top-2 margin, empirical instability, and choice entropy.
-- Found that explicitly describing **what uncertainty remains unresolved** can dramatically change routing behavior.
-- Preserved later experiments without retroactively tuning Jev's routing criteria.
+A coding agent repeatedly has to decide what to do next. Should it search an unfamiliar repository, inspect a known file, run tests, inspect stored data, or ask the user because the requirement itself is unsettled?
 
-> The main contribution of this project is **not a claim of universal accuracy**.  
-> It is an investigation of stability, uncertainty, and semantic decision boundaries in agent routing.
+This project studies **Jev as a semantic decision router** over a fixed five-action space. Jev evaluates the agent state and returns a structured choice and probability distribution. It does not perform the selected operation or solve the complete programming task.
 
----
+The progression starts with benchmark validation, then moves into adaptive diagnostics: repeated identical inputs, boundary sweeps, controlled wording changes, and explicitness about unresolved implementation details. The central observation is that one-shot accuracy can conceal variation across repeated evaluations.
 
-## The routing problem
+## Explore the interactive monograph
 
-A coding agent repeatedly needs to make micro-decisions such as:
+The deployed monograph combines the research narrative, historical results, and exploratory views. Its sections guide readers from the routing task through replay and decision boundaries to interpretation and limitations.
 
-- search the repository
-- inspect a known implementation file
-- run tests after a code change
-- inspect database state
-- ask the user when intended behavior is undefined
+![The English light-theme hero introduces the Jev Agent Routing Lab monograph.](docs/assets/readme/hero-light-en.png)
 
-This project represents those decisions using five actions:
+### Scenario Sandbox
 
-```text
-SEARCH_CODE
-READ_FILE
-RUN_TESTS
-QUERY_DATABASE
-ASK_USER
-```
+The sandbox presents the five candidate actions against an agent-state scenario. It is an explanatory interface, not an execution environment: a routing choice is not permission to invoke a real tool.
 
-Jev receives the current agent state and returns a structured decision containing information such as:
+![The scenario sandbox shows the five routing actions and the current agent-state prompt.](docs/assets/readme/scenario-sandbox.png)
 
-```text
-choice
-probabilities
-confidence
-```
+### Historic Replay
 
-The returned probability distribution also allows us to calculate the separation between the two most likely actions:
+Historic Replay makes saved evaluations inspectable. One example is **V5U02**, a fixed state evaluated 20 times: `SEARCH_CODE` appeared 14 times and `ASK_USER` appeared 6 times. Average confidence was 0.315 and average top-two margin was 0.0705. These are observations from repeated evaluations of the same state, not 20 independent samples.
 
-```text
-margin = P(top1) - P(top2)
-```
+![Historic Replay displays the repeated V5U02 evaluations and their action distribution.](docs/assets/readme/historic-replay.png)
 
----
+### Margin Deconstructor and Explicitness Ladder
 
-## Why this matters
+The monograph provides views for inspecting probability separation and the V8 explicitness cases. V8 held the approved business rule fixed while varying how the unresolved implementation problem was stated.
 
-A coding agent does not only need intelligence.
+![The explicitness ladder compares V8 cases C1 through C6.](docs/assets/readme/explicitness-ladder.png)
 
-It also needs to determine the correct **next operation**.
+### Progression Timeline and Uncertainty Governor
 
-For example:
+The timeline distinguishes the initial benchmark and validation suites (V1–V3) from adaptive diagnostics (V4–V8). The uncertainty governor is conceptual: it presents signals to inspect, not a validated production policy.
 
-```text
-State:
+![The timeline distinguishes V1–V3 benchmark validation from V4–V8 adaptive diagnostics.](docs/assets/readme/investigative-timeline.png)
 
-The approved requirement says that usernames from deleted
-accounts can be reused, but the implementation responsible
-for this behavior has not been located.
+![The dark-theme uncertainty governor presents confidence, margin, and stability as distinct signals.](docs/assets/readme/uncertainty-governor.png)
 
-Decision:
+### Deep Data Lab
 
-SEARCH_CODE
-```
+Deep Data Lab provides five focused views:
 
-In this architecture, Jev is not the coding agent itself.
-
-It acts as a **semantic routing layer** between the current agent state and the next tool execution.
-
----
-
-## Architecture
-
-```mermaid
-flowchart TD
-
-    A[Current Agent State] --> B[Jev Decision Router]
-
-    B --> C[Choice]
-    B --> D[Probabilities]
-    B --> E[Confidence]
-
-    D --> F[Calculate top-1 / top-2 margin]
-
-    C --> G{Decision sufficiently clear?}
-    E --> G
-    F --> G
-
-    G -->|Yes| H[Execute selected tool]
-    G -->|No| I[Fallback / second evaluation / ask user]
-
-    H --> J[New Agent State]
-    J --> A
-```
-
-A future production-oriented version can additionally separate:
-
-```text
-semantic uncertainty
-```
-
-from:
-
-```text
-provider / infrastructure failure
-```
-
-so that ambiguous decisions and failed API requests are handled differently.
-
----
-
-## Available actions
-
-| Action | Meaning |
+| View | What it helps inspect |
 |---|---|
-| `SEARCH_CODE` | Search the repository when the relevant implementation location is unknown |
-| `READ_FILE` | Inspect a specific implementation file when the relevant file is already known |
-| `RUN_TESTS` | Verify code that has already been modified |
-| `QUERY_DATABASE` | Inspect persistent records, schema, constraints, or database state |
-| `ASK_USER` | Request clarification when intended behavior cannot be determined |
+| **Holdout** | The balanced V3 comparison and its evaluation context |
+| **Progression** | How the experiments developed from V1 through V8 |
+| **Boundary** | Repeated action distributions around selected boundaries |
+| **Explicitness** | V8’s six cases, C1–C6 |
+| **Stability** | Repetition, action frequency, and uncertainty measures |
 
-These action definitions were frozen during the later experiments.
+![Deep Data Lab presents holdout, progression, boundary, explicitness, and stability views.](docs/assets/readme/deep-data-lab.png)
 
-The routing criteria were not modified after observing difficult or unstable cases.
+The interface supports English and Spanish, themes, and responsive layouts. The mobile example below uses Spanish and a dark theme.
 
----
-
-## Research questions
-
-The project investigates several questions:
-
-1. How accurately can Jev route software-engineering micro-decisions?
-2. How stable is the same decision across repeated evaluations?
-3. Can one-shot accuracy hide unstable behavior?
-4. What happens near semantic decision boundaries?
-5. Can confidence and top-1/top-2 probability margin identify uncertainty?
-6. How sensitive is routing to small changes in wording?
-7. How does a specialized evaluator compare with simple rules and general-purpose LLMs?
-8. How should uncertainty be handled before allowing an agent to execute a tool automatically?
+![The monograph is shown at a 390-pixel mobile viewport in Spanish and dark theme.](docs/assets/readme/mobile-es-dark.png)
 
 ---
 
-# Experimental progression
+## Routing action space
 
-The project evolved progressively rather than starting with the final boundary experiments.
+The benchmark uses five actions with distinct meanings:
 
-| Version | Experiment | Purpose |
+| Action | Choose it when… |
+|---|---|
+| `SEARCH_CODE` | The relevant implementation location is unknown and repository search is the next useful step. |
+| `READ_FILE` | A relevant file is known and its contents or behavior need inspection. |
+| `RUN_TESTS` | Code has changed and verification is needed. |
+| `QUERY_DATABASE` | Persistent records, schema, constraints, or database state may explain the issue. |
+| `ASK_USER` | Intended behavior or a requirement is not defined well enough to proceed. |
+
+The action space is deliberately small. It focuses the experiments on next-step distinctions rather than general task completion.
+
+## Experimental progression
+
+The experiment labels describe an evolving investigation, not eight independent benchmark replications.
+
+| Stage | Role in the study | Design |
 |---|---|---|
-| **V1** | Baseline | Initial routing validation |
-| **V2** | Hard cases | More difficult semantic distinctions |
-| **V3** | Balanced holdout | Evaluate frozen routing logic on a new balanced dataset |
-| **V4** | Adversarial minimal pairs | Test whether small semantic changes correctly flip the routed action |
-| **V5** | Cue-stripped adversarial suite | Reduce obvious lexical cues and introduce distractors |
-| **V5 consistency** | Repeated boundary evaluation | Repeat low-confidence states without changing the input |
-| **V6** | Username boundary sweep | Explore the `ASK_USER ↔ SEARCH_CODE` boundary |
-| **V7** | Minimal linguistic ablation | Control wording more tightly around the discovered boundary |
-| **V8** | Implementation-explicitness ablation | Measure how explicit unresolved implementation information affects routing |
+| **V1–V3: benchmark and validation** | Establish baseline behavior and a frozen balanced holdout. | Initial cases, harder semantic distinctions, then a 50-case holdout. |
+| **V4: minimal pairs** | Probe whether small semantic changes flip the expected action. | Paired cases across action boundaries. |
+| **V5: cue-stripped diagnostics** | Reduce direct lexical cues and inspect controlled uncertainty. | Harder cases and a later repeated evaluation of a fixed state. |
+| **V5U02: repeated state** | Revisit one fixed V5 state. | 20 evaluations of the same wording; two actions observed. |
+| **V6: boundary sweep** | Gradually change a state around an `ASK_USER` / `SEARCH_CODE` boundary. | Repeated evaluations at B3. |
+| **V7: minimal ablation** | Control a wording change while holding the rest of a scenario fixed. | Repeated evaluations at A5. |
+| **V8: implementation explicitness** | Study how state representation relates to routing around implementation uncertainty. | Six cases, C1–C6, with the approved business rule held fixed. |
 
-The later experiments are **diagnostic experiments**, not independent untouched holdout benchmarks.
+V4–V8 are **adaptive diagnostics** informed by earlier observations, not untouched holdout benchmarks. V5U02 is listed separately because its 20 repetitions are a consistency experiment, not another V5 accuracy denominator.
 
----
+## Canonical results
 
-# Key results
+### Benchmark and validation
 
-Detailed historical results are available in:
+| Suite | Successful requests | Semantic accuracy on successful responses | Correct across all attempts |
+|---|---:|---:|---:|
+| V1 baseline | 20/20 | 100% | 20/20 |
+| V2 hard cases | 30/30 | 100% | 30/30 |
+| V3 balanced holdout | 50/50 | 100% | 50/50 |
+| V4 minimal pairs | 39/40 | 100% | 39/40 |
+| V5 cue-stripped | 39/40 | 100% | 39/40 |
 
-[`docs/results-summary.md`](docs/results-summary.md)
+V4 and V5 each had one infrastructure failure. “Semantic accuracy on successful responses” excludes requests that did not return a decision; “correct across all attempts” keeps those failures visible in the full attempt count. Infrastructure failures are not counted as semantic reasoning errors.
 
-A few representative observations are shown below.
+### V3 holdout comparison
 
-## Initial benchmark phase
+| Router | Successful requests | Correct decisions | Accuracy on successful responses |
+|---|---:|---:|---:|
+| Jev | 50/50 | 50/50 | 100% |
+| Rule baseline | 50/50 | 24/50 | 48% |
+| OpenAI GPT-5-mini | 50/50 | 40/50 | 80% |
+| NVIDIA Nemotron Ultra | 48/50 | 47/48 | 97.9% |
 
-The early experiments produced strong one-shot routing performance.
+Nemotron produced 47 semantically correct decisions among 48 successful responses and 47 correct decisions across all 50 attempts. These results are descriptive context, **not a normalized leaderboard or provider ranking**. Infrastructure, retries, latency measurement, pricing, output parsing, and endpoint availability were not fully normalized across systems.
 
-That result motivated a harder question:
+### Repeated-state diagnostics
 
-> Was high benchmark accuracy enough to conclude that routing was reliable?
+| Diagnostic | Repetitions | Observed choices | Average confidence | Average top-two margin |
+|---|---:|---|---:|---:|
+| V5U02 | 20 | `SEARCH_CODE` 14; `ASK_USER` 6 | 0.315 | 0.0705 |
+| V6-B3 | 10 | `SEARCH_CODE` 6; `ASK_USER` 4 | 0.317 | 0.068 |
+| V7-A5 | 10 | `SEARCH_CODE` 7; `ASK_USER` 3 | 0.248 | 0.047 |
 
-The later experiments showed that the answer is **no**.
+### V8 explicitness cases
 
----
+| Case | Repeated choice | Average confidence | Average margin |
+|---|---|---:|---:|
+| C1 | `SEARCH_CODE` 8/10; `ASK_USER` 2/10 | 0.242 | 0.034 |
+| C2 | `SEARCH_CODE` 10/10 | 0.534 | 0.284 |
+| C3 | `SEARCH_CODE` 10/10 | 1.000 | 1.000 |
+| C4 | `SEARCH_CODE` 10/10 | 0.987 | 0.982 |
+| C5 | `SEARCH_CODE` 10/10 | 1.000 | 1.000 |
+| C6 | `SEARCH_CODE` 10/10 | 1.000 | 1.000 |
 
-## One-shot accuracy can hide instability
+The V8 representation differences coincided with observed differences in consistency and separation in these cases. This does **not** establish causation or generality.
 
-A particularly important case initially produced the expected action:
+## What the measurements mean
 
-```text
-ASK_USER
-```
+These signals answer different questions:
 
-However, when the **exact same input** was evaluated repeatedly, Jev alternated between:
+- **Choice** is the selected action for one response.
+- **Confidence** is the evaluator’s reported score. It is not established here as a calibrated probability that the answer is correct.
+- **Top-two margin** is `P(top1) − P(top2)` for one returned distribution. A small margin means the leading options are close in that response; it is not a universal instability threshold.
+- **Empirical stability** describes how often the same action appeared in repeated runs of a particular state.
+- **Infrastructure reliability** describes whether a request returned a usable semantic decision at all.
 
-```text
-ASK_USER
-SEARCH_CODE
-```
+Repeated identical inputs are **non-independent empirical observations**. A repeated 10/10 outcome describes those runs; it does not provide an independent-sample confidence interval or population-level guarantee. Low margin did not universally predict instability, and confidence alone did not determine whether a repeated state was stable. This repository does not validate an automatic fallback threshold.
 
-This showed that a single correct benchmark response could hide a state positioned near a semantic decision boundary.
+## Decision boundary: routing is not permission
 
----
-
-## Repeated boundary behavior
-
-Several later experiments reproduced this pattern.
-
-Representative repeated states included distributions such as:
-
-```text
-ASK_USER      6/20
-SEARCH_CODE  14/20
-```
-
-and:
-
-```text
-ASK_USER      4/10
-SEARCH_CODE   6/10
-```
-
-These results motivated a deeper investigation into probability separation and agent-state wording.
-
----
-
-## V8: implementation explicitness
-
-One of the clearest experiments kept the approved product requirement fixed while changing only how clearly the unresolved implementation problem was described.
-
-### C1 — approved requirement only
+A possible architecture separates decision selection from execution:
 
 ```text
-The current approved requirement says that
-the username becomes available again.
+Current agent state
+        │
+        ▼
+Semantic router ──► action + scores
+        │
+        ▼
+Policy / authorization checks
+        │
+        ▼
+Tool execution (only when independently authorized)
 ```
 
-Repeated routing remained close to the decision boundary:
+**Routing Decision ≠ Permission to Execute.** A router’s `RUN_TESTS` or `QUERY_DATABASE` choice is not authorization to access a machine, repository, database, or external system. An integrating agent still needs its own permission, safety, and policy checks. This architecture is conceptual and has not been validated as a production control system.
+
+## Method and limitations
+
+The routing criteria and five-action semantics were frozen before the later diagnostic experiments. Datasets were not retroactively relabeled to improve observed results. When later evidence raised a new question, the study added diagnostics rather than rewriting earlier cases.
+
+- Scenarios are synthetic and the action space is intentionally narrow.
+- V4–V8 were informed by earlier observations; they are adaptive diagnostics, not independent untouched benchmarks.
+- Repeated evaluations of the same text are not independent samples.
+- Confidence is not shown to be a calibrated correctness probability.
+- No universal confidence or margin cutoff is established; low margin does not universally predict instability.
+- Provider comparisons are descriptive, with infrastructure, retries, latency, cost, and parsing not fully normalized.
+- Provider failures, such as rate limits or service errors, are tracked separately from semantic mistakes.
+- Results do not guarantee behavior on real repositories, in production agents, or under changed provider versions.
+- V8 representation changes coincided with observed stability differences in these cases; causal impact and generality remain untested.
+- The uncertainty-governor and execution-boundary diagrams are conceptual, not validated policy mechanisms.
+
+See [Methodology](docs/methodology.md) for definitions, metrics, dataset freezing, and reproducibility notes; [Findings](docs/findings.md) for interpretation; and the [Results Summary](docs/results-summary.md) for the historical tables.
+
+## Technology
+
+| Area | Technologies |
+|---|---|
+| Interactive monograph | React 19, TypeScript, Vite |
+| Charts | Apache ECharts via `echarts-for-react` |
+| Localization | `i18next`, `react-i18next` |
+| Research and evaluation | TypeScript, Node.js, Jev, OpenAI-compatible providers |
+| Tooling and publication | pnpm, ESLint, GitHub Actions, GitHub Pages |
+
+The README and research documents are not part of the Pages deployment trigger. A docs-only change updates repository documentation but does not itself deploy a new monograph build.
+
+## Repository map
 
 ```text
-SEARCH_CODE  8/10
-ASK_USER     2/10
+.
+├── cases/                 Frozen scenario sets and routing criteria
+├── docs/                  Methodology, findings, experiments, and results summary
+├── results/               Result artifact documentation; generated JSON is ignored
+├── src/                   Research, benchmark, and provider evaluation scripts
+├── visualizations/         React monograph and GitHub Pages application
+└── README.md               Project overview and entry point
 ```
 
-The average top-1/top-2 margin was very small.
+## Run locally
 
----
+### Requirements
 
-### C2 — implementation not discussed
+- Node.js 24
+- pnpm 11 (the Pages workflow pins pnpm 11.27.1)
 
-Adding:
-
-```text
-The implementation is not discussed.
-```
-
-produced:
-
-```text
-SEARCH_CODE 10/10
-```
-
-The routing became empirically stable, although meaningful probability mass remained on `ASK_USER`.
-
----
-
-### C3 — implementation location explicitly unclear
-
-Adding:
-
-```text
-It is unclear where this behavior is implemented.
-```
-
-produced strongly separated routing:
-
-```text
-SEARCH_CODE 10/10
-```
-
-with the returned distribution strongly concentrated on `SEARCH_CODE` in the tested runs.
-
----
-
-## Main semantic observation
-
-The later experiments suggest that the evaluator responds not only to:
-
-```text
-What is the desired behavior?
-```
-
-but also to:
-
-```text
-What information is still missing?
-```
-
-Consider:
-
-```text
-Requirement known
-```
-
-That may still leave several possible next actions.
-
-But:
-
-```text
-Requirement known
-+
-implementation location unknown
-```
-
-gives the router a much clearer operational problem:
-
-```text
-SEARCH_CODE
-```
-
-This distinction is important for agent design because the quality of the **agent state representation** directly affects routing quality.
-
----
-
-# Confidence is not accuracy
-
-One of the strongest lessons from the project is:
-
-```text
-low confidence != incorrect
-```
-
-and:
-
-```text
-high confidence != universally correct
-```
-
-Confidence should not be interpreted as a calibrated probability that a routing decision is correct.
-
-Some lower-confidence states were completely stable across repeated runs.
-
-Other lower-confidence states genuinely alternated between actions.
-
----
-
-## Probability margin
-
-The experiments therefore also track:
-
-```text
-margin = P(top1) - P(top2)
-```
-
-For example:
-
-```text
-SEARCH_CODE  0.39
-ASK_USER     0.38
-
-margin = 0.01
-```
-
-The two actions are almost tied.
-
-Compare that with:
-
-```text
-SEARCH_CODE  0.98
-ASK_USER     0.01
-
-margin = 0.97
-```
-
-The first action is strongly separated from the alternative.
-
-In the tested boundary families, very small margins frequently appeared in genuinely unstable states.
-
-However:
-
-> This is an empirical observation from this project, not a universally calibrated production threshold.
-
----
-
-## Empirical stability
-
-Repeated experiments also distinguish between the evaluator's internal uncertainty and the actual observed stability of its choices.
-
-For example, a state can produce:
-
-```text
-SEARCH_CODE 10/10
-```
-
-while still assigning substantial probability to another action.
-
-That state is:
-
-```text
-empirically stable
-```
-
-but not necessarily:
-
-```text
-internally certain
-```
-
-These are different properties.
-
----
-
-## Instability rate
-
-For repeated experiments:
-
-```text
-dominantChoiceRate =
-max(action counts) / successful runs
-```
-
-and:
-
-```text
-instabilityRate =
-1 - dominantChoiceRate
-```
-
-Example:
-
-```text
-SEARCH_CODE = 7
-ASK_USER    = 3
-```
-
-produces:
-
-```text
-dominantChoiceRate = 0.70
-instabilityRate    = 0.30
-```
-
----
-
-## Choice entropy
-
-The later experiment runners also calculate empirical choice entropy.
-
-A deterministic result:
-
-```text
-10 / 0
-```
-
-has:
-
-```text
-entropy = 0
-```
-
-A more balanced distribution produces greater entropy.
-
-This gives another way to describe instability without relying exclusively on Jev's own confidence value.
-
----
-
-# Proposed agent policy
-
-The long-term goal is **not** to blindly execute every Jev decision.
-
-A safer architecture is:
-
-```ts
-const decision = await evaluate(state)
-
-const margin =
-  decision.top1Probability -
-  decision.top2Probability
-
-if (decisionIsAmbiguous(decision, margin)) {
-  return fallback()
-}
-
-return execute(decision.choice)
-```
-
-Possible fallback strategies include:
-
-```text
-second evaluation
-general-purpose model
-human clarification
-safe abstention
-```
-
-Any threshold used here must be calibrated on the target domain.
-
-Values observed in this repository should not be treated as universal production thresholds.
-
----
-
-# Reliability vs semantic correctness
-
-The experiments distinguish two different types of failure.
-
-## Semantic routing error
-
-The evaluator successfully returns a decision but selects an action that does not match the benchmark label.
-
-## Infrastructure failure
-
-The evaluator does not successfully produce a semantic decision.
-
-Examples observed during testing included:
-
-```text
-HTTP 429
-HTTP 503
-provider overload
-timeouts
-```
-
-These should not automatically be counted as semantic reasoning failures.
-
-A real agent needs independent handling for:
-
-```text
-semantic uncertainty
-```
-
-and:
-
-```text
-infrastructure reliability
-```
-
-Possible infrastructure handling includes:
-
-```text
-retry
-fallback provider
-circuit breaker
-temporary abstention
-```
-
----
-
-# Comparators
-
-Jev was not evaluated in isolation.
-
-The project also contains experiments with:
-
-- deterministic keyword/rule routing
-- a general-purpose OpenAI model
-- NVIDIA Nemotron Ultra through NVIDIA NIM
-
-Relevant implementation files include:
-
-```text
-src/rules.ts
-src/rules-benchmark.ts
-
-src/llm.ts
-src/llm-benchmark.ts
-
-src/nvidia-llm.ts
-src/nvidia-benchmark.ts
-```
-
-These comparisons provide useful context, but they are **not perfectly equivalent benchmarks**.
-
-Differences include:
-
-```text
-provider infrastructure
-retry behavior
-latency measurement
-pricing methodology
-output formatting
-endpoint availability
-```
-
-The repository therefore does not present them as a perfectly normalized model leaderboard.
-
----
-
-# Repository structure
-
-```text
-jev-agent-routing-lab/
-│
-├── cases/
-│   ├── consistency.json
-│   ├── routing-baseline.json
-│   ├── routing-hard.json
-│   ├── routing-holdout.json
-│   ├── routing-v4-minimal-pairs.json
-│   ├── routing-v5-cue-stripped.json
-│   ├── routing-v6-username-boundary.json
-│   ├── routing-v7-minimal-ablation.json
-│   └── routing-v8-implementation-explicitness.json
-│
-├── docs/
-│   ├── experiments.md
-│   ├── findings.md
-│   ├── methodology.md
-│   └── results-summary.md
-│
-├── results/
-│   └── README.md
-│
-├── src/
-│   ├── benchmark.ts
-│   ├── consistency.ts
-│   ├── jev.ts
-│   │
-│   ├── rules.ts
-│   ├── rules-benchmark.ts
-│   │
-│   ├── llm.ts
-│   ├── llm-smoke.ts
-│   ├── llm-benchmark.ts
-│   │
-│   ├── nvidia-llm.ts
-│   ├── nvidia-smoke.ts
-│   ├── nvidia-benchmark.ts
-│   ├── nvidia-model-probe.ts
-│   ├── nvidia-ultra-stability.ts
-│   │
-│   ├── v4-focus-consistency.ts
-│   ├── v5-boundary-consistency.ts
-│   ├── v6-boundary-sweep.ts
-│   ├── v7-minimal-ablation.ts
-│   ├── v8-implementation-explicitness.ts
-│   │
-│   ├── smoke.ts
-│   └── types.ts
-│
-├── .env.example
-├── .gitattributes
-├── .gitignore
-├── package.json
-├── pnpm-lock.yaml
-├── pnpm-workspace.yaml
-├── README.md
-└── tsconfig.json
-```
-
----
-
-# Documentation
-
-The research is separated into several documents.
-
-### Methodology
-
-[`docs/methodology.md`](docs/methodology.md)
-
-Covers:
-
-```text
-experimental design
-action definitions
-dataset freezing
-metrics
-latency methodology
-cost methodology
-semantic vs infrastructure failures
-limitations
-```
-
-### Findings
-
-[`docs/findings.md`](docs/findings.md)
-
-Explains the main observations discovered across the experiments.
-
-### Experiment history
-
-[`docs/experiments.md`](docs/experiments.md)
-
-Documents how the project evolved from baseline routing to boundary analysis.
-
-### Results summary
-
-[`docs/results-summary.md`](docs/results-summary.md)
-
-Contains the main historical quantitative results without requiring users to rerun every paid or rate-limited API experiment.
-
-### Generated results
-
-[`results/README.md`](results/README.md)
-
-Explains how local result artifacts are generated and why raw benchmark JSON files are not committed.
-
----
-
-# Setup
-
-## Requirements
-
-Recommended environment:
-
-```text
-Node.js 22+
-pnpm
-```
-
-The project has been developed and tested using a modern Node.js environment.
-
----
-
-## Install dependencies
+### Run the monograph
 
 ```bash
-pnpm install
+cd visualizations
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
----
-
-## Environment variables
-
-Create:
-
-```text
-.env
-```
-
-using:
-
-```text
-.env.example
-```
-
-as the template.
-
-Example:
-
-```env
-AI_GATEWAY_API_KEY=your_vercel_ai_gateway_key
-NVIDIA_API_KEY=your_nvidia_api_key
-```
-
-`AI_GATEWAY_API_KEY` is required for Jev experiments through the Vercel AI Gateway.
-
-`NVIDIA_API_KEY` is required only for NVIDIA comparator experiments.
-
-Never commit:
-
-```text
-.env
-API keys
-tokens
-credentials
-```
-
----
-
-# Verification
-
-Run TypeScript validation:
+To run the checks used for the Pages build:
 
 ```bash
+pnpm lint
+pnpm build
+```
+
+### Run research scripts
+
+From the repository root, install the root package dependencies and run scripts defined in `package.json`:
+
+```bash
+pnpm install --frozen-lockfile
 pnpm typecheck
-```
-
----
-
-## Main benchmark
-
-```bash
 pnpm benchmark
-```
-
----
-
-## Rule baseline
-
-```bash
 pnpm rules
 ```
 
----
+Provider-backed scripts are separate commands (`pnpm llm`, `pnpm nvidia`, and related smoke scripts). They may contact external providers and require credentials. Inspect the script and provider configuration before running them. Keep credentials in your local environment and **never commit secrets or `.env` files**. `.env.example` is a template, not a credential source.
 
-## General-purpose LLM comparator
+## Further reading
 
-```bash
-pnpm llm
-```
+- [Research results and interpretation](docs/results-summary.md)
+- [Experimental methodology](docs/methodology.md)
+- [Findings](docs/findings.md)
+- [Experiment history](docs/experiments.md)
+- [Frozen result-artifact notes](results/README.md)
+- [Interactive monograph source](visualizations/)
+- [MIT License](LICENSE)
 
----
+## License
 
-## NVIDIA comparator
-
-```bash
-pnpm nvidia
-```
-
----
-
-# Diagnostic experiments
-
-The later diagnostic experiments can be executed directly.
-
-## V4 focused consistency
-
-```bash
-pnpm exec tsx src/v4-focus-consistency.ts
-```
-
-## V5 boundary consistency
-
-```bash
-pnpm exec tsx src/v5-boundary-consistency.ts
-```
-
-## V6 boundary sweep
-
-```bash
-pnpm exec tsx src/v6-boundary-sweep.ts
-```
-
-## V7 minimal ablation
-
-```bash
-pnpm exec tsx src/v7-minimal-ablation.ts
-```
-
-## V8 implementation explicitness
-
-```bash
-pnpm exec tsx src/v8-implementation-explicitness.ts
-```
-
-Generated result JSON files are written locally to:
-
-```text
-results/
-```
-
-They are intentionally ignored by Git.
-
----
-
-# Reproducibility principles
-
-Several practices were followed to reduce retrospective tuning.
-
-Once a diagnostic experiment had been executed:
-
-```text
-states were not rewritten
-expected labels were not changed based on outcomes
-routing criteria were not tuned
-```
-
-If a previous scenario appeared insufficiently controlled, a **new experiment** was created instead of modifying the old result.
-
-This produced the progression:
-
-```text
-baseline
-   ↓
-hard cases
-   ↓
-holdout
-   ↓
-minimal pairs
-   ↓
-cue-stripped cases
-   ↓
-repeated consistency
-   ↓
-boundary sweep
-   ↓
-linguistic ablation
-   ↓
-implementation explicitness
-```
-
----
-
-# Limitations
-
-This repository does **not** demonstrate universal Jev performance.
-
-Important limitations include:
-
-- synthetic software-engineering scenarios
-- a deliberately small action space
-- datasets authored specifically for this research
-- later diagnostic suites designed after observing earlier behavior
-- limited repeated samples per state
-- repeated calls to identical text are not independent samples
-- provider and gateway variability
-- hosted model behavior may change over time
-- latency measurements are affected by infrastructure and retry behavior
-- provider-specific cost measurements are not perfectly comparable
-
-The results should therefore be interpreted as evidence about the investigated routing setting, not as a general benchmark of all agent tasks.
-
----
-
-# What this project does not claim
-
-The experiments do not establish that:
-
-```text
-Jev has universal 100% accuracy
-```
-
-or:
-
-```text
-confidence is a calibrated probability of correctness
-```
-
-or:
-
-```text
-one probability-margin threshold works for every domain
-```
-
-or:
-
-```text
-Jev is universally superior to general-purpose LLMs
-```
-
-The evidence supports a narrower conclusion:
-
-> Repeated evaluation and probability-distribution analysis can reveal meaningful semantic routing boundaries that one-shot accuracy alone may hide.
-
----
-
-# Next phase
-
-The research phase is now largely complete.
-
-The next step is to move from controlled evaluation to a real agent loop.
-
-The planned agent will expose tools such as:
-
-```text
-search_code()
-read_file()
-run_tests()
-query_database()
-ask_user()
-```
-
-Conceptually:
-
-```text
-User task
-    ↓
-Agent constructs state
-    ↓
-Jev routes next action
-    ↓
-Uncertainty gate
-    ↓
-Tool execution
-    ↓
-New state
-    ↓
-Jev routes again
-```
-
-The next phase will investigate:
-
-```text
-real repository interaction
-multi-step routing
-uncertainty gating
-fallback models
-provider failures
-safe execution
-agent-state construction
-```
-
----
-
-# Project status
-
-```text
-Research experiments
-V1–V8
-✅ Completed
-```
-
-Current stage:
-
-```text
-documentation and reproducibility
-✅ In progress
-```
-
-Next:
-
-```text
-real coding-agent integration
-uncertainty gate
-fallback routing
-live demonstration
-```
-
----
-
-# Security
-
-Real credentials are never committed to the repository.
-
-The following are intentionally ignored:
-
-```text
-.env
-generated result JSON files
-node_modules
-build output
-```
-
-Use `.env.example` only as a template.
-
----
-
-# Contributions and discussion
-
-This project is experimental research.
-
-Issues, reproductions, alternative routing cases, critiques of the methodology, and independent experiments are welcome.
-
-When proposing new benchmark cases, prefer creating a new version or diagnostic suite instead of retroactively modifying previously executed datasets.
-
----
-
-# Final perspective
-
-The initial question was:
-
-> Can Jev correctly choose the next action for a coding agent?
-
-The experiments eventually produced a more interesting question:
-
-> **When should an agent trust that routing decision enough to act automatically?**
-
-That distinction — between obtaining a decision and understanding its uncertainty — is the direction this project will explore next.
+This project is licensed under the [MIT License](LICENSE). Copyright © 2026 Brayan Pérez.
